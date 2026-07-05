@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#E9E2D9;font-family:'Nunito',system-ui,sans-serif;color:#2E2018;padding:56px 56px 90px;">
+
+  <!-- ======================= COVER ======================= -->
+  <div style="max-width:1200px;margin:0 auto 18px;display:flex;align-items:flex-end;gap:28px;">
+    <div style="width:96px;height:96px;flex-shrink:0;">
+      <dc-import name="Logo" style="width:96px;height:96px;" hint-size="96px,96px"></dc-import>
+    </div>
+    <div>
+      <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#FF5A2C;">Social XP · MVP v2</div>
+      <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:52px;line-height:1.02;margin:6px 0 8px;letter-spacing:-1px;">The gym for social skills.</h1>
+      <p style="margin:0;font-size:19px;max-width:680px;color:#6E5F54;line-height:1.5;">Duolingo-style engagement, book-grade content. Chapters of 3-minute lessons, one real-world rep a day, a collectible quote per lesson, streaks and daily quests. Build-ready screens below.</p>
+    </div>
+  </div>
+
+  <!-- system tokens row -->
+  <div style="max-width:1200px;margin:0 auto 64px;display:flex;flex-wrap:wrap;gap:14px;">
+    <div style="background:#fff;border-radius:22px;padding:20px 24px;flex:1;min-width:250px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+      <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#7A6A5C;margin-bottom:14px;">Palette · warm &amp; encouraging</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#FF5A2C;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Coral</div></div>
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#FF914D;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Ember</div></div>
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#FFC24A;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Amber XP</div></div>
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#58C08A;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Go green</div></div>
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#FFF6EE;border:1px solid #EADFD5;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Cream</div></div>
+        <div style="text-align:center;"><div style="width:50px;height:50px;border-radius:14px;background:#2E2018;"></div><div style="font-size:11px;margin-top:6px;color:#7A6A5C;">Cocoa</div></div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:22px;padding:20px 24px;flex:1;min-width:250px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+      <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#7A6A5C;margin-bottom:10px;">Type · friendly rounded</div>
+      <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:34px;line-height:1;">Fredoka</div>
+      <div style="font-size:13px;color:#7A6A5C;margin-bottom:10px;">Headlines · numbers · buttons</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:20px;">Nunito 800</div>
+      <div style="font-size:15px;color:#6E5F54;font-weight:600;">Body copy, supportive and clear.</div>
+    </div>
+    <div style="background:#2E2018;color:#FFF6EE;border-radius:22px;padding:20px 24px;flex:1.7;min-width:380px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+      <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#C9B7A6;margin-bottom:14px;">Core loop · once a day, ~5 minutes</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FF914D;">1 · Learn</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">3-min lesson</div></div>
+        <div style="color:#7A6A5C;font-weight:900;">→</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FFC24A;">2 · Try</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">real-world rep</div></div>
+        <div style="color:#7A6A5C;font-weight:900;">→</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#58C08A;">3 · Claim</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">XP + a quote you keep</div></div>
+        <div style="color:#7A6A5C;font-weight:900;">→</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FF7A2E;">4 · Return</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">streak + quests + chest</div></div>
+      </div>
+      <div style="font-size:13px;color:#C9B7A6;font-weight:700;margin-top:12px;">Three comeback hooks: don't break the streak · finish the quest chest · complete the chapter's quote set.</div>
+    </div>
+  </div>
+
+  <!-- ======================= 01 ONBOARDING ======================= -->
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">01</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">Onboarding</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:640px;">Sell the belief in 20 seconds, capture one goal, set the pace. The streak mindset starts before the home screen.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <!-- Onboarding 1: Welcome -->
+    <figure data-screen-label="Onboarding · Welcome" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Welcome · the pitch</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;justify-content:space-between;padding:64px 26px 36px;">
+          <div style="text-align:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;letter-spacing:2px;text-transform:uppercase;color:#FF5A2C;">Social XP</div>
+          <div style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+            <div style="width:100px;height:100px;margin-bottom:18px;">
+              <dc-import name="Logo" style="width:100px;height:100px;" hint-size="100px,100px"></dc-import>
+            </div>
+            <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:33px;line-height:1.06;margin:0 0 12px;letter-spacing:-0.5px;">Social skills are<br>just reps.</h2>
+            <p style="margin:0;font-size:18px;line-height:1.5;color:#6E5F54;max-width:300px;">Confidence isn't a talent you're born with. It's built — one tiny conversation at a time. 3 minutes a day.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;">Start training</div>
+            <div style="text-align:center;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;color:#7A6A5C;">I already have an account</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Onboarding 2: Goal -->
+    <figure data-screen-label="Onboarding · Goal" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Pick your goal</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:64px 26px 36px;">
+          <div style="height:8px;border-radius:99px;background:#EADFD5;margin-bottom:30px;overflow:hidden;"><div style="width:40%;height:100%;background:#FF5A2C;border-radius:99px;"></div></div>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;line-height:1.1;margin:0 0 6px;letter-spacing:-0.5px;">What brings you here?</h2>
+          <p style="margin:0 0 24px;font-size:16px;color:#6E5F54;">Pick the one that matters most right now — you can change it later.</p>
+          <div style="display:flex;flex-direction:column;gap:13px;flex:1;">
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #FF5A2C;background:#FFEDE4;font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;display:flex;align-items:center;justify-content:space-between;">Ease social nerves<span style="width:26px;height:26px;border-radius:99px;border:2px solid #FF5A2C;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="width:13px;height:13px;border-radius:99px;background:#FF5A2C;"></span></span></div>
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;display:flex;align-items:center;justify-content:space-between;">More confidence<span style="width:26px;height:26px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span></div>
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;display:flex;align-items:center;justify-content:space-between;">Be a better listener<span style="width:26px;height:26px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span></div>
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;display:flex;align-items:center;justify-content:space-between;">Make conversation easy<span style="width:26px;height:26px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span></div>
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;font-family:'Fredoka',sans-serif;font-weight:500;font-size:18px;display:flex;align-items:center;justify-content:space-between;">Stop seeking approval<span style="width:26px;height:26px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span></div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;margin-top:18px;">Continue</div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Onboarding 3: Pace -->
+    <figure data-screen-label="Onboarding · Pace" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Set the daily pace</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:64px 26px 36px;">
+          <div style="height:8px;border-radius:99px;background:#EADFD5;margin-bottom:30px;overflow:hidden;"><div style="width:75%;height:100%;background:#FF5A2C;border-radius:99px;"></div></div>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;line-height:1.1;margin:0 0 6px;letter-spacing:-0.5px;text-align:center;">How hard do we go?</h2>
+          <p style="margin:0 0 10px;font-size:16px;color:#6E5F54;text-align:center;">You can change this anytime. No pressure.</p>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;">
+            <div style="padding:22px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;display:flex;align-items:center;gap:16px;"><div style="font-size:28px;width:36px;text-align:center;">🌱</div><div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;">Chill</div><div style="font-size:14px;color:#7A6A5C;font-weight:700;">1 lesson a day · ~3 min</div></div></div>
+            <div style="padding:22px 20px;border-radius:18px;border:2px solid #FF5A2C;background:#FFF0E9;display:flex;align-items:center;gap:16px;position:relative;"><div style="font-size:28px;width:36px;text-align:center;">🔥</div><div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;">Steady</div><div style="font-size:14px;color:#7A6A5C;font-weight:700;">Lesson + real-world rep · ~5 min</div></div><span style="background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:11px;padding:4px 9px;border-radius:8px;letter-spacing:0.5px;flex-shrink:0;">PICKED</span></div>
+            <div style="padding:22px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;display:flex;align-items:center;gap:16px;"><div style="font-size:28px;width:36px;text-align:center;">⚡</div><div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;">Beast</div><div style="font-size:14px;color:#7A6A5C;font-weight:700;">Stack lessons + reps all day</div></div></div>
+            <div style="background:#fff;border:2px solid #EADFD5;border-radius:18px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-top:6px;"><div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;">Daily reminder</div><div style="font-size:13px;color:#7A6A5C;font-weight:700;">Keep your streak alive</div></div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#FF5A2C;">7:30 PM</div></div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;margin-top:18px;">Let's go →</div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 02 HOME ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">02</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">Home — the Learn path</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:680px;">The journey path won. One scrollable road through Chapter 1 with named lessons, a reward chest, and a checkpoint boss. Daily quests sit on top — three small wins per session. Chapter banner taps through to the chapter list.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="Home · Learn path" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Learn tab · Chapter 1 path</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;">
+          <!-- header -->
+          <div style="padding:56px 20px 12px;display:flex;flex-direction:column;gap:12px;background:#FFF6EE;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:5px;background:#fff;border-radius:14px;padding:8px 12px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-7 1 2 2 2 3 3-.5-2-.5-4 0-7z" fill="#FF7A2E"></path></svg>
+                <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;">7</span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;background:#fff;border-radius:14px;padding:8px 12px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+                  <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FF914D"></path></svg>
+                  <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;">3</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;background:#fff;border-radius:14px;padding:8px 12px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+                  <span style="width:16px;height:16px;border-radius:5px;background:#FFC24A;display:inline-block;"></span>
+                  <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;">1,240</span>
+                </div>
+              </div>
+            </div>
+            <!-- chapter banner -->
+            <div style="background:linear-gradient(160deg,#FF7A45,#FF5A2C);border-radius:20px;padding:14px 18px;color:#fff;display:flex;align-items:center;gap:14px;box-shadow:0 6px 16px rgba(255,90,44,0.28);">
+              <div style="flex:1;">
+                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:11px;letter-spacing:1.5px;opacity:0.85;">CHAPTER 1 · 2 OF 6 DONE</div>
+                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;margin-top:2px;">Breaking the Ice</div>
+                <div style="height:7px;border-radius:99px;background:rgba(255,255,255,0.28);overflow:hidden;margin-top:8px;max-width:200px;"><div style="width:33%;height:100%;background:#FFC24A;border-radius:99px;"></div></div>
+              </div>
+              <svg width="26" height="26" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.5" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2"></rect><path d="M9 3.5v17" stroke="rgba(255,255,255,0.9)" stroke-width="2"></path></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+            <!-- daily quests -->
+            <div style="background:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 3px 0 rgba(0,0,0,0.04);display:flex;align-items:center;gap:14px;">
+              <div style="flex:1;display:flex;flex-direction:column;gap:7px;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.5px;color:#7A6A5C;">DAILY QUESTS</span><span style="font-size:12px;font-weight:800;color:#B8A99C;">0 / 3</span></div>
+                <div style="display:flex;align-items:center;gap:8px;"><span style="width:15px;height:15px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span><span style="font-size:13px;font-weight:800;color:#544537;">Finish 1 lesson</span></div>
+                <div style="display:flex;align-items:center;gap:8px;"><span style="width:15px;height:15px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span><span style="font-size:13px;font-weight:800;color:#544537;">Earn 30 XP</span></div>
+                <div style="display:flex;align-items:center;gap:8px;"><span style="width:15px;height:15px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span><span style="font-size:13px;font-weight:800;color:#544537;">Do your real-world rep</span></div>
+              </div>
+              <div style="width:52px;height:52px;border-radius:14px;background:#FFF3D6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2.5" fill="#FFB020"></rect><path d="M4 12h16" stroke="#E0951B" stroke-width="1.8"></path><rect x="10.3" y="10" width="3.4" height="4.4" rx="1.2" fill="#7A5A10"></rect></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- path -->
+          <div style="flex:1;overflow:hidden;position:relative;padding:14px 0 0;display:flex;flex-direction:column;align-items:center;">
+            <!-- L1 done -->
+            <div style="display:flex;flex-direction:column;align-items:center;transform:translateX(-52px);">
+              <div style="width:56px;height:56px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 #3F9E6E;"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+              <div style="font-size:12px;font-weight:800;color:#7A6A5C;margin-top:4px;">Say hi first</div>
+            </div>
+            <div style="width:0;height:16px;border-left:3px dashed #E6D4C4;margin:3px 0;transform:translateX(-26px);"></div>
+            <!-- L2 done -->
+            <div style="display:flex;flex-direction:column;align-items:center;transform:translateX(30px);">
+              <div style="width:56px;height:56px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 #3F9E6E;"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+              <div style="font-size:12px;font-weight:800;color:#7A6A5C;margin-top:4px;">React, don't open</div>
+            </div>
+            <div style="width:0;height:16px;border-left:3px dashed #E6D4C4;margin:3px 0;transform:translateX(-4px);"></div>
+            <!-- L3 current -->
+            <div style="position:relative;display:flex;flex-direction:column;align-items:center;margin-top:30px;transform:translateX(-38px);">
+              <div style="position:absolute;top:-36px;background:#2E2018;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;padding:5px 13px;border-radius:10px;white-space:nowrap;">START · +20 XP</div>
+              <div style="width:82px;height:82px;border-radius:99px;background:linear-gradient(160deg,#FF7A45,#FF5A2C);display:flex;align-items:center;justify-content:center;box-shadow:0 7px 0 #D8431B, 0 0 0 6px rgba(255,90,44,0.18);">
+                <svg width="36" height="36" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"></path></svg>
+              </div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;margin-top:6px;">The follow-up question</div>
+            </div>
+            <div style="width:0;height:16px;border-left:3px dashed #E6D4C4;margin:3px 0;transform:translateX(4px);"></div>
+            <!-- chest -->
+            <div style="display:flex;flex-direction:column;align-items:center;transform:translateX(44px);">
+              <div style="width:56px;height:56px;border-radius:99px;background:#FFC24A;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 #E0A52F;"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2.5" fill="#fff"></rect><path d="M4 12h16" stroke="#E0A52F" stroke-width="1.8"></path><rect x="10.3" y="10" width="3.4" height="4.4" rx="1.2" fill="#E0A52F"></rect></svg></div>
+              <div style="font-size:12px;font-weight:800;color:#C9A23B;margin-top:4px;">Reward</div>
+            </div>
+            <div style="width:0;height:16px;border-left:3px dashed #E6D4C4;margin:3px 0;transform:translateX(14px);"></div>
+            <!-- L4 locked -->
+            <div style="display:flex;flex-direction:column;align-items:center;transform:translateX(-30px);">
+              <div style="width:56px;height:56px;border-radius:99px;background:#EADFD5;display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#B8A99C"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#B8A99C" stroke-width="2.4"></path></svg></div>
+              <div style="font-size:12px;font-weight:800;color:#B8A99C;margin-top:4px;">Remember the name</div>
+            </div>
+            <div style="width:0;height:14px;border-left:3px dashed #E6D4C4;margin:3px 0;transform:translateX(6px);"></div>
+            <!-- checkpoint peek -->
+            <div style="display:flex;flex-direction:column;align-items:center;transform:translateX(34px);opacity:0.9;">
+              <div style="width:60px;height:60px;border-radius:99px;background:#2E2018;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 #171008;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M7 3v18" stroke="#FFC24A" stroke-width="2.4" stroke-linecap="round"></path><path d="M7 4h10l-3 3.5 3 3.5H7z" fill="#FFC24A"></path></svg></div>
+            </div>
+          </div>
+
+          <!-- tab bar -->
+          <div style="display:flex;justify-content:space-around;align-items:flex-start;padding:12px 10px 28px;background:#fff;border-top:1px solid #F0E4D8;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#FF5A2C"></path></svg><span style="font-size:11px;font-weight:800;color:#FF5A2C;">Learn</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linejoin="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Quotes</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#B8A99C"></rect><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v4" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linecap="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Coach</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#B8A99C"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#B8A99C"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">You</span></div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 03 CHAPTERS ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">03</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">Chapters — the book, gamified</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:680px;">The content spine. Five chapters from first hello to leading a room, each ending in a real-world checkpoint. Opens from the chapter banner on Home.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="Chapters" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Chapter list · tapped from the banner</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;">
+          <div style="padding:56px 22px 12px;display:flex;align-items:center;gap:14px;">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#2E2018" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;">Chapters</span>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:8px 20px 0;display:flex;flex-direction:column;gap:14px;">
+            <!-- Ch1 active -->
+            <div style="background:#fff;border:2px solid #FF5A2C;border-radius:22px;padding:18px;box-shadow:0 5px 0 rgba(255,90,44,0.15);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#FF7A45,#FF5A2C);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#fff;">1</div>
+                <div style="flex:1;">
+                  <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;">Breaking the Ice</div>
+                  <div style="font-size:13px;color:#FF5A2C;font-weight:800;">2 of 6 done · 4 quotes to collect</div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:14px;font-weight:800;color:#7A6A5C;">Say hi first</span></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:14px;font-weight:800;color:#7A6A5C;">React, don't open</span></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#FF5A2C;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"></path></svg></span><span style="font-size:14px;font-weight:900;color:#2E2018;">The follow-up question</span><span style="font-size:11px;font-weight:800;color:#fff;background:#FF5A2C;padding:2px 8px;border-radius:99px;">NOW</span></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#EADFD5;flex-shrink:0;"></span><span style="font-size:14px;font-weight:700;color:#B8A99C;">Remember the name</span></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#EADFD5;flex-shrink:0;"></span><span style="font-size:14px;font-weight:700;color:#B8A99C;">The graceful exit</span></div>
+                <div style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:99px;background:#2E2018;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24"><path d="M7 4h10l-3 3.5 3 3.5H7z" fill="#FFC24A"></path></svg></span><span style="font-size:14px;font-weight:800;color:#544537;">Checkpoint · 3 real conversations</span></div>
+              </div>
+              <div style="margin-top:14px;padding:14px;border-radius:16px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;text-align:center;box-shadow:0 5px 0 #D8431B;">Continue · The follow-up question</div>
+            </div>
+            <!-- Ch2 locked -->
+            <div style="background:#fff;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:14px;opacity:0.85;">
+              <div style="width:52px;height:52px;border-radius:16px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#B8A99C;">2</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#8A7B70;">Keeping It Going</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">Listening, flow, never running dry</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+            <!-- Ch3 locked -->
+            <div style="background:#fff;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:14px;opacity:0.85;">
+              <div style="width:52px;height:52px;border-radius:16px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#B8A99C;">3</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#8A7B70;">Telling Stories</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">Make your moments land</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+            <!-- Ch4 locked peek -->
+            <div style="background:#fff;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:14px;opacity:0.85;">
+              <div style="width:52px;height:52px;border-radius:16px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#B8A99C;">4</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#8A7B70;">Confidence Under Pressure</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">High stakes, steady voice</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+          </div>
+          <!-- tab bar -->
+          <div style="display:flex;justify-content:space-around;align-items:flex-start;padding:12px 10px 28px;background:#fff;border-top:1px solid #F0E4D8;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#FF5A2C"></path></svg><span style="font-size:11px;font-weight:800;color:#FF5A2C;">Learn</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linejoin="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Quotes</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#B8A99C"></rect><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v4" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linecap="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Coach</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#B8A99C"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#B8A99C"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">You</span></div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 04 LESSON LOOP ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">04</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">The lesson loop — 5 beats, ~3 minutes</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:680px;">Concept → your call (tap to answer) → a quote you keep → the real-world rep → claim. Same rhythm every day, so the habit never needs willpower. Shown: Chapter 1, Lesson 3.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <!-- Beat 1: Concept -->
+    <figure data-screen-label="Lesson · Concept" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">1 · The concept</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:58px 22px 34px;">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#B8A99C" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            <div style="flex:1;display:flex;gap:6px;">
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#7A6A5C;font-weight:800;margin-bottom:18px;">CHAPTER 1 · LESSON 3 · THE FOLLOW-UP QUESTION</div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;color:#FF5A2C;margin-bottom:14px;">① THE CONCEPT</div>
+            <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:36px;line-height:1.1;margin:0 0 18px;letter-spacing:-0.5px;">Answers are doors.</h2>
+            <p style="margin:0;font-size:20px;line-height:1.6;color:#544537;">Most people hear an answer and start hunting for a brand-new topic. Wrong move. <b style="color:#FF5A2C;">Every answer hands you the next question</b> — pick one word they said and pull the thread.</p>
+            <div style="margin-top:28px;background:#FFEFE4;border-radius:20px;padding:18px 20px;display:flex;gap:14px;align-items:center;">
+              <div style="width:42px;height:42px;flex-shrink:0;border-radius:12px;background:#FFE2D2;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M9 18l-1 3 3-1c1 .3 2 .5 3 .5 5 0 9-3.6 9-8s-4-8-9-8-9 3.6-9 8c0 1.7.6 3.3 1.6 4.6z" fill="#FF914D"></path></svg></div>
+              <div style="font-weight:700;font-size:16px;color:#7A5A3E;">"You never need a topic. They just gave you one."</div>
+            </div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;">Continue</div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Beat 2: Your call (quiz) -->
+    <figure data-screen-label="Lesson · Your call" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">2 · Your call — tap to answer</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:58px 22px 34px;">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#B8A99C" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            <div style="flex:1;display:flex;gap:6px;">
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#7A6A5C;font-weight:800;margin-bottom:18px;">CHAPTER 1 · LESSON 3 · THE FOLLOW-UP QUESTION</div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;color:#FF5A2C;margin-bottom:14px;">② YOUR CALL</div>
+          <div style="background:#fff;border:2px solid #F0E4D8;border-radius:20px;border-bottom-left-radius:6px;padding:16px 18px;align-self:flex-start;max-width:88%;box-shadow:0 3px 0 rgba(0,0,0,0.03);margin-bottom:18px;">
+            <div style="font-size:12px;font-weight:800;color:#B8A99C;margin-bottom:4px;">THEY SAY</div>
+            <div style="font-size:18px;color:#2E2018;font-weight:600;">"Work's been crazy — we're launching this week."</div>
+          </div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;margin-bottom:14px;">Which reply opens the door?</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:13px;">
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #EADFD5;background:#fff;font-size:17px;font-weight:700;color:#8A7B70;">"Nice. So… seen anything good lately?"</div>
+            <div style="padding:18px 20px;border-radius:18px;border:2px solid #58C08A;background:#EAF8F0;font-size:17px;font-weight:800;color:#2E2018;display:flex;align-items:center;justify-content:space-between;gap:12px;">"A launch? What are you launching?"<span style="width:26px;height:26px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></div>
+            <div style="background:#EAF8F0;border-radius:18px;padding:14px 18px;margin-top:4px;">
+              <div style="font-size:12px;font-weight:800;color:#3F9E6E;letter-spacing:1px;margin-bottom:4px;">THAT'S THE THREAD · +10 XP</div>
+              <div style="font-size:15px;font-weight:700;color:#2E5A44;line-height:1.45;">One word — "launching" — just became the whole next chapter of this conversation.</div>
+            </div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#58C08A;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #3F9E6E;">Continue</div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Beat 3: Quote collected -->
+    <figure data-screen-label="Lesson · Quote unlocked" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">3 · The quote you keep</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(170deg,#2E2018,#43301F);display:flex;flex-direction:column;padding:58px 22px 34px;">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="rgba(255,255,255,0.55)" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            <div style="flex:1;display:flex;gap:6px;">
+              <div style="flex:1;height:8px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,0.18);"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,0.18);"></div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);font-weight:800;margin-bottom:14px;">CHAPTER 1 · LESSON 3 · THE FOLLOW-UP QUESTION</div>
+          <div style="text-align:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;letter-spacing:2px;color:#FFC24A;margin-bottom:16px;">③ QUOTE UNLOCKED</div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+            <!-- collectible card -->
+            <div style="position:relative;background:#FFF6EE;border-radius:24px;padding:28px 24px 22px;box-shadow:0 16px 40px rgba(0,0,0,0.4);">
+              <span style="position:absolute;top:-12px;right:18px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;letter-spacing:1px;padding:5px 12px;border-radius:99px;box-shadow:0 3px 0 #D8431B;">NEW</span>
+              <div style="font-family:'Fredoka',sans-serif;font-size:72px;line-height:0.5;color:#FF914D;height:34px;">“</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:26px;line-height:1.32;color:#2E2018;">The quality of your life is the quality of your conversations.</div>
+              <div style="display:flex;align-items:center;gap:13px;margin-top:20px;">
+                <div style="width:38px;height:50px;border-radius:5px;background:linear-gradient(135deg,#FF7A45,#FF5A2C);box-shadow:0 3px 8px rgba(0,0,0,0.18);"></div>
+                <div style="line-height:1.3;">
+                  <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#2E2018;">Tony Robbins</div>
+                  <div style="font-size:13px;color:#7A6A5C;font-weight:700;">on connection</div>
+                </div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:5px;"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FF914D"></path></svg><span style="font-size:13px;font-weight:800;color:#7A6A5C;">3 of 6</span></div>
+              </div>
+            </div>
+            <div style="text-align:center;font-size:14px;color:rgba(255,255,255,0.6);font-weight:700;margin-top:16px;">Added to your collection · Breaking the Ice set</div>
+            <div style="display:flex;justify-content:center;gap:7px;margin-top:10px;">
+              <span style="width:9px;height:9px;border-radius:99px;background:#FFC24A;"></span>
+              <span style="width:9px;height:9px;border-radius:99px;background:#FFC24A;"></span>
+              <span style="width:9px;height:9px;border-radius:99px;background:#FFC24A;"></span>
+              <span style="width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,0.22);"></span>
+              <span style="width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,0.22);"></span>
+              <span style="width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,0.22);"></span>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:12px;">
+            <div style="flex:1;padding:15px;border-radius:18px;border:2px solid rgba(255,255,255,0.25);color:#FFF6EE;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5" fill="none" stroke="#FFF6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 20h14" stroke="#FFF6EE" stroke-width="2.4" stroke-linecap="round"></path></svg>Save</div>
+            <div style="flex:1;padding:15px;border-radius:18px;border:2px solid rgba(255,255,255,0.25);color:#FFF6EE;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 15V4M7 8l5-5 5 5" fill="none" stroke="#FFF6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 12v8h14v-8" fill="none" stroke="#FFF6EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Share</div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#FFC24A;color:#2E2018;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D89E2E;">Continue</div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Beat 4: Real-world rep -->
+    <figure data-screen-label="Lesson · Real-world rep" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">4 · The real-world rep</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:58px 22px 34px;">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#B8A99C" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            <div style="flex:1;display:flex;gap:6px;">
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="flex:1;height:8px;border-radius:99px;background:#EADFD5;"></div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#7A6A5C;font-weight:800;margin-bottom:18px;">CHAPTER 1 · LESSON 3 · THE FOLLOW-UP QUESTION</div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;color:#FF5A2C;margin-bottom:16px;">④ THE REAL-WORLD REP</div>
+            <div style="background:linear-gradient(160deg,#FF7A45,#FF5A2C);border-radius:26px;padding:30px 26px;color:#fff;box-shadow:0 12px 26px rgba(255,90,44,0.32);">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px;line-height:1.2;">Ask someone how their day's going — then one follow-up about what they said.</div>
+              <div style="font-size:15px;opacity:0.9;margin-top:12px;font-weight:700;">Barista, classmate, coworker — anyone counts.</div>
+              <div style="display:inline-flex;align-items:center;gap:7px;margin-top:20px;background:rgba(255,255,255,0.22);padding:7px 14px;border-radius:99px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;"><span style="width:14px;height:14px;border-radius:4px;background:#FFC24A;"></span>+30 XP</div>
+            </div>
+            <div style="font-size:14px;color:#7A6A5C;font-weight:700;margin-top:18px;max-width:280px;">Honor system. No recording, no grade — the only person you'd cheat is you.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;">I'm in — let's go</div>
+            <div style="text-align:center;font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;color:#7A6A5C;">Remind me tonight</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- Beat 5: Claim -->
+    <figure data-screen-label="Lesson · Complete" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">5 · Claim — quests tick up</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:linear-gradient(180deg,#FFF1D6,#FFF6EE 40%);display:flex;flex-direction:column;padding:64px 22px 34px;align-items:center;text-align:center;">
+          <div style="width:110px;height:110px;margin-bottom:6px;position:relative;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;inset:0;border-radius:99px;background:#fff;box-shadow:0 8px 0 rgba(0,0,0,0.05);"></div>
+            <div style="position:relative;width:70px;height:70px;"><dc-import name="Logo" style="width:70px;height:70px;" hint-size="70px,70px"></dc-import></div>
+          </div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:31px;letter-spacing:-0.5px;margin-top:4px;">Lesson complete! 💪</div>
+          <div style="font-size:16px;color:#6E5F54;font-weight:700;margin-top:4px;">That's how confidence gets built.</div>
+          <div style="display:flex;gap:12px;margin:20px 0 18px;">
+            <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:18px;padding:13px 20px;box-shadow:0 5px 0 rgba(0,0,0,0.05);">
+              <span style="width:20px;height:20px;border-radius:6px;background:#FFC24A;"></span>
+              <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#FF5A2C;">+20 XP</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:18px;padding:13px 20px;box-shadow:0 5px 0 rgba(0,0,0,0.05);">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FF914D"></path></svg>
+              <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#2E2018;">+1 quote</span>
+            </div>
+          </div>
+          <div style="width:100%;background:#fff;border-radius:20px;padding:16px 18px;box-shadow:0 4px 0 rgba(0,0,0,0.04);text-align:left;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.5px;color:#7A6A5C;">DAILY QUESTS</span><span style="font-size:12px;font-weight:800;color:#FF5A2C;">1 / 3</span></div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;align-items:center;gap:9px;"><span style="width:17px;height:17px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="10" height="10" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:14px;font-weight:800;color:#544537;">Finish 1 lesson</span></div>
+              <div style="display:flex;align-items:center;gap:9px;"><span style="width:17px;height:17px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span><span style="font-size:14px;font-weight:800;color:#544537;">Earn 30 XP</span><div style="flex:1;height:7px;border-radius:99px;background:#F0E4D8;overflow:hidden;margin-left:6px;"><div style="width:66%;height:100%;background:#FFC24A;border-radius:99px;"></div></div><span style="font-size:12px;font-weight:800;color:#B8A99C;">20/30</span></div>
+              <div style="display:flex;align-items:center;gap:9px;"><span style="width:17px;height:17px;border-radius:99px;border:2px solid #EADFD5;flex-shrink:0;"></span><span style="font-size:14px;font-weight:800;color:#544537;">Do your real-world rep</span></div>
+            </div>
+          </div>
+          <div style="font-size:13px;font-weight:800;color:#7A6A5C;letter-spacing:1px;margin:16px 0 10px;">HOW'D IT FEEL?</div>
+          <div style="display:flex;gap:10px;width:100%;margin-bottom:auto;">
+            <div style="flex:1;background:#fff;border:2px solid #EADFD5;border-radius:16px;padding:12px 6px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;">😎<br>Crushed it</div>
+            <div style="flex:1;background:#FFF0E9;border:2px solid #FF5A2C;border-radius:16px;padding:12px 6px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;">🙂<br>Got it</div>
+            <div style="flex:1;background:#fff;border:2px solid #EADFD5;border-radius:16px;padding:12px 6px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;">😬<br>Shaky</div>
+          </div>
+          <div style="width:100%;padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;margin-top:18px;">Claim &amp; continue</div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 05 QUOTE COLLECTION ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">05</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">The quote collection</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:680px;">Every lesson ends in a quote you keep — pocket wisdom, one card at a time. Completing a chapter's set is the collector itch that brings people back. Cards are share-ready by design (free marketing).</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="Quotes · Collection" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Quotes tab · Breaking the Ice set</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;">
+          <div style="padding:56px 22px 14px;">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;">
+              <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px;">Quotes</span>
+              <span style="display:flex;align-items:center;gap:6px;background:#fff;border-radius:12px;padding:6px 12px;box-shadow:0 2px 0 rgba(0,0,0,0.04);"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FF914D"></path></svg><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;">3 / 6</span></span>
+            </div>
+            <div style="font-size:14px;color:#7A6A5C;font-weight:700;margin-top:4px;">Pocket wisdom — one card per lesson.</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:14px;">
+              <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;color:#fff;background:#FF914D;padding:4px 11px;border-radius:8px;white-space:nowrap;">CHAPTER 1</span>
+              <span style="font-weight:800;font-size:14px;color:#6E5F54;">Breaking the Ice</span>
+              <div style="flex:1;height:8px;border-radius:99px;background:#F0E4D8;overflow:hidden;"><div style="width:50%;height:100%;background:#FF914D;border-radius:99px;"></div></div>
+            </div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:4px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start;">
+            <!-- collected -->
+            <div style="background:#fff;border-radius:20px;padding:16px 15px;box-shadow:0 4px 0 rgba(0,0,0,0.04);display:flex;flex-direction:column;min-height:170px;">
+              <div style="font-family:'Fredoka',sans-serif;font-size:40px;line-height:0.5;color:#FF914D;height:20px;">“</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;line-height:1.35;color:#2E2018;flex:1;">To be interesting, be interested.</div>
+              <div style="font-size:12px;font-weight:800;color:#7A6A5C;margin-top:10px;">Dale Carnegie</div>
+              <div style="font-size:11px;font-weight:700;color:#B8A99C;">Lesson 1</div>
+            </div>
+            <div style="background:#fff;border-radius:20px;padding:16px 15px;box-shadow:0 4px 0 rgba(0,0,0,0.04);display:flex;flex-direction:column;min-height:170px;">
+              <div style="font-family:'Fredoka',sans-serif;font-size:40px;line-height:0.5;color:#FF914D;height:20px;">“</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;line-height:1.35;color:#2E2018;flex:1;">We have two ears and one mouth so we can listen twice as much as we speak.</div>
+              <div style="font-size:12px;font-weight:800;color:#7A6A5C;margin-top:10px;">Epictetus</div>
+              <div style="font-size:11px;font-weight:700;color:#B8A99C;">Lesson 2</div>
+            </div>
+            <div style="position:relative;background:#fff;border:2px solid #FF914D;border-radius:20px;padding:16px 15px;box-shadow:0 4px 0 rgba(255,145,77,0.2);display:flex;flex-direction:column;min-height:170px;">
+              <span style="position:absolute;top:-10px;right:12px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:10px;letter-spacing:1px;padding:3px 9px;border-radius:99px;">NEW</span>
+              <div style="font-family:'Fredoka',sans-serif;font-size:40px;line-height:0.5;color:#FF914D;height:20px;">“</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;line-height:1.35;color:#2E2018;flex:1;">The quality of your life is the quality of your conversations.</div>
+              <div style="font-size:12px;font-weight:800;color:#7A6A5C;margin-top:10px;">Tony Robbins</div>
+              <div style="font-size:11px;font-weight:700;color:#B8A99C;">Lesson 3</div>
+            </div>
+            <!-- locked -->
+            <div style="border:2px dashed #D8C9B8;border-radius:20px;padding:16px 15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:170px;">
+              <svg width="22" height="22" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+              <span style="font-size:12px;font-weight:800;color:#B8A99C;text-align:center;">Finish Lesson 4<br>to unlock</span>
+            </div>
+            <div style="border:2px dashed #D8C9B8;border-radius:20px;padding:16px 15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:170px;">
+              <svg width="22" height="22" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+              <span style="font-size:12px;font-weight:800;color:#B8A99C;text-align:center;">Finish Lesson 5<br>to unlock</span>
+            </div>
+            <div style="border:2px dashed #FFC24A;border-radius:20px;padding:16px 15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:170px;background:#FFF9EC;">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M7 3v18" stroke="#E0A52F" stroke-width="2.4" stroke-linecap="round"></path><path d="M7 4h10l-3 3.5 3 3.5H7z" fill="#E0A52F"></path></svg>
+              <span style="font-size:12px;font-weight:800;color:#C9A23B;text-align:center;">Beat the checkpoint<br>for the rare one</span>
+            </div>
+          </div>
+          <!-- tab bar -->
+          <div style="display:flex;justify-content:space-around;align-items:flex-start;padding:12px 10px 28px;background:#fff;border-top:1px solid #F0E4D8;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#B8A99C"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Learn</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FF5A2C"></path></svg><span style="font-size:11px;font-weight:800;color:#FF5A2C;">Quotes</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#B8A99C"></rect><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v4" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linecap="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Coach</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#B8A99C"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#B8A99C"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">You</span></div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 06 STREAK ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">06</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">The streak moment</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:640px;">Fires when the daily goal is done. A big number, the week laid out, and instant share.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="Streak celebration" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Streak +1 celebration</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#3A2416,#7A2E14);display:flex;flex-direction:column;align-items:center;text-align:center;padding:70px 26px 36px;position:relative;overflow:hidden;">
+          <!-- confetti -->
+          <div style="position:absolute;top:90px;left:36px;width:12px;height:12px;border-radius:3px;background:#FFC24A;transform:rotate(20deg);"></div>
+          <div style="position:absolute;top:140px;right:44px;width:10px;height:10px;border-radius:3px;background:#58C08A;transform:rotate(-15deg);"></div>
+          <div style="position:absolute;top:200px;left:60px;width:9px;height:9px;border-radius:99px;background:#fff;opacity:0.8;"></div>
+          <div style="position:absolute;top:120px;left:120px;width:8px;height:8px;border-radius:2px;background:#FF8A5A;transform:rotate(30deg);"></div>
+          <div style="position:absolute;top:240px;right:70px;width:12px;height:12px;border-radius:3px;background:#FFC24A;transform:rotate(40deg);"></div>
+          <div style="position:absolute;top:300px;left:40px;width:10px;height:10px;border-radius:99px;background:#58C08A;"></div>
+          <div style="position:absolute;top:88px;right:90px;width:8px;height:8px;border-radius:2px;background:#fff;opacity:0.7;transform:rotate(15deg);"></div>
+
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;letter-spacing:2px;color:#FFC24A;position:relative;">STREAK EXTENDED</div>
+
+          <div style="position:relative;width:190px;height:206px;margin:10px 0 0;display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 100 110" style="width:100%;height:100%;position:absolute;">
+              <defs><linearGradient id="flame2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF5A2C"></stop><stop offset="0.6" stop-color="#FF914D"></stop><stop offset="1" stop-color="#FFC24A"></stop></linearGradient></defs>
+              <path d="M50 4 C58 26 84 36 84 66 a34 34 0 0 1 -68 0 C16 44 30 36 36 18 C40 30 46 32 52 38 C50 24 50 14 50 4 Z" fill="url(#flame2)"></path>
+            </svg>
+            <span style="position:relative;font-family:'Fredoka',sans-serif;font-weight:700;font-size:58px;color:#fff;text-shadow:0 3px 10px rgba(0,0,0,0.25);margin-top:32px;">8</span>
+          </div>
+
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:32px;line-height:1.15;color:#fff;margin:6px 0 0;letter-spacing:-0.5px;">8 day streak!</h2>
+          <p style="color:#F4D8C2;font-size:16px;font-weight:700;line-height:1.5;margin:8px 0 0;max-width:280px;">You showed up 8 days straight. That's not luck — that's a habit forming.</p>
+
+          <!-- week row -->
+          <div style="display:flex;gap:9px;margin-top:20px;position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:#FF914D;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:11px;font-weight:800;color:#F4D8C2;">M</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:#FF914D;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:11px;font-weight:800;color:#F4D8C2;">T</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:#FF914D;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:11px;font-weight:800;color:#F4D8C2;">W</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:#FF914D;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:11px;font-weight:800;color:#F4D8C2;">T</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:#FFC24A;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px rgba(255,194,74,0.25);"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M12 2c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-7 1 2 2 2 3 3-.5-2-.5-4 0-7z" fill="#7A2E14"></path></svg></span><span style="font-size:11px;font-weight:900;color:#FFC24A;">F</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:rgba(255,255,255,0.14);"></span><span style="font-size:11px;font-weight:800;color:rgba(244,216,194,0.6);">S</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="width:34px;height:34px;border-radius:99px;background:rgba(255,255,255,0.14);"></span><span style="font-size:11px;font-weight:800;color:rgba(244,216,194,0.6);">S</span></div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin:auto 0;position:relative;">
+            <div style="background:rgba(255,255,255,0.12);border-radius:18px;padding:12px 20px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#FFC24A;">+50</div><div style="font-size:12px;color:#F4D8C2;font-weight:700;">XP today</div></div>
+            <div style="background:rgba(255,255,255,0.12);border-radius:18px;padding:12px 20px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;color:#fff;">2</div><div style="font-size:12px;color:#F4D8C2;font-weight:700;">days to a chest</div></div>
+          </div>
+
+          <div style="width:100%;display:flex;flex-direction:column;gap:12px;position:relative;">
+            <div style="padding:19px;border-radius:20px;background:#FFC24A;color:#2E2018;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;box-shadow:0 6px 0 #D89E2E;">Keep it going</div>
+            <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:16px;color:#F4D8C2;">Share my streak</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 07 YOU ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">07</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">You — XP &amp; chapter progress</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:640px;">The mirror: total XP, streak, reps and quotes, plus the road through all five chapters. XP only goes up.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="You · Progress" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">You tab</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;">
+          <div style="background:linear-gradient(160deg,#FF7A45,#FF5A2C);padding:60px 22px 22px;color:#fff;border-bottom-left-radius:30px;border-bottom-right-radius:30px;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;opacity:0.85;">YOUR TOTAL XP</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;margin-top:2px;"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:46px;line-height:1;">1,240</span><span style="font-size:16px;font-weight:700;opacity:0.85;margin-bottom:6px;">XP</span></div>
+            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.16);border-radius:12px;padding:7px 12px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-7 1 2 2 2 3 3-.5-2-.5-4 0-7z" fill="#FFE0A8"></path></svg><span style="font-weight:800;font-size:14px;">7-day streak</span></div>
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.16);border-radius:12px;padding:7px 12px;white-space:nowrap;"><span style="font-weight:800;font-size:14px;">⚡ 18 reps</span></div>
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.16);border-radius:12px;padding:7px 12px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="#FFE0A8"></path></svg><span style="font-weight:800;font-size:14px;">3 quotes</span></div>
+            </div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:18px 22px;display:flex;flex-direction:column;gap:11px;">
+            <div style="font-size:13px;font-weight:800;color:#7A6A5C;letter-spacing:1px;">THE ROAD</div>
+            <!-- Ch1 current -->
+            <div style="background:#fff;border:2px solid #FF5A2C;border-radius:18px;padding:13px 16px;box-shadow:0 4px 0 rgba(255,90,44,0.18);">
+              <div style="display:flex;align-items:center;gap:13px;">
+                <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(160deg,#FF7A45,#FF5A2C);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#fff;">1</div>
+                <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;">Breaking the Ice</div><div style="font-size:13px;color:#FF5A2C;font-weight:800;">2 of 6 lessons</div></div>
+              </div>
+              <div style="height:11px;border-radius:99px;background:#F0E4D8;overflow:hidden;margin-top:10px;"><div style="width:33%;height:100%;background:linear-gradient(90deg,#FFC24A,#FF914D);border-radius:99px;"></div></div>
+            </div>
+            <!-- locked chapters -->
+            <div style="display:flex;align-items:center;gap:13px;background:#fff;border-radius:18px;padding:13px 16px;opacity:0.75;">
+              <div style="width:44px;height:44px;border-radius:14px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#B8A99C;">2</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#8A7B70;">Keeping It Going</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">Listening, flow, never running dry</div></div>
+              <svg width="17" height="17" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;background:#fff;border-radius:18px;padding:13px 16px;opacity:0.75;">
+              <div style="width:44px;height:44px;border-radius:14px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#B8A99C;">3</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#8A7B70;">Telling Stories</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">Make your moments land</div></div>
+              <svg width="17" height="17" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;background:#fff;border-radius:18px;padding:13px 16px;opacity:0.75;">
+              <div style="width:44px;height:44px;border-radius:14px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#B8A99C;">4</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#8A7B70;">Confidence Under Pressure</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">High stakes, steady voice</div></div>
+              <svg width="17" height="17" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;background:#fff;border-radius:18px;padding:13px 16px;opacity:0.75;">
+              <div style="width:44px;height:44px;border-radius:14px;background:#EADFD5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#B8A99C;">5</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#8A7B70;">Lead the Room</div><div style="font-size:13px;color:#B8A99C;font-weight:700;">Set the tone wherever you are</div></div>
+              <svg width="17" height="17" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.4" fill="#CDBCAD"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#CDBCAD" stroke-width="2.4"></path></svg>
+            </div>
+          </div>
+          <!-- tab bar -->
+          <div style="display:flex;justify-content:space-around;align-items:flex-start;padding:12px 10px 28px;background:#fff;border-top:1px solid #F0E4D8;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#B8A99C"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Learn</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3l7 7-7 11-7-11z" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linejoin="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Quotes</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#B8A99C"></rect><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v4" fill="none" stroke="#B8A99C" stroke-width="2.2" stroke-linecap="round"></path></svg><span style="font-size:11px;font-weight:700;color:#B8A99C;">Coach</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#FF5A2C"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#FF5A2C"></path></svg><span style="font-size:11px;font-weight:800;color:#FF5A2C;">You</span></div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 08 PAYWALL ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">08</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">Premium · Social XP+</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:640px;">Free gets one lesson a day — enough to build the habit. Plus unlocks unlimited reps and the AI coaching that costs real money to run.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <figure data-screen-label="Paywall" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Paywall</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;padding:58px 22px 34px;">
+          <div style="display:flex;justify-content:flex-end;"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#B8A99C" stroke-width="2.6" stroke-linecap="round"></path></svg></div>
+          <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:2px;">
+            <div style="width:78px;height:78px;margin-bottom:6px;"><dc-import name="Logo" style="width:78px;height:78px;" hint-size="78px,78px"></dc-import></div>
+            <div style="display:inline-block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;color:#fff;background:linear-gradient(90deg,#FF914D,#FF5A2C);padding:5px 14px;border-radius:99px;margin:4px 0 10px;">SOCIAL XP+</div>
+            <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;line-height:1.1;margin:0;letter-spacing:-0.5px;">Train as much<br>as you want.</h2>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;margin:14px 0;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:26px;height:26px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-weight:700;font-size:16px;">Unlimited lessons &amp; reps per day</span></div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:26px;height:26px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-weight:700;font-size:16px;">All chapters unlocked from day one</span></div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:26px;height:26px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-weight:700;font-size:16px;">AI speaking coach &amp; feedback</span></div>
+            <div style="display:flex;align-items:center;gap:12px;"><span style="width:26px;height:26px;border-radius:99px;background:#58C08A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-weight:700;font-size:16px;">Streak repair — one slip forgiven</span></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-bottom:18px;">
+            <div style="flex:1;background:#fff;border:2px solid #EADFD5;border-radius:18px;padding:14px;text-align:center;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#7A6A5C;">Monthly</div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;">$6.99</div></div>
+            <div style="flex:1;background:#FFF0E9;border:2px solid #FF5A2C;border-radius:18px;padding:14px;text-align:center;position:relative;"><span style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:11px;padding:2px 10px;border-radius:99px;white-space:nowrap;">SAVE 52%</span><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FF5A2C;">Yearly</div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;">$39.99</div></div>
+          </div>
+          <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;text-align:center;box-shadow:0 6px 0 #D8431B;">Start 7-day free trial</div>
+          <div style="text-align:center;font-size:13px;color:#7A6A5C;font-weight:700;margin-top:12px;">Then $39.99/yr · cancel anytime</div>
+          <div style="text-align:center;font-size:11px;color:#A99A8C;font-weight:600;margin-top:10px;line-height:1.4;">Social XP builds confidence through practice.<br>It's not therapy or mental-health treatment.</div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+  <!-- ======================= 09 AI COACH ======================= -->
+  <div style="max-width:1200px;margin:96px auto 0;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#2E2018;padding:5px 12px;border-radius:9px;">09</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">AI Coach <span style="font-size:16px;color:#7A6A5C;font-weight:500;">— Version 2, unlocks with Chapter 2</span></h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:640px;">Record a 30-second rep — intro, story, idea — and get warm, specific feedback. Encouraging first, actionable always. Never a grade that stings.</p>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <!-- AI record -->
+    <figure data-screen-label="AI Coach · Record" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Record a rep</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#241A12,#3A2416);display:flex;flex-direction:column;padding:58px 26px 36px;align-items:center;text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FFC24A;">AI COACH</span>
+            <span style="width:22px;"></span>
+          </div>
+          <div style="margin-top:30px;font-size:14px;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:1px;">TODAY'S PROMPT</div>
+          <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;line-height:1.18;color:#fff;margin:10px 0 0;max-width:300px;">Introduce yourself like we just met at an event.</h2>
+          <div style="font-size:15px;color:rgba(255,255,255,0.6);font-weight:700;margin-top:12px;">Aim for 30 seconds. No script — just talk.</div>
+
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;width:100%;">
+            <div style="display:flex;align-items:center;gap:4px;height:90px;">
+              <div style="width:5px;height:24px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:46px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:70px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:40px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:84px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:30px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:60px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:90px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="width:5px;height:54px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:34px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:66px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:42px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:22px;border-radius:99px;background:#FF914D;"></div>
+            </div>
+          </div>
+
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;color:#fff;margin-bottom:18px;">0:18</div>
+          <div style="width:84px;height:84px;border-radius:99px;background:rgba(255,90,44,0.18);border:3px solid #FF5A2C;display:flex;align-items:center;justify-content:center;">
+            <div style="width:34px;height:34px;border-radius:9px;background:#FF5A2C;"></div>
+          </div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.6);font-weight:700;margin-top:14px;">Tap to stop</div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- AI feedback -->
+    <figure data-screen-label="AI Coach · Feedback" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Coach feedback</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div style="height:100%;background:#FFF6EE;display:flex;flex-direction:column;">
+          <div style="background:linear-gradient(160deg,#FF7A45,#FF5A2C);padding:60px 24px 26px;color:#fff;border-bottom-left-radius:28px;border-bottom-right-radius:28px;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;opacity:0.85;">YOUR INTRO · 0:28</div>
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:27px;line-height:1.12;margin-top:4px;">Warm and easy to follow. 🔥</div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:18px 22px 30px;display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:20px;padding:16px 20px;box-shadow:0 3px 0 rgba(0,0,0,0.03);">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;color:#58C08A;line-height:1;">84</div>
+              <div style="flex:1;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;">Strong rep, Alex.</div><div style="font-size:13px;color:#7A6A5C;font-weight:700;">Up 9 points from last time</div></div>
+            </div>
+            <div style="flex:1;background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 3px 0 rgba(0,0,0,0.03);display:flex;flex-direction:column;justify-content:space-evenly;gap:12px;">
+              <div><div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-bottom:6px;"><span>Confidence</span><span style="color:#58C08A;">82</span></div><div style="height:9px;border-radius:99px;background:#F0E4D8;overflow:hidden;"><div style="width:82%;height:100%;background:#58C08A;border-radius:99px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-bottom:6px;"><span>Clarity</span><span style="color:#58C08A;">88</span></div><div style="height:9px;border-radius:99px;background:#F0E4D8;overflow:hidden;"><div style="width:88%;height:100%;background:#58C08A;border-radius:99px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-bottom:6px;"><span>Energy</span><span style="color:#58C08A;">79</span></div><div style="height:9px;border-radius:99px;background:#F0E4D8;overflow:hidden;"><div style="width:79%;height:100%;background:#58C08A;border-radius:99px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-bottom:6px;"><span>Pace</span><span style="color:#FFB020;">A touch fast</span></div><div style="height:9px;border-radius:99px;background:#F0E4D8;overflow:hidden;"><div style="width:68%;height:100%;background:#FFB020;border-radius:99px;"></div></div></div>
+            </div>
+            <div style="background:#FFEFE4;border-radius:20px;padding:16px 18px;">
+              <div style="font-size:12px;font-weight:800;color:#C9554A;letter-spacing:1px;margin-bottom:6px;">ONE THING TO TRY</div>
+              <div style="font-weight:700;font-size:15px;color:#7A5A3E;line-height:1.4;">You said "um" 6 times — totally normal. Next rep, try pausing instead. Silence reads as confidence.</div>
+            </div>
+            <div style="padding:18px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;text-align:center;box-shadow:0 6px 0 #D8431B;">Try again · +15 XP</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

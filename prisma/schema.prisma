@@ -1,0 +1,74 @@
+// Neon Postgres (via Vercel integration).
+// DATABASE_URL is the pooled connection (runtime); DATABASE_URL_UNPOOLED is the
+// direct connection Prisma uses for db push / migrations.
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String   @id @default(cuid())
+  name            String   @default("Alex")
+  goal            String?
+  pace            String   @default("steady") // chill | steady | beast
+  reminderTime    String   @default("19:30")
+  isPremium       Boolean  @default(false)
+  activeCourseId  Int      @default(1)
+  totalXP         Int      @default(0)
+  streakCount     Int      @default(0)
+  lastGoalMetDate String? // YYYY-MM-DD, local
+  repsCompleted   Int      @default(0)
+  streakShields   Int      @default(0) // chest drops; auto-consumed to save a missed day (cap 2)
+  openedChests    String   @default("[]") // JSON array of opened chest ids, e.g. ["c1","s7"]
+  createdAt       DateTime @default(now())
+
+  lessons LessonCompletion[]
+  quotes  CollectedQuote[]
+  daily   DailyState[]
+}
+
+model LessonCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  chapterId   Int
+  lessonIndex Int // 1-based
+  feel        String? // crushed | got-it | shaky
+  completedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId, lessonIndex])
+}
+
+model CollectedQuote {
+  id      String   @id @default(cuid())
+  userId  String
+  quoteId String // e.g. "c1-l3"
+  savedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quoteId])
+}
+
+// One row per user per local day; all quest/gating counters reset by keying on date.
+model DailyState {
+  id               String  @id @default(cuid())
+  userId           String
+  date             String // YYYY-MM-DD
+  lessonsDoneToday Int     @default(0)
+  xpEarnedToday    Int     @default(0)
+  repDoneToday     Boolean @default(false)
+  repPending       Boolean @default(false)
+  chestOpened      Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
