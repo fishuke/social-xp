@@ -27,7 +27,7 @@ export default async function CoachPage() {
         Get real feedback.
       </h1>
       <p className="mt-3 max-w-[300px] font-body text-[16px] font-bold leading-[1.5] text-sec2">
-        Daily speaking prompts, a 30-second rep, and a coach that scores your confidence, clarity
+        Daily speaking prompts, a 30-second challenge, and a coach that scores your confidence, clarity
         and energy — encouraging first, actionable always.
       </p>
       <div className="mt-8 w-full max-w-[320px]">

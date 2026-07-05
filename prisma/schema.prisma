@@ -57,6 +57,61 @@ model CollectedQuote {
   @@unique([userId, quoteId])
 }
 
+// ---------- content (DB-managed lessons & units; seeded from prisma/seed.ts) ----------
+
+model Course {
+  id        Int    @id
+  title     String
+  tagline   String
+  sortOrder Int    @default(0)
+  units     Unit[]
+}
+
+model Unit {
+  id         Int    @id
+  courseId   Int
+  number     Int // display order within the course
+  level      String // CEFR-style: "A1", "A2"…
+  levelTitle String // e.g. "Survival Social"
+  title      String
+  tagline    String
+  canDo      String // CEFR can-do statement
+
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
+  quotes  Quote[]
+
+  @@unique([courseId, number])
+}
+
+model Lesson {
+  id           Int     @id @default(autoincrement())
+  unitId       Int
+  index        Int // 1-based within the unit
+  title        String
+  isCheckpoint Boolean @default(false)
+  steps        Json // [{type:"concept"|"quiz", ...}] — see LessonStep in lib/content.ts
+  challenge    Json // {text, sub}
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([unitId, index])
+}
+
+model Quote {
+  id          String  @id // "u1-l3"
+  unitId      Int
+  lessonIndex Int
+  text        String
+  author      String
+  authorNote  String
+  rare        Boolean @default(false)
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([unitId, lessonIndex])
+}
+
 // One row per user per local day; all quest/gating counters reset by keying on date.
 model DailyState {
   id               String  @id @default(cuid())

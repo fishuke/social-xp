@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { getDaily, getProgress, isLessonUnlocked } from "@/lib/game";
-import { getChapter, getLesson, getQuote } from "@/lib/content";
+import { getCourseProgress, getDaily, isLessonUnlocked } from "@/lib/game";
+import { getLessonData, getQuoteData, getUnit } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { LessonFlow } from "./lesson-flow";
 
@@ -12,39 +12,40 @@ export default async function LessonPage({
 }: {
   params: Promise<{ chapterId: string; lessonIndex: string }>;
 }) {
-  const { chapterId: c, lessonIndex: l } = await params;
-  const chapterId = Number(c);
+  const { chapterId: u, lessonIndex: l } = await params;
+  const unitId = Number(u);
   const lessonIndex = Number(l);
 
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
 
-  const chapter = getChapter(chapterId);
-  const lesson = getLesson(chapterId, lessonIndex);
-  const quote = getQuote(chapterId, lessonIndex);
-  if (!chapter || !lesson || !quote) redirect("/learn");
+  const [unit, lesson, quote] = await Promise.all([
+    getUnit(unitId),
+    getLessonData(unitId, lessonIndex),
+    getQuoteData(unitId, lessonIndex),
+  ]);
+  if (!unit || !lesson || !quote) redirect("/learn");
 
-  const progress = await getProgress(user);
-  if (!isLessonUnlocked(progress, chapterId, lessonIndex)) {
-    const p = progress.find((x) => x.chapterId === chapterId);
+  const progress = await getCourseProgress(user);
+  if (!isLessonUnlocked(progress, unitId, lessonIndex)) {
+    const p = progress.find((x) => x.unit.id === unitId);
     redirect(p && !p.unlocked && !user.isPremium ? "/paywall" : "/learn");
   }
 
   const alreadyCompleted = progress
-    .find((x) => x.chapterId === chapterId)!
+    .find((x) => x.unit.id === unitId)!
     .completed.includes(lessonIndex);
 
   const [daily, collectedBefore] = await Promise.all([
     getDaily(user.id),
     prisma.collectedQuote.count({
-      where: { userId: user.id, quoteId: { startsWith: `c${chapterId}-` } },
+      where: { userId: user.id, quoteId: { startsWith: `u${unitId}-` } },
     }),
   ]);
 
   return (
     <LessonFlow
-      chapterId={chapterId}
-      chapterTitle={chapter.title}
+      unit={{ id: unit.id, number: unit.number, level: unit.level, title: unit.title }}
       lesson={lesson}
       quote={quote}
       collectedBefore={collectedBefore}

@@ -9,8 +9,13 @@ const METHODS = [
   },
   {
     emoji: "🌍",
-    title: "Real-world reps",
-    body: "Decades of CBT research agree: practice between sessions is what actually changes behavior. The daily rep isn't a bonus — it's the whole point. The lesson just loads the move.",
+    title: "Real-world practice",
+    body: "Decades of CBT research agree: practice between sessions is what actually changes behavior. The daily challenge isn't a bonus — it's the whole point. The lesson just loads the move.",
+  },
+  {
+    emoji: "🧠",
+    title: "Thought work, not just behavior",
+    body: "Straight from CBT's cognitive side: every lesson includes a “challenge the thought” step — catch the anxious prediction (“they'll think I'm weird”), name the distortion, answer it with the balanced take. Confidence needs both the reframe and the rep.",
   },
   {
     emoji: "📶",

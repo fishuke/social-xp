@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { currentPosition, getProgress } from "@/lib/game";
-import { COURSES, getCourse } from "@/lib/content";
+import { currentPosition, getCourseProgress } from "@/lib/game";
 import {
   CheckIcon,
   ChevronLeftIcon,
@@ -10,17 +9,23 @@ import {
   LockIcon,
   PlayIcon,
 } from "@/components/icons";
-import { CourseSwitcher } from "@/components/course-switcher";
 
 export const dynamic = "force-dynamic";
 
-export default async function ChaptersPage() {
+export default async function UnitsPage() {
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
 
-  const course = getCourse(user.activeCourseId) ?? COURSES[0];
-  const progress = await getProgress(user);
+  const progress = await getCourseProgress(user);
   const pos = currentPosition(progress);
+
+  // group units by level, preserving order
+  const levels: { code: string; title: string }[] = [];
+  for (const p of progress) {
+    if (!levels.some((l) => l.code === p.unit.level)) {
+      levels.push({ code: p.unit.level, title: p.unit.levelTitle });
+    }
+  }
 
   return (
     <div className="page-enter flex flex-col gap-4 px-5 pb-8 pt-[58px]">
@@ -28,19 +33,10 @@ export default async function ChaptersPage() {
         <Link href="/learn" aria-label="Back" className="-ml-1 p-1 text-cocoa">
           <ChevronLeftIcon size={24} />
         </Link>
-        <h1 className="font-display text-[20px] font-semibold text-cocoa">Chapters</h1>
+        <h1 className="font-display text-[20px] font-semibold text-cocoa">Units</h1>
       </header>
 
-      <CourseSwitcher
-        courses={COURSES.map((c) => ({ id: c.id, title: c.title }))}
-        activeCourseId={course.id}
-      />
-
-      {course.inspiration && (
-        <p className="-mt-1 font-body text-[12px] font-bold text-faint">{course.inspiration}</p>
-      )}
-
-      {course.levels.map((level) => (
+      {levels.map((level) => (
         <section key={level.code} className="flex flex-col gap-3">
           <div className="mt-1 flex items-center gap-2.5">
             <span className="rounded-[10px] bg-cocoa px-2.5 py-1 font-display text-[13px] font-semibold tracking-[1px] text-amber">
@@ -50,50 +46,48 @@ export default async function ChaptersPage() {
             <span className="h-[2px] flex-1 rounded-full bg-line" />
           </div>
 
-          {course.chapters
-            .filter((chapter) => chapter.level === level.code)
-            .map((chapter) => {
-              const p = progress.find((x) => x.chapterId === chapter.id)!;
-              const isActive = chapter.id === pos.chapterId && p.unlocked;
-              const quotesLeft = chapter.lessons.length - p.completed.length;
+          {progress
+            .filter((p) => p.unit.level === level.code)
+            .map(({ unit, completed, unlocked, complete }) => {
+              const isActive = unit.id === pos.unitId && unlocked;
+              const quotesLeft = unit.lessons.length - completed.length;
 
               if (!isActive) {
-                const locked = !p.unlocked;
                 return (
                   <Link
-                    key={chapter.id}
-                    href={locked ? "/paywall" : "/learn"}
+                    key={unit.id}
+                    href={!unlocked ? "/paywall" : "/learn"}
                     className="flex items-center gap-4 rounded-[22px] bg-white p-4 opacity-85"
                   >
                     <span
                       className="flex h-[52px] w-[52px] items-center justify-center rounded-[16px] font-display text-[22px] font-semibold"
                       style={
-                        p.complete
+                        complete
                           ? { background: "#58C08A", color: "#fff" }
                           : { background: "#EADFD5", color: "#8A7B70" }
                       }
                     >
-                      {p.complete ? <CheckIcon size={26} /> : chapter.number}
+                      {complete ? <CheckIcon size={26} /> : unit.number}
                     </span>
                     <span className="flex-1">
                       <span
                         className="block font-display text-[18px] font-semibold"
                         style={{ color: "#8A7B70" }}
                       >
-                        {chapter.title}
+                        {unit.title}
                       </span>
                       <span className="block font-body text-[13px] font-bold text-faint">
-                        {chapter.tagline}
+                        {unit.tagline}
                       </span>
                     </span>
-                    {locked && <LockIcon size={22} />}
+                    {!unlocked && <LockIcon size={22} />}
                   </Link>
                 );
               }
 
               return (
                 <section
-                  key={chapter.id}
+                  key={unit.id}
                   className="rounded-[22px] border-2 border-coral bg-white p-4 shadow-[0_5px_0_rgba(255,90,44,0.15)]"
                 >
                   <div className="flex items-center gap-3">
@@ -101,28 +95,30 @@ export default async function ChaptersPage() {
                       className="flex h-[52px] w-[52px] items-center justify-center rounded-[16px] font-display text-[24px] font-semibold text-white"
                       style={{ background: "linear-gradient(160deg, #FF7A45, #FF5A2C)" }}
                     >
-                      {chapter.number}
+                      {unit.number}
                     </span>
                     <div>
                       <p className="font-display text-[19px] font-semibold text-cocoa">
-                        {chapter.title}
+                        {unit.title}
                       </p>
                       <p className="font-body text-[13px] font-extrabold text-coral">
-                        {p.completed.length} of {chapter.lessons.length} done · {quotesLeft} quotes
-                        to collect
+                        {completed.length} of {unit.lessons.length} done · {quotesLeft} quotes to
+                        collect
                       </p>
                     </div>
                   </div>
 
-                  <p className="mt-3 rounded-[12px] bg-tint-warm px-3 py-2 font-body text-[13px] font-extrabold" style={{ color: "#7A5A3E" }}>
-                    🎯 {chapter.canDo}
+                  <p
+                    className="mt-3 rounded-[12px] bg-tint-warm px-3 py-2 font-body text-[13px] font-extrabold"
+                    style={{ color: "#7A5A3E" }}
+                  >
+                    🎯 {unit.canDo}
                   </p>
 
                   <div className="mt-4 flex flex-col gap-3">
-                    {chapter.lessons.map((lesson) => {
-                      const done = p.completed.includes(lesson.index);
-                      const current =
-                        lesson.index === pos.lessonIndex && chapter.id === pos.chapterId;
+                    {unit.lessons.map((lesson) => {
+                      const done = completed.includes(lesson.index);
+                      const current = lesson.index === pos.lessonIndex && unit.id === pos.unitId;
                       return (
                         <div key={lesson.index} className="flex items-center gap-3">
                           <span
@@ -167,11 +163,11 @@ export default async function ChaptersPage() {
                   </div>
 
                   <Link
-                    href={`/lesson/${chapter.id}/${pos.lessonIndex}`}
+                    href={`/lesson/${unit.id}/${pos.lessonIndex}`}
                     className="btn btn-coral mt-4 rounded-[16px]"
                     style={{ fontSize: 17 }}
                   >
-                    Continue · {chapter.lessons.find((l) => l.index === pos.lessonIndex)?.title}
+                    Continue · {unit.lessons.find((l) => l.index === pos.lessonIndex)?.title}
                   </Link>
                 </section>
               );

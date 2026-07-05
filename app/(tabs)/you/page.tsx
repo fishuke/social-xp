@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { effectiveStreak, getProgress } from "@/lib/game";
-import { COURSES, getCourse } from "@/lib/content";
+import { effectiveStreak, getCourseProgress } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { DiamondIcon, FlameIcon, LockIcon } from "@/components/icons";
 
@@ -12,12 +11,12 @@ export default async function YouPage() {
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
 
-  const [progress, quoteCount] = await Promise.all([
-    getProgress(user),
+  const [progress, quoteCount, course] = await Promise.all([
+    getCourseProgress(user),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
+    prisma.course.findUnique({ where: { id: 1 } }),
   ]);
   const streak = effectiveStreak(user);
-  const course = getCourse(user.activeCourseId) ?? COURSES[0];
 
   return (
     <div className="page-enter flex flex-col pb-6">
@@ -37,7 +36,7 @@ export default async function YouPage() {
             {streak}-day streak
           </span>
           <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
-            ⚡ {user.repsCompleted} reps
+            ⚡ {user.repsCompleted} challenges
           </span>
           <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
             <DiamondIcon size={16} color="#FFC24A" />
@@ -53,11 +52,11 @@ export default async function YouPage() {
 
       <section className="px-5 pt-6">
         <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
-          The road · {course.title}
+          The road · {course?.title}
         </p>
         <div className="mt-3 flex flex-col gap-3">
-          {course.chapters.map((chapter) => {
-            const p = progress.find((x) => x.chapterId === chapter.id)!;
+          {progress.map((p) => {
+            const chapter = p.unit;
             const active = p.unlocked && !p.complete;
             const percent = (p.completed.length / chapter.lessons.length) * 100;
 

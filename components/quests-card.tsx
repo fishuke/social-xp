@@ -108,7 +108,7 @@ export function QuestsCard({ quests, showRepAction }: { quests: QuestState; show
             progress={{ current: quests.xpToday, target: 30 }}
           />
           <QuestRow
-            label="Do your real-world rep"
+            label="Do today's challenge"
             done={quests.repDone}
             action={
               showRepAction && !quests.repDone && quests.lessonDone ? (

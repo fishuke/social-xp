@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { currentPosition, effectiveStreak, getDaily, getProgress, questState } from "@/lib/game";
-import { CHAPTERS } from "@/lib/content";
+import { currentPosition, effectiveStreak, getCourseProgress, getDaily, questState } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { BookIcon, ChevronRightIcon, DiamondIcon, FlameIcon, XpSquareIcon } from "@/components/icons";
 import { StatPill, ProgressBar } from "@/components/ui";
@@ -16,19 +15,19 @@ export default async function LearnPage() {
   if (!user) redirect("/onboarding");
 
   const [progress, daily, quoteCount] = await Promise.all([
-    getProgress(user),
+    getCourseProgress(user),
     getDaily(user.id),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
   ]);
   const pos = currentPosition(progress);
-  const chapter = CHAPTERS.find((c) => c.id === pos.chapterId)!;
-  const chapterProgress = progress.find((p) => p.chapterId === chapter.id)!;
-  const doneCount = chapterProgress.completed.length;
+  const unitProgress = progress.find((p) => p.unit.id === pos.unitId)!;
+  const unit = unitProgress.unit;
+  const doneCount = unitProgress.completed.length;
   const openedChests: string[] = JSON.parse(user.openedChests || "[]");
 
   const nodes: PathNode[] = [];
-  for (const lesson of chapter.lessons) {
-    const done = chapterProgress.completed.includes(lesson.index);
+  for (const lesson of unit.lessons) {
+    const done = unitProgress.completed.includes(lesson.index);
     nodes.push({
       kind: "lesson",
       index: lesson.index,
@@ -39,8 +38,8 @@ export default async function LearnPage() {
     if (lesson.index === 3) {
       nodes.push({
         kind: "chest",
-        reached: [1, 2, 3].every((i) => chapterProgress.completed.includes(i)),
-        opened: openedChests.includes(`c${chapter.id}`),
+        reached: [1, 2, 3].every((i) => unitProgress.completed.includes(i)),
+        opened: openedChests.includes(`c${unit.id}`),
       });
     }
   }
@@ -66,11 +65,11 @@ export default async function LearnPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="font-body text-[11px] font-extrabold uppercase tracking-[1.5px] text-white/85">
-              {chapter.level} · Chapter {chapter.number} · {doneCount} of {chapter.lessons.length} done
+              {unit.level} · Unit {unit.number} · {doneCount} of {unit.lessons.length} done
             </p>
-            <p className="mt-0.5 font-display text-[21px] font-semibold">{chapter.title}</p>
+            <p className="mt-0.5 font-display text-[21px] font-semibold">{unit.title}</p>
             <ProgressBar
-              percent={(doneCount / chapter.lessons.length) * 100}
+              percent={(doneCount / unit.lessons.length) * 100}
               height={7}
               track="rgba(255,255,255,0.28)"
               fill="#FFC24A"
@@ -84,7 +83,7 @@ export default async function LearnPage() {
 
       <QuestsCard quests={questState(daily)} showRepAction />
 
-      <LearnPath chapterId={chapter.id} nodes={nodes} />
+      <LearnPath chapterId={unit.id} nodes={nodes} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { Lesson, Quote } from "@/lib/content";
+import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content";
 import { XP } from "@/lib/content";
 import { haptic, sfx } from "@/lib/juice";
 import { ChatIcon, CheckIcon, CloseIcon, DiamondIcon, Logo, XpSquareIcon } from "@/components/icons";
@@ -10,11 +10,12 @@ import { QuoteCard } from "@/components/quote-card";
 import { ConfettiBurst } from "@/components/confetti";
 import { CountUp } from "@/components/count-up";
 
+type UnitMeta = { id: number; number: number; level: string; title: string };
+
 type Props = {
-  chapterId: number;
-  chapterTitle: string;
-  lesson: Lesson;
-  quote: Quote;
+  unit: UnitMeta;
+  lesson: LessonData;
+  quote: QuoteData;
   collectedBefore: number;
   xpTodayBefore: number;
   repDoneToday: boolean;
@@ -27,22 +28,35 @@ const FEELS = [
   { id: "shaky", emoji: "😬", label: "Shaky" },
 ];
 
+const CIRCLED = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
+
 export function LessonFlow(props: Props) {
-  const { chapterId, chapterTitle, lesson, quote } = props;
+  const { unit, lesson, quote } = props;
   const router = useRouter();
-  const [beat, setBeat] = useState(1);
-  const [quizFirstTry, setQuizFirstTry] = useState(true);
+  const steps = lesson.steps;
+  const totalScreens = steps.length + 3; // steps → quote → challenge → claim
+  const [screen, setScreen] = useState(0);
+  const [firstTries, setFirstTries] = useState(0);
   const [repCommitted, setRepCommitted] = useState(false);
   const [feel, setFeel] = useState<string | null>(null);
   const [claiming, setClaiming] = useState(false);
 
-  const dark = beat === 3;
+  const phase =
+    screen < steps.length
+      ? "step"
+      : screen === steps.length
+        ? "quote"
+        : screen === steps.length + 1
+          ? "challenge"
+          : "claim";
+  const dark = phase === "quote";
+
   const kicker = lesson.isCheckpoint
-    ? `Chapter ${chapterId} · Checkpoint`
-    : `Chapter ${chapterId} · Lesson ${lesson.index} · ${lesson.title}`;
+    ? `${unit.level} · Unit ${unit.number} · Checkpoint`
+    : `${unit.level} · Unit ${unit.number} · Lesson ${lesson.index}`;
 
   function close() {
-    if (beat > 1 && !window.confirm("Leave the lesson? Your progress in it won't be saved.")) return;
+    if (screen > 0 && !window.confirm("Leave the lesson? Your progress in it won't be saved.")) return;
     router.push("/learn");
   }
 
@@ -58,9 +72,9 @@ export function LessonFlow(props: Props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chapterId,
+        unitId: unit.id,
         lessonIndex: lesson.index,
-        quizFirstTry,
+        quizFirstTries: firstTries,
         feel,
         repCommitted,
         localTime,
@@ -73,30 +87,32 @@ export function LessonFlow(props: Props) {
     }, 700);
   }
 
+  const next = () => setScreen((s) => s + 1);
+
   return (
     <div
       className="relative flex flex-1 flex-col overflow-hidden px-6 pb-8 pt-[58px]"
       style={{
         background: dark
           ? "linear-gradient(170deg, #2E2018, #43301F)"
-          : beat === 5
+          : phase === "claim"
             ? "linear-gradient(180deg, #FFF1D6, #FFF6EE 40%)"
             : "#FFF6EE",
       }}
     >
-      {/* shared chrome: close + 5-segment progress */}
+      {/* shared chrome: close + segmented progress */}
       <div className="flex items-center gap-3">
         <button onClick={close} aria-label="Close" style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}>
           <CloseIcon size={24} />
         </button>
-        <div className="flex flex-1 gap-1.5">
-          {[1, 2, 3, 4, 5].map((s) => (
+        <div className="flex flex-1 gap-1">
+          {Array.from({ length: totalScreens }, (_, s) => (
             <span
               key={s}
               className="h-[8px] flex-1 rounded-full"
               style={{
                 background:
-                  s <= beat
+                  s <= screen
                     ? dark
                       ? "#FFC24A"
                       : "#FF5A2C"
@@ -113,43 +129,51 @@ export function LessonFlow(props: Props) {
         className="mt-5 font-body text-[13px] font-extrabold uppercase tracking-[1px]"
         style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}
       >
-        {kicker}
+        {kicker} · {lesson.title}
       </p>
 
-      <div key={beat} className="beat-enter relative flex flex-1 flex-col">
-        {beat === 1 && <ConceptBeat lesson={lesson} onNext={() => setBeat(2)} />}
-        {beat === 2 && (
-          <QuizBeat
-            lesson={lesson}
-            onFail={() => setQuizFirstTry(false)}
-            onNext={() => setBeat(3)}
-          />
-        )}
-        {beat === 3 && (
-          <QuoteBeat
+      <div key={screen} className="beat-enter relative flex flex-1 flex-col">
+        {phase === "step" &&
+          (steps[screen].type === "concept" ? (
+            <ConceptScreen
+              step={steps[screen] as ConceptStep}
+              label={conceptLabel(screen, steps.length)}
+              circled={CIRCLED[screen]}
+              onNext={next}
+            />
+          ) : (
+            <QuizScreen
+              step={steps[screen] as QuizStep}
+              circled={CIRCLED[screen]}
+              onFirstTry={() => setFirstTries((n) => n + 1)}
+              onNext={next}
+            />
+          ))}
+        {phase === "quote" && (
+          <QuoteScreen
             quote={quote}
-            chapterTitle={chapterTitle}
+            unitTitle={unit.title}
             collectedBefore={props.collectedBefore}
-            onNext={() => setBeat(4)}
+            onNext={next}
           />
         )}
-        {beat === 4 && (
-          <RepBeat
+        {phase === "challenge" && (
+          <ChallengeScreen
             lesson={lesson}
             onCommit={() => {
               setRepCommitted(true);
-              setBeat(5);
+              next();
             }}
             onLater={() => {
               setRepCommitted(false);
-              setBeat(5);
+              next();
             }}
           />
         )}
-        {beat === 5 && (
-          <ClaimBeat
+        {phase === "claim" && (
+          <ClaimScreen
             {...props}
-            quizFirstTry={quizFirstTry}
+            firstTries={firstTries}
             feel={feel}
             setFeel={setFeel}
             claiming={claiming}
@@ -161,32 +185,49 @@ export function LessonFlow(props: Props) {
   );
 }
 
-/* ---------- Beat 1 · Concept ---------- */
+function conceptLabel(index: number, total: number): string {
+  if (index === 0) return "The concept";
+  if (index === total - 1) return "The move";
+  return "Go deeper";
+}
 
-function ConceptBeat({ lesson, onNext }: { lesson: Lesson; onNext: () => void }) {
-  const { headline, body, keyPhrase, coachLine } = lesson.concept;
-  const [before, after] = body.split(keyPhrase);
+/* ---------- concept screens ---------- */
+
+function ConceptScreen({
+  step,
+  label,
+  circled,
+  onNext,
+}: {
+  step: ConceptStep;
+  label: string;
+  circled: string;
+  onNext: () => void;
+}) {
+  const [before, after] = step.body.split(step.keyPhrase);
   return (
     <>
       <p className="mt-6 font-display text-[13px] font-semibold uppercase tracking-[2px] text-coral">
-        ① The concept
+        {circled} {label}
       </p>
-      <h2 className="mt-3 font-display text-[36px] font-semibold leading-[1.1] text-cocoa">
-        {headline}
+      <h2 className="mt-3 font-display text-[34px] font-semibold leading-[1.1] text-cocoa">
+        {step.headline}
       </h2>
-      <p className="mt-4 font-body text-[20px] leading-[1.6] text-ink">
+      <p className="mt-4 font-body text-[19px] leading-[1.6] text-ink">
         {before}
-        <strong className="font-extrabold text-coral">{keyPhrase}</strong>
+        <strong className="font-extrabold text-coral">{step.keyPhrase}</strong>
         {after}
       </p>
-      <div className="mt-6 flex items-start gap-3 rounded-[20px] bg-tint-warm p-4">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-coral">
-          <ChatIcon size={22} />
-        </span>
-        <p className="font-body text-[16px] font-bold leading-[1.45]" style={{ color: "#7A5A3E" }}>
-          {coachLine}
-        </p>
-      </div>
+      {step.coachLine && (
+        <div className="mt-6 flex items-start gap-3 rounded-[20px] bg-tint-warm p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-coral">
+            <ChatIcon size={22} />
+          </span>
+          <p className="font-body text-[16px] font-bold leading-[1.45]" style={{ color: "#7A5A3E" }}>
+            {step.coachLine}
+          </p>
+        </div>
+      )}
       <div className="mt-auto pt-8">
         <button className="btn btn-coral" onClick={onNext}>
           Continue
@@ -196,32 +237,33 @@ function ConceptBeat({ lesson, onNext }: { lesson: Lesson; onNext: () => void })
   );
 }
 
-/* ---------- Beat 2 · Your call (tap quiz) ---------- */
+/* ---------- quiz / thought-reframe screens ---------- */
 
-function QuizBeat({
-  lesson,
-  onFail,
+function QuizScreen({
+  step,
+  circled,
+  onFirstTry,
   onNext,
 }: {
-  lesson: Lesson;
-  onFail: () => void;
+  step: QuizStep;
+  circled: string;
+  onFirstTry: () => void;
   onNext: () => void;
 }) {
-  const quiz = lesson.quiz;
+  const inner = step.voice === "inner";
   const [wrongPick, setWrongPick] = useState<number | null>(null);
   const [resolved, setResolved] = useState(false);
   const [shaking, setShaking] = useState(false);
-  const firstTry = wrongPick === null;
 
   function pick(i: number) {
     if (resolved) return;
-    if (i === quiz.correctIndex) {
+    if (i === step.correctIndex) {
       sfx("correct");
       haptic();
+      if (wrongPick === null) onFirstTry();
       setResolved(true);
       return;
     }
-    onFail();
     sfx("wrong");
     haptic([40, 30, 40]);
     setWrongPick(i);
@@ -233,20 +275,27 @@ function QuizBeat({
   return (
     <>
       <p className="mt-6 font-display text-[13px] font-semibold uppercase tracking-[2px] text-coral">
-        ② Your call
+        {circled} {inner ? "Challenge the thought" : "Your call"}
       </p>
       <div className="mt-4">
         <p className="mb-1.5 font-body text-[11px] font-extrabold uppercase tracking-[1.5px] text-faint">
-          They say
+          {inner ? "Your brain says" : "They say"}
         </p>
-        <div className="inline-block rounded-[18px] rounded-bl-[6px] border-2 border-line2 bg-white px-4 py-3 font-body text-[17px] font-bold text-ink">
-          “{quiz.theySay}”
+        <div
+          className="inline-block rounded-[18px] rounded-bl-[6px] border-2 px-4 py-3 font-body text-[17px] font-bold"
+          style={
+            inner
+              ? { borderColor: "#E6D4C4", background: "#FFF9EC", color: "#7A5A3E", fontStyle: "italic" }
+              : { borderColor: "#F0E4D8", background: "#fff", color: "#544537" }
+          }
+        >
+          “{step.theySay}”
         </div>
       </div>
-      <h2 className="mt-5 font-display text-[20px] font-semibold text-cocoa">{quiz.question}</h2>
+      <h2 className="mt-5 font-display text-[20px] font-semibold text-cocoa">{step.question}</h2>
       <div className="mt-4 flex flex-col gap-3">
-        {quiz.options.map((option, i) => {
-          const isCorrect = i === quiz.correctIndex;
+        {step.options.map((option, i) => {
+          const isCorrect = i === step.correctIndex;
           const showCorrect = resolved && isCorrect;
           const showWrong = wrongPick === i;
           return (
@@ -273,18 +322,14 @@ function QuizBeat({
       {resolved && (
         <div className="pop-in mt-4 rounded-[16px] border-2 border-go-border bg-go-tint p-4">
           <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-go-text">
-            {quiz.feedbackTitle}
-            {firstTry && ` · +${XP.quizFirstTry} XP`}
+            {step.feedbackTitle}
+            {wrongPick === null && ` · +${XP.quizFirstTry} XP`}
           </p>
-          <p className="mt-1 font-body text-[14px] font-bold text-go-text">{quiz.feedbackBody}</p>
+          <p className="mt-1 font-body text-[14px] font-bold text-go-text">{step.feedbackBody}</p>
         </div>
       )}
       <div className="mt-auto pt-6">
-        <button
-          className={`btn ${resolved ? "btn-green" : "btn-coral"}`}
-          onClick={onNext}
-          disabled={!resolved}
-        >
+        <button className={`btn ${resolved ? "btn-green" : "btn-coral"}`} onClick={onNext} disabled={!resolved}>
           Continue
         </button>
       </div>
@@ -292,16 +337,16 @@ function QuizBeat({
   );
 }
 
-/* ---------- Beat 3 · Quote unlocked (dark) ---------- */
+/* ---------- quote unlocked (dark) ---------- */
 
-function QuoteBeat({
+function QuoteScreen({
   quote,
-  chapterTitle,
+  unitTitle,
   collectedBefore,
   onNext,
 }: {
-  quote: Quote;
-  chapterTitle: string;
+  quote: QuoteData;
+  unitTitle: string;
   collectedBefore: number;
   onNext: () => void;
 }) {
@@ -319,7 +364,7 @@ function QuoteBeat({
   return (
     <>
       <p className="mt-6 text-center font-display text-[13px] font-semibold uppercase tracking-[2px] text-amber">
-        ③ Quote unlocked
+        Quote unlocked
       </p>
       <div className="flex flex-1 flex-col justify-center">
         <div className="relative">
@@ -332,7 +377,7 @@ function QuoteBeat({
           className="pop-in mt-5 text-center font-body text-[14px] font-bold text-ondark"
           style={{ animationDelay: "180ms" }}
         >
-          Added to your collection · {chapterTitle} set
+          Added to your collection · {unitTitle} set
         </p>
         <div className="mt-3 flex justify-center gap-2">
           {Array.from({ length: 6 }, (_, i) => (
@@ -364,21 +409,21 @@ function QuoteBeat({
   );
 }
 
-/* ---------- Beat 4 · Real-world rep ---------- */
+/* ---------- real-world challenge ---------- */
 
-function RepBeat({
+function ChallengeScreen({
   lesson,
   onCommit,
   onLater,
 }: {
-  lesson: Lesson;
+  lesson: LessonData;
   onCommit: () => void;
   onLater: () => void;
 }) {
   return (
     <>
       <p className="mt-6 font-display text-[13px] font-semibold uppercase tracking-[2px] text-coral">
-        ④ Real-world rep
+        Real-world challenge
       </p>
       <div className="flex flex-1 flex-col justify-center">
         <div
@@ -389,11 +434,11 @@ function RepBeat({
           }}
         >
           <h2 className="font-display text-[26px] font-semibold leading-[1.25]">
-            {lesson.rep.challenge}
+            {lesson.challenge.text}
           </h2>
-          <p className="mt-3 font-body text-[15px] font-bold text-white/85">{lesson.rep.sub}</p>
+          <p className="mt-3 font-body text-[15px] font-bold text-white/85">{lesson.challenge.sub}</p>
           <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/22 px-3 py-1.5 font-display text-[15px] font-semibold">
-            <XpSquareIcon size={16} />+{XP.rep} XP
+            <XpSquareIcon size={16} />+{XP.challenge} XP
           </span>
         </div>
         <p className="mt-4 text-center font-body text-[14px] font-bold text-sec2">
@@ -412,26 +457,26 @@ function RepBeat({
   );
 }
 
-/* ---------- Beat 5 · Claim ---------- */
+/* ---------- claim ---------- */
 
-function ClaimBeat({
+function ClaimScreen({
   lesson,
   xpTodayBefore,
   repDoneToday,
   alreadyCompleted,
-  quizFirstTry,
+  firstTries,
   feel,
   setFeel,
   claiming,
   onClaim,
 }: Props & {
-  quizFirstTry: boolean;
+  firstTries: number;
   feel: string | null;
   setFeel: (f: string) => void;
   claiming: boolean;
   onClaim: () => void;
 }) {
-  const claimXP = alreadyCompleted ? 0 : XP.lessonClaim + (quizFirstTry ? XP.quizFirstTry : 0);
+  const claimXP = alreadyCompleted ? 0 : XP.lessonClaim + firstTries * XP.quizFirstTry;
   const xpAfter = xpTodayBefore + claimXP;
   return (
     <>
@@ -480,12 +525,8 @@ function ClaimBeat({
         </p>
         <div className="flex flex-col gap-2.5">
           <ClaimQuestRow label="Finish 1 lesson" done />
-          <ClaimQuestRow
-            label="Earn 30 XP"
-            done={xpAfter >= 30}
-            progress={Math.min(xpAfter, 30)}
-          />
-          <ClaimQuestRow label="Do your real-world rep" done={repDoneToday} />
+          <ClaimQuestRow label="Earn 30 XP" done={xpAfter >= 30} progress={Math.min(xpAfter, 30)} />
+          <ClaimQuestRow label="Do today's challenge" done={repDoneToday} />
         </div>
       </div>
 

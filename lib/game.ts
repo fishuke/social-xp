@@ -1,6 +1,7 @@
 import type { User } from "@prisma/client";
 import { prisma } from "./db";
-import { CHAPTERS, XP, courseChapters, getLesson, getQuote } from "./content";
+import { XP, type QuizStep, type UnitData } from "./content";
+import { getLessonData, getQuoteData, getUnits } from "./catalog";
 
 // ---------- dates (local server time; swap for user TZ when auth lands) ----------
 
@@ -34,47 +35,52 @@ export async function getDaily(userId: string) {
 
 // ---------- progress derivation ----------
 
-export type ChapterProgress = {
-  chapterId: number;
+export type UnitProgress = {
+  unit: UnitData;
   completed: number[]; // lesson indexes
   unlocked: boolean;
   complete: boolean;
 };
 
-// Progress over the chapters of the user's active course.
-export async function getProgress(user: User): Promise<ChapterProgress[]> {
-  const chapters = courseChapters(user.activeCourseId ?? 1);
-  const rows = await prisma.lessonCompletion.findMany({ where: { userId: user.id } });
-  const byChapter = new Map<number, number[]>();
+// Progress over the units of the (single, for now) course.
+// LessonCompletion.chapterId stores the unit id.
+export async function getCourseProgress(user: User): Promise<UnitProgress[]> {
+  const [units, rows] = await Promise.all([
+    getUnits(1),
+    prisma.lessonCompletion.findMany({ where: { userId: user.id } }),
+  ]);
+  const byUnit = new Map<number, number[]>();
   for (const r of rows) {
-    const list = byChapter.get(r.chapterId) ?? [];
+    const list = byUnit.get(r.chapterId) ?? [];
     list.push(r.lessonIndex);
-    byChapter.set(r.chapterId, list);
+    byUnit.set(r.chapterId, list);
   }
-  let previousComplete = true; // a course's first chapter is always unlocked
-  return chapters.map((c) => {
-    const completed = (byChapter.get(c.id) ?? []).sort((a, b) => a - b);
-    const complete = completed.length >= c.lessons.length;
+  let previousComplete = true; // the first unit is always unlocked
+  return units.map((unit) => {
+    const completed = (byUnit.get(unit.id) ?? []).sort((a, b) => a - b);
+    const complete = completed.length >= unit.lessons.length;
     const unlocked = user.isPremium || previousComplete;
     previousComplete = complete;
-    return { chapterId: c.id, completed, unlocked, complete };
+    return { unit, completed, unlocked, complete };
   });
 }
 
-export function currentPosition(progress: ChapterProgress[]): { chapterId: number; lessonIndex: number } {
+export function currentPosition(progress: UnitProgress[]): { unitId: number; lessonIndex: number } {
   for (const p of progress) {
-    if (!p.unlocked) continue;
-    if (p.complete) continue;
-    const chapter = CHAPTERS.find((c) => c.id === p.chapterId)!;
-    const next = chapter.lessons.find((l) => !p.completed.includes(l.index));
-    if (next) return { chapterId: p.chapterId, lessonIndex: next.index };
+    if (!p.unlocked || p.complete) continue;
+    const next = p.unit.lessons.find((l) => !p.completed.includes(l.index));
+    if (next) return { unitId: p.unit.id, lessonIndex: next.index };
   }
-  // course finished (or empty) — park on its first chapter
-  return { chapterId: progress[0]?.chapterId ?? 1, lessonIndex: 1 };
+  // course finished (or empty) — park on the first unit
+  return { unitId: progress[0]?.unit.id ?? 1, lessonIndex: 1 };
 }
 
-export function isLessonUnlocked(progress: ChapterProgress[], chapterId: number, lessonIndex: number): boolean {
-  const p = progress.find((x) => x.chapterId === chapterId);
+export function isLessonUnlocked(
+  progress: UnitProgress[],
+  unitId: number,
+  lessonIndex: number
+): boolean {
+  const p = progress.find((x) => x.unit.id === unitId);
   if (!p || !p.unlocked) return false;
   for (let i = 1; i < lessonIndex; i++) if (!p.completed.includes(i)) return false;
   return true;
@@ -95,8 +101,8 @@ export function effectiveStreak(user: User): number {
 }
 
 // Duolingo rule: the first lesson of the day keeps the streak alive, on any pace.
-// Reps power the daily quests + chest instead of gating the streak.
-function goalMet(daily: { lessonsDoneToday: number; repDoneToday: boolean }): boolean {
+// Challenges power the daily quests + chest instead of gating the streak.
+function goalMet(daily: { lessonsDoneToday: number }): boolean {
   return daily.lessonsDoneToday >= 1;
 }
 
@@ -160,15 +166,15 @@ export function questState(daily: {
 export async function completeLesson(
   user: User,
   input: {
-    chapterId: number;
+    unitId: number;
     lessonIndex: number;
-    quizFirstTry: boolean;
+    quizFirstTries: number; // quiz/reframe steps answered right on the first try
     feel?: string;
     repCommitted: boolean;
     localTime?: string; // "HH:MM" in the user's timezone
   }
 ) {
-  const lesson = getLesson(input.chapterId, input.lessonIndex);
+  const lesson = await getLessonData(input.unitId, input.lessonIndex);
   if (!lesson) throw new Error("Unknown lesson");
 
   // Daily reminder follows the time they actually train.
@@ -180,19 +186,26 @@ export async function completeLesson(
     where: {
       userId_chapterId_lessonIndex: {
         userId: user.id,
-        chapterId: input.chapterId,
+        chapterId: input.unitId,
         lessonIndex: input.lessonIndex,
       },
     },
   });
 
-  const xpAwarded = already ? 0 : XP.lessonClaim + (input.quizFirstTry ? XP.quizFirstTry : 0);
-  const quote = getQuote(input.chapterId, input.lessonIndex);
+  const quizCount = lesson.steps.filter((s): s is QuizStep => s.type === "quiz").length;
+  const firstTries = Math.max(0, Math.min(input.quizFirstTries, quizCount));
+  const xpAwarded = already ? 0 : XP.lessonClaim + firstTries * XP.quizFirstTry;
+  const quote = await getQuoteData(input.unitId, input.lessonIndex);
   const date = dayString();
 
   if (!already) {
     await prisma.lessonCompletion.create({
-      data: { userId: user.id, chapterId: input.chapterId, lessonIndex: input.lessonIndex, feel: input.feel },
+      data: {
+        userId: user.id,
+        chapterId: input.unitId,
+        lessonIndex: input.lessonIndex,
+        feel: input.feel,
+      },
     });
     if (quote) {
       await prisma.collectedQuote.upsert({
@@ -233,14 +246,14 @@ export async function completeRep(user: User) {
   }
   const updatedDaily = await prisma.dailyState.update({
     where: { userId_date: { userId: user.id, date: daily.date } },
-    data: { repDoneToday: true, repPending: false, xpEarnedToday: { increment: XP.rep } },
+    data: { repDoneToday: true, repPending: false, xpEarnedToday: { increment: XP.challenge } },
   });
   const fresh = await prisma.user.update({
     where: { id: user.id },
-    data: { totalXP: { increment: XP.rep }, repsCompleted: { increment: 1 } },
+    data: { totalXP: { increment: XP.challenge }, repsCompleted: { increment: 1 } },
   });
   const celebrateStreak = await evaluateStreak(fresh);
-  return { xpAwarded: XP.rep, totalXP: fresh.totalXP, celebrateStreak, quests: questState(updatedDaily) };
+  return { xpAwarded: XP.challenge, totalXP: fresh.totalXP, celebrateStreak, quests: questState(updatedDaily) };
 }
 
 // ---------- chests (variable rewards — the "Hooked" loop's slot machine) ----------
@@ -306,12 +319,12 @@ export async function openQuestChest(user: User): Promise<ChestResult> {
   return grantChest(user, "common");
 }
 
-export async function openPathChest(user: User, chapterId: number): Promise<ChestResult> {
+export async function openPathChest(user: User, unitId: number): Promise<ChestResult> {
   const opened: string[] = JSON.parse(user.openedChests || "[]");
-  const key = `c${chapterId}`;
+  const key = `c${unitId}`;
   if (opened.includes(key)) return { ...NO_CHEST, totalXP: user.totalXP };
-  const progress = await getProgress(user);
-  const p = progress.find((x) => x.chapterId === chapterId);
+  const progress = await getCourseProgress(user);
+  const p = progress.find((x) => x.unit.id === unitId);
   const reached = p ? [1, 2, 3].every((i) => p.completed.includes(i)) : false;
   if (!reached) return { ...NO_CHEST, totalXP: user.totalXP };
   return grantChest(user, "rare", key);

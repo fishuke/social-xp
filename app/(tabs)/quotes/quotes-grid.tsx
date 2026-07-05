@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { Quote } from "@/lib/content";
+import type { QuoteData } from "@/lib/content";
 import { CloseIcon, FlagIcon, LockIcon } from "@/components/icons";
 import { QuoteCard } from "@/components/quote-card";
 
 export type QuoteSlot = {
-  quote: Quote;
+  quote: QuoteData;
   collected: boolean;
   isNew: boolean;
 };
@@ -15,7 +15,7 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
   const [open, setOpen] = useState<QuoteSlot | null>(null);
   const collectedCount = slots.filter((s) => s.collected).length;
 
-  async function share(quote: Quote) {
+  async function share(quote: QuoteData) {
     const text = `“${quote.text}” — ${quote.author} · collected on Social XP`;
     if (navigator.share) {
       await navigator.share({ text }).catch(() => {});

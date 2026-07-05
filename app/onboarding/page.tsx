@@ -15,8 +15,8 @@ const GOALS = [
 
 const PACES = [
   { id: "chill", emoji: "🌱", title: "Chill", sub: "1 lesson a day · ~3 min" },
-  { id: "steady", emoji: "🔥", title: "Steady", sub: "Lesson + real-world rep · ~5 min" },
-  { id: "beast", emoji: "⚡", title: "Beast", sub: "Stack lessons + reps all day" },
+  { id: "steady", emoji: "🔥", title: "Steady", sub: "Lesson + real-world challenge · ~5 min" },
+  { id: "beast", emoji: "⚡", title: "Beast", sub: "Stack lessons + challenges all day" },
 ];
 
 export default function Onboarding() {
