@@ -78,6 +78,35 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         </button>
       </form>
 
+      {isLogin && (
+        <div className="mt-5 rounded-[18px] border-2 border-dashed border-amber bg-tint-rare p-4">
+          <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-amber-dark">
+            Just testing?
+          </p>
+          <p className="mt-1 font-body text-[13px] font-bold text-sec">
+            Demo account: <strong>demo@social.xp</strong> / <strong>password123</strong> — shared by
+            all testers, so progress mixes. Creating your own account keeps yours separate.
+          </p>
+          <button
+            className="mt-3 w-full rounded-[14px] bg-amber py-2.5 font-display text-[15px] font-semibold text-cocoa shadow-[0_3px_0_#D89E2E] active:translate-y-0.5 active:shadow-[0_1px_0_#D89E2E]"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              const result = await loginAccount({ email: "demo@social.xp", password: "password123" });
+              if (result.ok) {
+                router.replace("/learn");
+                router.refresh();
+              } else {
+                setError(result.error);
+                setBusy(false);
+              }
+            }}
+          >
+            Use demo account
+          </button>
+        </div>
+      )}
+
       <div className="mt-auto pt-6 text-center">
         <Link
           href={isLogin ? "/register" : "/login"}
