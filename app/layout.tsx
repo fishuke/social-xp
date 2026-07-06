@@ -31,12 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}>
-      <body className="min-h-dvh">
-        {/* Phone-width column; fills the screen on mobile, centered card on desktop */}
-        <div className="mx-auto flex min-h-dvh w-full max-w-[402px] flex-col bg-cream shadow-[0_0_48px_rgba(46,32,24,0.12)]">
-          {children}
-        </div>
-      </body>
+      <body className="min-h-dvh">{children}</body>
     </html>
   );
 }
