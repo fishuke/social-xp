@@ -109,7 +109,7 @@ export function LessonEditor({
           </label>
         </div>
         <label className={labelClass}>
-          Steps — array of {"{type:\"concept\"}"} and {"{type:\"quiz\", voice:\"them\"|\"inner\"}"}
+          Steps: array of {"{type:\"concept\"}"} and {"{type:\"quiz\", voice:\"them\"|\"inner\"}"}
         </label>
         <textarea
           value={stepsJson}
@@ -118,7 +118,7 @@ export function LessonEditor({
           spellCheck={false}
           className={`${fieldClass} font-mono text-[12px]`}
         />
-        <label className={`${labelClass} mt-4`}>Challenge — {"{text, sub}"}</label>
+        <label className={`${labelClass} mt-4`}>Challenge: {"{text, sub}"}</label>
         <textarea
           value={challengeJson}
           onChange={(e) => setChallengeJson(e.target.value)}

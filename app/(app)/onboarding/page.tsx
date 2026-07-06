@@ -47,7 +47,7 @@ export default function Onboarding() {
             just reps.
           </h1>
           <p className="max-w-[300px] font-body text-[18px] leading-[1.5] text-sec">
-            Confidence isn&apos;t a talent you&apos;re born with. It&apos;s built — one tiny
+            Confidence isn&apos;t a talent you&apos;re born with. It&apos;s built, one tiny
             conversation at a time. 3 minutes a day.
           </p>
           <a
@@ -77,7 +77,7 @@ export default function Onboarding() {
           What brings you here?
         </h2>
         <p className="mt-2 font-body text-[15px] font-bold text-sec2">
-          Pick the one that matters most right now — you can change it later.
+          Pick the one that matters most right now. You can change it later.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           {GOALS.map((g) => {

@@ -1,5 +1,5 @@
 // Content types + XP economy. Zod schemas are the single source of truth for
-// the JSON stored in Lesson.steps / Lesson.challenge — the seed validates on
+// the JSON stored in Lesson.steps / Lesson.challenge - the seed validates on
 // write and the catalog validates on read, so hand-edited DB content fails
 // loudly instead of breaking a screen.
 
@@ -9,6 +9,7 @@ export const XP = {
   quizFirstTry: 10, // per quiz/reframe step answered right first try
   lessonClaim: 20,
   challenge: 30, // real-world challenge
+  coach: 15, // AI-coach speaking rep (first few per day — see lib/coach.ts)
 } as const;
 
 export const conceptStepSchema = z.object({
@@ -21,16 +22,21 @@ export const conceptStepSchema = z.object({
 
 // voice "them" = a person talking (behavior quiz).
 // voice "inner" = your own automatic thought (CBT-style cognitive reframe).
-export const quizStepSchema = z.object({
-  type: z.literal("quiz"),
-  voice: z.enum(["them", "inner"]),
-  theySay: z.string().min(1),
-  question: z.string().min(1),
-  options: z.array(z.string().min(1)).length(2),
-  correctIndex: z.number().int().min(0).max(1),
-  feedbackTitle: z.string().min(1),
-  feedbackBody: z.string().min(1),
-});
+export const quizStepSchema = z
+  .object({
+    type: z.literal("quiz"),
+    voice: z.enum(["them", "inner"]),
+    theySay: z.string().min(1),
+    question: z.string().min(1),
+    options: z.array(z.string().min(1)).min(2).max(4),
+    correctIndex: z.number().int().min(0).max(3),
+    feedbackTitle: z.string().min(1),
+    feedbackBody: z.string().min(1),
+  })
+  .refine((s) => s.correctIndex < s.options.length, {
+    message: "correctIndex must point at an existing option",
+    path: ["correctIndex"],
+  });
 
 export const lessonStepSchema = z.discriminatedUnion("type", [
   conceptStepSchema,

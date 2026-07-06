@@ -40,7 +40,7 @@ export default async function QuotesPage() {
         </span>
       </header>
       <p className="mt-1 font-body text-[14px] font-bold text-sec2">
-        Pocket wisdom — one card per lesson.
+        Pocket wisdom. One card per lesson.
       </p>
 
       <div className="mt-4 flex items-center gap-3 rounded-[16px] bg-white p-3 shadow-[0_2px_0_rgba(0,0,0,0.04)]">

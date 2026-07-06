@@ -1,6 +1,6 @@
 import { CheckIcon } from "./icons";
 
-// One daily-quest line — shared by the quests card and the lesson claim screen.
+// One daily-quest line - shared by the quests card and the lesson claim screen.
 export function QuestRow({
   label,
   done,

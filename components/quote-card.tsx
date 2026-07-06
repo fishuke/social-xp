@@ -1,7 +1,7 @@
 import type { QuoteData } from "@/lib/content";
 import { DiamondIcon } from "./icons";
 
-// The big collectible card — lesson Beat 3 and the Quotes full-screen view.
+// The big collectible card - lesson Beat 3 and the Quotes full-screen view.
 export function QuoteCard({
   quote,
   collectedInChapter,

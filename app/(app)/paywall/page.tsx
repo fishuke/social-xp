@@ -7,9 +7,9 @@ import { CheckIcon, CloseIcon, Logo } from "@/components/icons";
 
 const PERKS = [
   "All chapters unlocked from day one",
-  "Skip ahead — train in any order",
+  "Skip ahead: train in any order",
   "AI speaking coach & feedback",
-  "Streak repair — one slip forgiven",
+  "Streak repair: one slip forgiven",
 ];
 
 export default function PaywallPage() {

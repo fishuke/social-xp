@@ -1,43 +1,39 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { LockIcon, MicIcon } from "@/components/icons";
+import { prisma } from "@/lib/db";
+import { coachLocked, countSessionsToday, getDailyPrompt } from "@/lib/coach";
+import { CoachClient, type CoachHistoryItem } from "./coach-client";
 
 export const dynamic = "force-dynamic";
 
-// V2 feature — MVP ships the locked state only.
 export default async function CoachPage() {
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
 
+  const [sessionsToday, recent] = await Promise.all([
+    countSessionsToday(user.id),
+    prisma.coachSession.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { id: true, promptText: true, overall: true, createdAt: true },
+    }),
+  ]);
+
+  const history: CoachHistoryItem[] = recent.map((s) => ({
+    id: s.id,
+    promptText: s.promptText,
+    overall: s.overall,
+    when: s.createdAt.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+  }));
+
   return (
-    <div className="page-enter flex flex-1 flex-col items-center justify-center px-6 pb-10 text-center">
-      <div className="relative flex h-[110px] w-[110px] items-center justify-center rounded-full bg-white shadow-[0_4px_0_rgba(0,0,0,0.05)]">
-        <MicIcon size={48} color="#B8A99C" />
-        <span className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full bg-amber shadow-[0_3px_0_#D89E2E]">
-          <LockIcon size={18} color="#2E2018" />
-        </span>
-      </div>
-      <p className="mt-6 font-display text-[13px] font-semibold uppercase tracking-[2px] text-coral">
-        AI Coach · coming in v2
-      </p>
-      <h1 className="mt-2 font-display text-[30px] font-semibold leading-[1.15] text-cocoa">
-        Practice out loud.
-        <br />
-        Get real feedback.
-      </h1>
-      <p className="mt-3 max-w-[300px] font-body text-[16px] font-bold leading-[1.5] text-sec2">
-        Daily speaking prompts, a 30-second challenge, and a coach that scores your confidence, clarity
-        and energy — encouraging first, actionable always.
-      </p>
-      <div className="mt-8 w-full max-w-[320px]">
-        <Link href="/paywall" className="btn btn-coral">
-          Get Social XP+
-        </Link>
-      </div>
-      <p className="mt-3 font-body text-[13px] font-bold text-faint">
-        Members get the coach the day it lands.
-      </p>
-    </div>
+    <CoachClient
+      name={user.name}
+      prompt={getDailyPrompt()}
+      locked={coachLocked(user, sessionsToday)}
+      isPremium={user.isPremium}
+      history={history}
+    />
   );
 }

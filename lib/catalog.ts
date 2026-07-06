@@ -23,7 +23,7 @@ function parseContent<T>(schema: z.ZodType<T>, value: unknown, where: string): T
     const issues = result.error.issues
       .map((i) => `${i.path.join(".")}: ${i.message}`)
       .join("; ");
-    throw new Error(`Invalid lesson content in ${where} — ${issues}`);
+    throw new Error(`Invalid lesson content in ${where}: ${issues}`);
   }
   return result.data;
 }

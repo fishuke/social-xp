@@ -10,7 +10,7 @@ const NAV = [
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  await requireAdmin(); // every page re-checks too — this is just the first wall
+  await requireAdmin(); // every page re-checks too - this is just the first wall
 
   return (
     <div className="min-h-dvh bg-[#F7F5F2]">

@@ -1,6 +1,6 @@
 "use server";
 
-// Admin-only server actions. Every action re-checks the admin role itself —
+// Admin-only server actions. Every action re-checks the admin role itself -
 // never rely on the page gate alone.
 
 import { revalidatePath } from "next/cache";
@@ -22,7 +22,7 @@ function asError(error: unknown): AdminSaveResult {
     const issues = error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
     return { ok: false, error: issues };
   }
-  if (error instanceof SyntaxError) return { ok: false, error: `Invalid JSON — ${error.message}` };
+  if (error instanceof SyntaxError) return { ok: false, error: `Invalid JSON: ${error.message}` };
   return { ok: false, error: error instanceof Error ? error.message : "Save failed" };
 }
 

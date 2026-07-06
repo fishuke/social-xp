@@ -68,7 +68,7 @@ export function LessonFlow(props: Props) {
     setClaiming(true);
     sfx("claim");
     haptic([20, 30, 20, 30, 40]);
-    // Tomorrow's reminder fires when they trained today — send local time (Duolingo-style).
+    // Tomorrow's reminder fires when they trained today - send local time (Duolingo-style).
     const now = new Date();
     const localTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
     const result = await claimLesson({
@@ -433,12 +433,12 @@ function ChallengeScreen({
           </span>
         </div>
         <p className="mt-4 text-center font-body text-[14px] font-bold text-sec2">
-          Honor system. No recording, no grade — the only person you&apos;d cheat is you.
+          Honor system. No recording, no grade. The only person you&apos;d cheat is you.
         </p>
       </div>
       <div className="flex flex-col gap-2">
         <button className="btn btn-coral" onClick={onCommit}>
-          I&apos;m in — let&apos;s go
+          I&apos;m in, let&apos;s go
         </button>
         <button className="btn btn-ghost" onClick={onLater}>
           Remind me tonight

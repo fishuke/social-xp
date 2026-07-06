@@ -11,7 +11,7 @@ export default async function AdminContent() {
   return (
     <div className="flex flex-col gap-6">
       <p className="font-body text-[13px] font-bold text-sec2">
-        Edits go live immediately — steps and challenges are zod-validated on save, so a bad edit
+        Edits go live immediately: steps and challenges are zod-validated on save, so a bad edit
         can&apos;t ship. New units still come from <code>prisma/seed.ts</code>.
       </p>
       {units.map((unit) => (

@@ -1,4 +1,4 @@
-// Auth.js (next-auth v5) — credentials login with JWT sessions.
+// Auth.js (next-auth v5) - credentials login with JWT sessions.
 // Accounts are optional: everyone starts as an anonymous cookie user, and
 // registering upgrades that same user row (progress is kept).
 

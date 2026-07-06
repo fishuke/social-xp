@@ -10,22 +10,22 @@ const METHODS = [
   {
     emoji: "🌍",
     title: "Real-world practice",
-    body: "Decades of CBT research agree: practice between sessions is what actually changes behavior. The daily challenge isn't a bonus — it's the whole point. The lesson just loads the move.",
+    body: "Decades of CBT research agree: practice between sessions is what actually changes behavior. The daily challenge isn't a bonus, it's the whole point. The lesson just loads the move.",
   },
   {
     emoji: "🧠",
     title: "Thought work, not just behavior",
-    body: "Straight from CBT's cognitive side: every lesson includes a “challenge the thought” step — catch the anxious prediction (“they'll think I'm weird”), name the distortion, answer it with the balanced take. Confidence needs both the reframe and the rep.",
+    body: "Straight from CBT's cognitive side: every lesson includes a “challenge the thought” step: catch the anxious prediction (“they'll think I'm weird”), name the distortion, answer it with the balanced take. Confidence needs both the reframe and the rep.",
   },
   {
     emoji: "📶",
     title: "Graded courage",
-    body: "Confidence is built like exposure therapy builds it — starting small, stepping up gradually, and collecting evidence that the scary thing was survivable. Levels A1 → A2 → B1 follow that ladder.",
+    body: "Confidence is built like exposure therapy builds it: starting small, stepping up gradually, and collecting evidence that the scary thing was survivable. Levels A1 → A2 → B1 follow that ladder.",
   },
   {
     emoji: "🧩",
     title: "Spaced practice & retrieval",
-    body: "Quizzes make you retrieve, not re-read — the single most reliable memory effect in learning science. Streaks and daily quests apply habit research: small, visible, daily beats big and rare.",
+    body: "Quizzes make you retrieve, not re-read: the single most reliable memory effect in learning science. Streaks and daily quests apply habit research: small, visible, daily beats big and rare.",
   },
 ];
 
@@ -64,7 +64,7 @@ export default function MethodPage() {
       <div className="mt-4 rounded-[18px] bg-tint-warm p-4">
         <p className="font-body text-[14px] font-bold leading-[1.5]" style={{ color: "#7A5A3E" }}>
           We&apos;re building an expert board of psychologists and social scientists to review every
-          unit — and we re-tune lessons continuously from real learner results.
+          unit, and we re-tune lessons continuously from real learner results.
         </p>
       </div>
 

@@ -15,6 +15,8 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   title: "Social XP",
   description: "Social skills are just reps. 3 minutes a day.",
+  applicationName: "Social XP",
+  appleWebApp: { capable: true, title: "Social XP", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

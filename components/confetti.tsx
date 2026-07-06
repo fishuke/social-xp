@@ -1,4 +1,4 @@
-// One-shot confetti burst — deterministic particles, pure CSS animation.
+// One-shot confetti burst - deterministic particles, pure CSS animation.
 
 const COLORS = ["#FFC24A", "#58C08A", "#FF914D", "#ffffff", "#FF5A2C"];
 

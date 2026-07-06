@@ -47,10 +47,13 @@ Feeds the "ship → readjust lessons from data" plan:
 - `feelLog` (crushed/got-it/shaky) per lesson — shaky spikes = lesson needs work
 - Plausible/PostHog or a simple events table + admin chart
 
-## 8. ⬜ Coach v2 (AI speaking practice)
-Evidence is strong (roleplay d ≈ 0.82, big confidence gains). Record 30s →
-transcribe → LLM feedback: encouraging first, actionable always, never a stinging
-grade. Screens 15–16 in the design handover. Premium perk.
+## 8. ✅ Coach v2 (AI speaking practice)
+Shipped: record ≤60s against a daily prompt → Gemini 2.5 Flash (audio-native)
+scores confidence/clarity/energy/pace, counts fillers, gives "one thing to try"
+(encouraging first, actionable always). Free: 1 rep/day; premium unlimited;
++15 XP for the first 3 reps/day. Needs `GEMINI_API_KEY` (~$0.002/session).
+Later ideas: session history page, streak integration, roleplay mode (à la
+Speeko Convos / Yoodli).
 
 ## 9. ⬜ Later / ideas
 - Courage to Be Disliked course (v1 content in git history) — v3+

@@ -84,7 +84,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
             Just testing?
           </p>
           <p className="mt-1 font-body text-[13px] font-bold text-sec">
-            Demo account: <strong>demo@social.xp</strong> / <strong>password123</strong> — shared by
+            Demo account: <strong>demo@social.xp</strong> / <strong>password123</strong>. Shared by
             all testers, so progress mixes. Creating your own account keeps yours separate.
           </p>
           <button

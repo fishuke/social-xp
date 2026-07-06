@@ -1,6 +1,6 @@
 "use client";
 
-// Tiny WebAudio chimes + haptics — Duolingo-style feedback without asset files.
+// Tiny WebAudio chimes + haptics - Duolingo-style feedback without asset files.
 // All calls are fire-and-forget and safe to fail (older browsers, no gesture yet).
 
 let ctx: AudioContext | null = null;
@@ -50,7 +50,7 @@ export function sfx(kind: "correct" | "wrong" | "reward" | "claim") {
         break;
     }
   } catch {
-    // audio unavailable — silently skip
+    // audio unavailable - silently skip
   }
 }
 

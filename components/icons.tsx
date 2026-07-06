@@ -1,4 +1,4 @@
-// Simple geometric SVG icons — 2.2–2.6 stroke, round caps (no icon font).
+// Simple geometric SVG icons - 2.2–2.6 stroke, round caps (no icon font).
 
 type IconProps = {
   size?: number;

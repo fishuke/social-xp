@@ -5,6 +5,7 @@ import { effectiveStreak, getCourseProgress } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { DiamondIcon, FlameIcon, LockIcon } from "@/components/icons";
 import { SignOutButton } from "@/components/sign-out-button";
+import { ReminderSetting } from "@/components/push-reminders";
 
 export const dynamic = "force-dynamic";
 
@@ -153,6 +154,8 @@ export default async function YouPage() {
             <span className="font-display text-[18px] text-coral">→</span>
           </Link>
         )}
+
+        <ReminderSetting />
 
         <Link
           href="/method"

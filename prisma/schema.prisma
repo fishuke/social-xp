@@ -34,6 +34,47 @@ model User {
   lessons LessonCompletion[]
   quotes  CollectedQuote[]
   daily   DailyState[]
+  pushSubs PushSubscription[]
+  coachSessions CoachSession[]
+}
+
+// One AI-coach rep: a short voice recording analyzed by Gemini (see lib/coach.ts).
+model CoachSession {
+  id          String   @id @default(cuid())
+  userId      String
+  date        String // YYYY-MM-DD — daily free-gating + XP cap
+  promptText  String
+  durationSec Int
+  transcript  String
+  wpm         Int
+  fillerCount Int
+  overall     Int // 0–100
+  confidence  Int
+  clarity     Int
+  energy      Int
+  pace        Int // 0–100; label lives in feedback JSON
+  feedback    Json // {headline, summary, paceLabel, fillerWords, strengths, oneThing, tryNext}
+  xpAwarded   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+// Web-push endpoints (one per browser/device). Populated when a user opts into
+// daily reminders; the reminder cron sends to every row for a due user.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String // client public key (base64url)
+  auth      String // client auth secret (base64url)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model LessonCompletion {

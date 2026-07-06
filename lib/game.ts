@@ -71,7 +71,7 @@ export function currentPosition(progress: UnitProgress[]): { unitId: number; les
     const next = p.unit.lessons.find((l) => !p.completed.includes(l.index));
     if (next) return { unitId: p.unit.id, lessonIndex: next.index };
   }
-  // course finished (or empty) — park on the first unit
+  // course finished (or empty) - park on the first unit
   return { unitId: progress[0]?.unit.id ?? 1, lessonIndex: 1 };
 }
 
@@ -267,7 +267,7 @@ export async function completeChallenge(user: User): Promise<AwardResult> {
   return { xpAwarded: XP.challenge, totalXP: fresh.totalXP, celebrateStreak, quests: questState(updatedDaily) };
 }
 
-// ---------- chests (variable rewards — the "Hooked" loop's slot machine) ----------
+// ---------- chests (variable rewards - the "Hooked" loop's slot machine) ----------
 
 export type ChestTier = "common" | "rare" | "epic";
 export type ChestResult = {
@@ -283,7 +283,7 @@ function openedChestKeys(user: User): string[] {
   return JSON.parse(user.openedChests || "[]");
 }
 
-// [xp, weight] tables per tier — small chance of a big hit keeps opening exciting.
+// [xp, weight] tables per tier - small chance of a big hit keeps opening exciting.
 const CHEST_TABLES: Record<ChestTier, { xp: [number, number][]; shieldChance: number }> = {
   common: { xp: [[20, 40], [30, 30], [40, 20], [60, 10]], shieldChance: 0.05 },
   rare: { xp: [[40, 35], [60, 30], [80, 25], [120, 10]], shieldChance: 0.1 },
@@ -345,7 +345,7 @@ export async function openPathChest(user: User, unitId: number): Promise<ChestRe
   return grantChest(user, "rare", key);
 }
 
-/** Streak milestone chest — every 7 days of streak, one epic chest. */
+/** Streak milestone chest - every 7 days of streak, one epic chest. */
 export async function openStreakChest(user: User, milestone: number): Promise<ChestResult> {
   const opened = openedChestKeys(user);
   const key = `s${milestone}`;

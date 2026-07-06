@@ -6,6 +6,7 @@ import { CheckIcon, FlameIcon } from "@/components/icons";
 import { CountUp } from "@/components/count-up";
 import { ShareStreakButton } from "./share-button";
 import { MilestoneChest } from "./milestone-chest";
+import { ReminderNudge } from "@/components/push-reminders";
 
 export const dynamic = "force-dynamic";
 
@@ -105,8 +106,8 @@ export default async function StreakPage({
         {streak} day streak!
       </h1>
       <p className="mt-2 max-w-[300px] font-body text-[15px] font-bold leading-[1.5] text-ondark">
-        You showed up {streak} {streak === 1 ? "day" : "days straight"}. That&apos;s not luck —
-        that&apos;s a habit forming.
+        You showed up {streak} {streak === 1 ? "day" : "days straight"}. That&apos;s not luck.
+        That&apos;s a habit forming.
       </p>
 
       <div className="mt-6 flex gap-2.5">
@@ -153,6 +154,8 @@ export default async function StreakPage({
       </div>
 
       {milestone && <MilestoneChest milestone={milestone} />}
+
+      <ReminderNudge />
 
       <div className="mt-auto flex w-full flex-col gap-2 pt-8">
         <Link href="/learn" className="btn btn-amber">

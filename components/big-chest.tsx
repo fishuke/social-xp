@@ -6,7 +6,7 @@ const TIER_COLORS: Record<ChestTier, { body: string; dark: string; strap: string
   epic: { body: "#2E2018", dark: "#171008", strap: "#FFC24A", latch: "#FFC24A" },
 };
 
-// Big ceremonial chest — the lid is its own group so it can hinge open.
+// Big ceremonial chest - the lid is its own group so it can hinge open.
 export function BigChest({ tier, open, size = 160 }: { tier: ChestTier; open: boolean; size?: number }) {
   const c = TIER_COLORS[tier];
   return (
@@ -15,7 +15,7 @@ export function BigChest({ tier, open, size = 160 }: { tier: ChestTier; open: bo
       <rect x="14" y="46" width="92" height="48" rx="9" fill={c.body} stroke={c.dark} strokeWidth="3.5" />
       <rect x="52" y="46" width="16" height="48" fill={c.strap} />
       <rect x="14" y="46" width="92" height="48" rx="9" fill="none" stroke={c.dark} strokeWidth="3.5" />
-      {/* lid — hinges at back-left */}
+      {/* lid - hinges at back-left */}
       <g className={open ? "chest-lid-open" : undefined} style={{ transformOrigin: "14px 46px" }}>
         <path
           d="M14 46 v-13 a17 17 0 0 1 17-17 h58 a17 17 0 0 1 17 17 v13 z"

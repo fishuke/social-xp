@@ -11,5 +11,5 @@ export async function shareText(text: string): Promise<void> {
 }
 
 export function quoteShareText(quote: { text: string; author: string }): string {
-  return `“${quote.text}” — ${quote.author} · collected on Social XP`;
+  return `“${quote.text}” · ${quote.author} · collected on Social XP`;
 }
