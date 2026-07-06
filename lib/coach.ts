@@ -10,6 +10,7 @@ import { XP } from "./content";
 import { dayString, getDaily, questState, type QuestState } from "./game";
 
 const MODEL = "gemini-2.5-flash";
+const MODEL_FALLBACK = "gemini-2.5-flash-lite";
 export const FREE_SESSIONS_PER_DAY = 1;
 const XP_SESSIONS_PER_DAY = 3; // reps that earn XP each day (anti-farming)
 
@@ -154,21 +155,25 @@ export async function analyzeRecording(
     },
   };
 
-  // Free-tier Flash throws transient 503s under load — one retry saves the
-  // user's recording instead of asking them to redo the rep.
-  let response;
-  try {
-    response = await ai.models.generateContent(request);
-  } catch (error) {
-    const status = (error as { status?: number }).status;
-    if (status !== 503 && status !== 429) throw error;
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    response = await ai.models.generateContent(request);
+  // Free-tier Flash throws transient 503s under load. Retry once, then fall
+  // back to Flash-Lite (separate capacity pool, also audio-native) so the
+  // user's recording isn't lost to a capacity blip.
+  const attempts = [MODEL, MODEL, MODEL_FALLBACK];
+  let lastError: unknown;
+  for (let i = 0; i < attempts.length; i++) {
+    try {
+      const response = await ai.models.generateContent({ ...request, model: attempts[i] });
+      const text = response.text;
+      if (!text) throw new Error("Empty response from the coach model");
+      return analysisSchema.parse(JSON.parse(text));
+    } catch (error) {
+      const status = (error as { status?: number }).status;
+      if (status !== 503 && status !== 429) throw error; // real errors surface immediately
+      lastError = error;
+      if (i < attempts.length - 1) await new Promise((resolve) => setTimeout(resolve, 2500));
+    }
   }
-
-  const text = response.text;
-  if (!text) throw new Error("Empty response from the coach model");
-  return analysisSchema.parse(JSON.parse(text));
+  throw lastError;
 }
 
 /* ---------- session orchestration (gating, persistence, XP) ---------- */
