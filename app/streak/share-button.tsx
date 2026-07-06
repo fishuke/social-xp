@@ -1,16 +1,13 @@
 "use client";
 
+import { shareText } from "@/lib/share";
+
 export function ShareStreakButton({ streak }: { streak: number }) {
-  async function share() {
-    const text = `🔥 ${streak}-day streak on Social XP — social skills are just reps.`;
-    if (navigator.share) {
-      await navigator.share({ text }).catch(() => {});
-    } else {
-      await navigator.clipboard.writeText(text);
-    }
-  }
   return (
-    <button className="btn btn-ghost-dark" onClick={share}>
+    <button
+      className="btn btn-ghost-dark"
+      onClick={() => shareText(`🔥 ${streak}-day streak on Social XP — social skills are just reps.`)}
+    >
       Share my streak
     </button>
   );

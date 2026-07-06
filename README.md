@@ -24,8 +24,10 @@ First visit runs the onboarding flow and creates an anonymous user (cookie sessi
 | Layer | Where | Notes |
 |---|---|---|
 | Screens | `app/**` | Server components for tabs; client components for lesson flow, onboarding, paywall |
-| API | `app/api/*` | onboarding, lesson/complete, rep/complete, chest, course, premium |
-| Game logic | `lib/game.ts` | XP, streaks, daily quests, gating — shared by API + server pages |
+| Mutations | `lib/actions.ts` | Typed Server Actions (zod-validated) — no hand-rolled fetch/API routes |
+| Game logic | `lib/game.ts` | XP, streaks, quests, chests — explicit result types |
+| Content access | `lib/catalog.ts` | DB reads with zod validation of lesson JSON |
+| Auth | `lib/auth.ts` | next-auth v5, JWT sessions, credentials; anonymous users upgrade on register |
 | Content | `lib/content.ts` | Courses → levels (A1/A2/B1) → chapters → lessons, quizzes, quotes |
 | DB | `prisma/schema.prisma` | User, LessonCompletion, CollectedQuote, DailyState |
 | Design tokens | `app/globals.css` | Colors, buttons, animations from the handover |
@@ -38,7 +40,7 @@ pooled connection (runtime); `DATABASE_URL_UNPOOLED` is the direct one Prisma us
 
 ## Known MVP simplifications
 
-- No real auth — anonymous cookie user (swap in real auth before multi-device).
+- Auth: optional email+password accounts (next-auth JWT). Everyone starts anonymous; registering upgrades the same user row so progress is kept. No email verification / password reset yet.
 - Paywall "Start free trial" just flags `isPremium` — wire StoreKit/Stripe later.
 - Daily reset uses server-local midnight, not the user's timezone.
 - Streak share sends text (no generated image yet); "Save" on a quote shares/copies it.

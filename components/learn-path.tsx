@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { CheckIcon, ChestIcon, FlagIcon, LockIcon, PlayIcon } from "./icons";
 import { ChestOverlay } from "./chest-overlay";
-import type { ChestResult } from "@/lib/game";
+import { useChest } from "./use-chest";
 
 export type PathNode =
   | { kind: "lesson"; index: number; title: string; state: "done" | "current" | "locked"; isCheckpoint: boolean }
@@ -13,34 +12,11 @@ export type PathNode =
 const OFFSETS = [-34, 38, -46, 34, -50, 40, -32, 44];
 
 export function LearnPath({ chapterId, nodes }: { chapterId: number; nodes: PathNode[] }) {
-  const router = useRouter();
-  const [reward, setReward] = useState<ChestResult | null>(null);
-
-  async function openPathChest() {
-    const res = await fetch("/api/chest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "path", chapterId }),
-    });
-    const data: ChestResult = await res.json();
-    if (data.xpAwarded > 0) {
-      setReward(data);
-    } else {
-      router.refresh();
-    }
-  }
+  const chest = useChest();
 
   return (
     <div className="flex flex-col items-center pb-10 pt-2">
-      {reward && (
-        <ChestOverlay
-          result={reward}
-          onDone={() => {
-            setReward(null);
-            router.refresh();
-          }}
-        />
-      )}
+      {chest.reward && <ChestOverlay result={chest.reward} onDone={chest.collect} />}
       {nodes.map((node, i) => {
         const offset = OFFSETS[i % OFFSETS.length];
         const nextOffset = OFFSETS[(i + 1) % OFFSETS.length];
@@ -53,7 +29,7 @@ export function LearnPath({ chapterId, nodes }: { chapterId: number; nodes: Path
           <div key={i} className="flex w-full flex-col items-center">
             <div style={{ transform: `translateX(${offset}px)` }}>
               {node.kind === "chest" ? (
-                <ChestNode node={node} onOpen={openPathChest} />
+                <ChestNode node={node} onOpen={() => chest.open({ type: "path", unitId: chapterId })} />
               ) : (
                 <LessonNode node={node} chapterId={chapterId} />
               )}

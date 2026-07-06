@@ -163,17 +163,28 @@ export function questState(daily: {
 
 // ---------- mutations ----------
 
+export type AwardResult = {
+  xpAwarded: number;
+  totalXP: number;
+  celebrateStreak: number | null;
+  quests: QuestState;
+};
+
+export type LessonClaimResult = AwardResult & { quoteId: string | null };
+
+export type LessonClaimInput = {
+  unitId: number;
+  lessonIndex: number;
+  quizFirstTries: number; // quiz/reframe steps answered right on the first try
+  feel?: string;
+  repCommitted: boolean;
+  localTime?: string; // "HH:MM" in the user's timezone
+};
+
 export async function completeLesson(
   user: User,
-  input: {
-    unitId: number;
-    lessonIndex: number;
-    quizFirstTries: number; // quiz/reframe steps answered right on the first try
-    feel?: string;
-    repCommitted: boolean;
-    localTime?: string; // "HH:MM" in the user's timezone
-  }
-) {
+  input: LessonClaimInput
+): Promise<LessonClaimResult> {
   const lesson = await getLessonData(input.unitId, input.lessonIndex);
   if (!lesson) throw new Error("Unknown lesson");
 
@@ -239,7 +250,7 @@ export async function completeLesson(
   };
 }
 
-export async function completeRep(user: User) {
+export async function completeChallenge(user: User): Promise<AwardResult> {
   const daily = await getDaily(user.id);
   if (daily.repDoneToday) {
     return { xpAwarded: 0, totalXP: user.totalXP, celebrateStreak: null, quests: questState(daily) };
@@ -268,6 +279,10 @@ export type ChestResult = {
 
 const SHIELD_CAP = 2;
 
+function openedChestKeys(user: User): string[] {
+  return JSON.parse(user.openedChests || "[]");
+}
+
 // [xp, weight] tables per tier — small chance of a big hit keeps opening exciting.
 const CHEST_TABLES: Record<ChestTier, { xp: [number, number][]; shieldChance: number }> = {
   common: { xp: [[20, 40], [30, 30], [40, 20], [60, 10]], shieldChance: 0.05 },
@@ -289,7 +304,7 @@ async function grantChest(user: User, tier: ChestTier, markOpened?: string): Pro
   const table = CHEST_TABLES[tier];
   const xp = weightedPick(table.xp);
   const shield = user.streakShields < SHIELD_CAP && Math.random() < table.shieldChance;
-  const opened: string[] = JSON.parse(user.openedChests || "[]");
+  const opened = openedChestKeys(user);
   const fresh = await prisma.user.update({
     where: { id: user.id },
     data: {
@@ -320,7 +335,7 @@ export async function openQuestChest(user: User): Promise<ChestResult> {
 }
 
 export async function openPathChest(user: User, unitId: number): Promise<ChestResult> {
-  const opened: string[] = JSON.parse(user.openedChests || "[]");
+  const opened = openedChestKeys(user);
   const key = `c${unitId}`;
   if (opened.includes(key)) return { ...NO_CHEST, totalXP: user.totalXP };
   const progress = await getCourseProgress(user);
@@ -332,7 +347,7 @@ export async function openPathChest(user: User, unitId: number): Promise<ChestRe
 
 /** Streak milestone chest — every 7 days of streak, one epic chest. */
 export async function openStreakChest(user: User, milestone: number): Promise<ChestResult> {
-  const opened: string[] = JSON.parse(user.openedChests || "[]");
+  const opened = openedChestKeys(user);
   const key = `s${milestone}`;
   const valid =
     milestone > 0 && milestone % 7 === 0 && user.streakCount >= milestone && !opened.includes(key);

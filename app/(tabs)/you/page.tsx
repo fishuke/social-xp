@@ -4,6 +4,7 @@ import { getSessionUser } from "@/lib/session";
 import { effectiveStreak, getCourseProgress } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { DiamondIcon, FlameIcon, LockIcon } from "@/components/icons";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export const dynamic = "force-dynamic";
 
@@ -121,6 +122,37 @@ export default async function YouPage() {
             );
           })}
         </div>
+
+        {user.email ? (
+          <div className="mt-5 flex items-center gap-3 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]">
+            <span className="text-[22px]">👤</span>
+            <span className="flex-1">
+              <span className="block font-display text-[15px] font-semibold text-cocoa">
+                {user.email}
+              </span>
+              <span className="block font-body text-[12px] font-bold text-sec2">
+                Progress synced to your account
+              </span>
+            </span>
+            <SignOutButton />
+          </div>
+        ) : (
+          <Link
+            href="/register"
+            className="mt-5 flex items-center gap-3 rounded-[18px] border-2 border-coral bg-tint-coral p-4"
+          >
+            <span className="text-[22px]">💾</span>
+            <span className="flex-1">
+              <span className="block font-display text-[15px] font-semibold text-cocoa">
+                Create an account
+              </span>
+              <span className="block font-body text-[12px] font-bold text-sec2">
+                Keep your streak &amp; XP safe across devices
+              </span>
+            </span>
+            <span className="font-display text-[18px] text-coral">→</span>
+          </Link>
+        )}
 
         <Link
           href="/method"

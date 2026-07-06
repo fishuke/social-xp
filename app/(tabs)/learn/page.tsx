@@ -81,7 +81,7 @@ export default async function LearnPage() {
         </div>
       </Link>
 
-      <QuestsCard quests={questState(daily)} showRepAction />
+      <QuestsCard quests={questState(daily)} showChallengeAction />
 
       <LearnPath chapterId={unit.id} nodes={nodes} />
     </div>

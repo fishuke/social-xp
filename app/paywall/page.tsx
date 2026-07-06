@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { startPremiumTrial } from "@/lib/actions";
 import { CheckIcon, CloseIcon, Logo } from "@/components/icons";
 
 const PERKS = [
@@ -18,7 +19,7 @@ export default function PaywallPage() {
 
   async function startTrial() {
     setBusy(true);
-    await fetch("/api/premium", { method: "POST" });
+    await startPremiumTrial();
     router.replace("/learn");
   }
 

@@ -1,5 +1,9 @@
-// Shared content types + XP economy. Actual lessons/units/quotes live in the
-// database (Course/Unit/Lesson/Quote models) — seeded from prisma/seed.ts.
+// Content types + XP economy. Zod schemas are the single source of truth for
+// the JSON stored in Lesson.steps / Lesson.challenge — the seed validates on
+// write and the catalog validates on read, so hand-edited DB content fails
+// loudly instead of breaking a screen.
+
+import { z } from "zod";
 
 export const XP = {
   quizFirstTry: 10, // per quiz/reframe step answered right first try
@@ -7,30 +11,42 @@ export const XP = {
   challenge: 30, // real-world challenge
 } as const;
 
-export type ConceptStep = {
-  type: "concept";
-  headline: string;
-  body: string; // plain text; `keyPhrase` is bolded inside it
-  keyPhrase: string;
-  coachLine?: string;
-};
+export const conceptStepSchema = z.object({
+  type: z.literal("concept"),
+  headline: z.string().min(1),
+  body: z.string().min(1),
+  keyPhrase: z.string().min(1),
+  coachLine: z.string().optional(),
+});
 
 // voice "them" = a person talking (behavior quiz).
 // voice "inner" = your own automatic thought (CBT-style cognitive reframe).
-export type QuizStep = {
-  type: "quiz";
-  voice: "them" | "inner";
-  theySay: string;
-  question: string;
-  options: string[];
-  correctIndex: number;
-  feedbackTitle: string;
-  feedbackBody: string;
-};
+export const quizStepSchema = z.object({
+  type: z.literal("quiz"),
+  voice: z.enum(["them", "inner"]),
+  theySay: z.string().min(1),
+  question: z.string().min(1),
+  options: z.array(z.string().min(1)).length(2),
+  correctIndex: z.number().int().min(0).max(1),
+  feedbackTitle: z.string().min(1),
+  feedbackBody: z.string().min(1),
+});
 
-export type LessonStep = ConceptStep | QuizStep;
+export const lessonStepSchema = z.discriminatedUnion("type", [
+  conceptStepSchema,
+  quizStepSchema,
+]);
+export const lessonStepsSchema = z.array(lessonStepSchema).min(1);
 
-export type Challenge = { text: string; sub: string };
+export const challengeSchema = z.object({
+  text: z.string().min(1),
+  sub: z.string().min(1),
+});
+
+export type ConceptStep = z.infer<typeof conceptStepSchema>;
+export type QuizStep = z.infer<typeof quizStepSchema>;
+export type LessonStep = z.infer<typeof lessonStepSchema>;
+export type Challenge = z.infer<typeof challengeSchema>;
 
 export type LessonData = {
   id: number;

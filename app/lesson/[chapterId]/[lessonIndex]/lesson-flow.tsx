@@ -4,9 +4,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content";
 import { XP } from "@/lib/content";
+import { claimLesson } from "@/lib/actions";
 import { haptic, sfx } from "@/lib/juice";
+import { quoteShareText, shareText } from "@/lib/share";
 import { ChatIcon, CheckIcon, CloseIcon, DiamondIcon, Logo, XpSquareIcon } from "@/components/icons";
 import { QuoteCard } from "@/components/quote-card";
+import { QuestRow } from "@/components/quest-row";
 import { ConfettiBurst } from "@/components/confetti";
 import { CountUp } from "@/components/count-up";
 
@@ -26,7 +29,7 @@ const FEELS = [
   { id: "crushed", emoji: "😎", label: "Crushed it" },
   { id: "got-it", emoji: "🙂", label: "Got it" },
   { id: "shaky", emoji: "😬", label: "Shaky" },
-];
+] as const;
 
 const CIRCLED = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
 
@@ -38,7 +41,7 @@ export function LessonFlow(props: Props) {
   const [screen, setScreen] = useState(0);
   const [firstTries, setFirstTries] = useState(0);
   const [repCommitted, setRepCommitted] = useState(false);
-  const [feel, setFeel] = useState<string | null>(null);
+  const [feel, setFeel] = useState<"crushed" | "got-it" | "shaky" | null>(null);
   const [claiming, setClaiming] = useState(false);
 
   const phase =
@@ -68,22 +71,17 @@ export function LessonFlow(props: Props) {
     // Tomorrow's reminder fires when they trained today — send local time (Duolingo-style).
     const now = new Date();
     const localTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    const res = await fetch("/api/lesson/complete", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        unitId: unit.id,
-        lessonIndex: lesson.index,
-        quizFirstTries: firstTries,
-        feel,
-        repCommitted,
-        localTime,
-      }),
+    const result = await claimLesson({
+      unitId: unit.id,
+      lessonIndex: lesson.index,
+      quizFirstTries: firstTries,
+      feel: feel ?? undefined,
+      repCommitted,
+      localTime,
     });
-    const data = await res.json();
     // Let the XP chips land, then move on (streak screen fires once/day max).
     setTimeout(() => {
-      router.replace(data.celebrateStreak ? `/streak?n=${data.celebrateStreak}` : "/learn");
+      router.replace(result.celebrateStreak ? `/streak?n=${result.celebrateStreak}` : "/learn");
     }, 700);
   }
 
@@ -352,14 +350,7 @@ function QuoteScreen({
 }) {
   const collected = Math.min(collectedBefore + 1, 6);
 
-  async function share() {
-    const text = `“${quote.text}” — ${quote.author} · collected on Social XP`;
-    if (navigator.share) {
-      await navigator.share({ text }).catch(() => {});
-    } else {
-      await navigator.clipboard.writeText(text);
-    }
-  }
+  const share = () => shareText(quoteShareText(quote));
 
   return (
     <>
@@ -472,7 +463,7 @@ function ClaimScreen({
 }: Props & {
   firstTries: number;
   feel: string | null;
-  setFeel: (f: string) => void;
+  setFeel: (f: (typeof FEELS)[number]["id"]) => void;
   claiming: boolean;
   onClaim: () => void;
 }) {
@@ -524,9 +515,9 @@ function ClaimScreen({
           Daily quests
         </p>
         <div className="flex flex-col gap-2.5">
-          <ClaimQuestRow label="Finish 1 lesson" done />
-          <ClaimQuestRow label="Earn 30 XP" done={xpAfter >= 30} progress={Math.min(xpAfter, 30)} />
-          <ClaimQuestRow label="Do today's challenge" done={repDoneToday} />
+          <QuestRow label="Finish 1 lesson" done />
+          <QuestRow label="Earn 30 XP" done={xpAfter >= 30} progress={{ current: xpAfter, target: 30 }} />
+          <QuestRow label="Do today's challenge" done={repDoneToday} />
         </div>
       </div>
 
@@ -558,46 +549,5 @@ function ClaimScreen({
         </button>
       </div>
     </>
-  );
-}
-
-function ClaimQuestRow({
-  label,
-  done,
-  progress,
-}: {
-  label: string;
-  done: boolean;
-  progress?: number;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <span
-        className="flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full border-2"
-        style={{
-          borderColor: done ? "#58C08A" : "#EADFD5",
-          background: done ? "#58C08A" : "transparent",
-        }}
-      >
-        {done && <CheckIcon size={10} />}
-      </span>
-      <span
-        className="flex-1 font-body text-[13px] font-extrabold"
-        style={{ color: done ? "#2E5A44" : "#544537" }}
-      >
-        {label}
-        {progress !== undefined && !done && (
-          <span className="ml-1.5 text-quest-amber">{progress}/30</span>
-        )}
-      </span>
-      {progress !== undefined && !done && (
-        <span className="h-[6px] w-16 overflow-hidden rounded-full bg-line">
-          <span
-            className="block h-full rounded-full bg-quest-amber"
-            style={{ width: `${(progress / 30) * 100}%` }}
-          />
-        </span>
-      )}
-    </div>
   );
 }

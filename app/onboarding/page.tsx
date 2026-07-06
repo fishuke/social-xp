@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { submitOnboarding, type OnboardingInput } from "@/lib/actions";
 import { Logo } from "@/components/icons";
 import { ProgressBar } from "@/components/ui";
 
@@ -22,17 +23,13 @@ const PACES = [
 export default function Onboarding() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [goal, setGoal] = useState("ease-nerves");
-  const [pace, setPace] = useState("steady");
+  const [goal, setGoal] = useState<OnboardingInput["goal"]>("ease-nerves");
+  const [pace, setPace] = useState<OnboardingInput["pace"]>("steady");
   const [saving, setSaving] = useState(false);
 
   async function finish() {
     setSaving(true);
-    await fetch("/api/onboarding", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ goal, pace }),
-    });
+    await submitOnboarding({ goal, pace });
     router.replace("/learn");
   }
 
@@ -64,7 +61,7 @@ export default function Onboarding() {
           <button className="btn btn-coral" onClick={() => setStep(1)}>
             Start training
           </button>
-          <button className="btn btn-ghost" onClick={() => setStep(1)}>
+          <button className="btn btn-ghost" onClick={() => router.push("/login")}>
             I already have an account
           </button>
         </div>
@@ -88,7 +85,7 @@ export default function Onboarding() {
             return (
               <button
                 key={g.id}
-                onClick={() => setGoal(g.id)}
+                onClick={() => setGoal(g.id as OnboardingInput["goal"])}
                 className="flex items-center justify-between rounded-[18px] border-2 px-5 py-[18px] text-left font-display text-[18px] font-medium transition-colors"
                 style={{
                   borderColor: selected ? "#FF5A2C" : "#EADFD5",
@@ -131,7 +128,7 @@ export default function Onboarding() {
           return (
             <button
               key={p.id}
-              onClick={() => setPace(p.id)}
+              onClick={() => setPace(p.id as OnboardingInput["pace"])}
               className="flex items-center gap-4 rounded-[18px] border-2 px-5 py-4 text-left"
               style={{
                 borderColor: selected ? "#FF5A2C" : "#EADFD5",

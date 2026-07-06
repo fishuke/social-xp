@@ -4,7 +4,12 @@
 // behavior quiz, one CBT thought-reframe (voice:"inner"), and "the move".
 
 import { PrismaClient } from "@prisma/client";
-import type { Challenge, LessonStep } from "../lib/content";
+import {
+  challengeSchema,
+  lessonStepsSchema,
+  type Challenge,
+  type LessonStep,
+} from "../lib/content";
 
 const prisma = new PrismaClient();
 
@@ -604,8 +609,9 @@ async function main() {
           index: lesson.index,
           title: lesson.title,
           isCheckpoint: lesson.isCheckpoint ?? false,
-          steps: lesson.steps,
-          challenge: lesson.challenge,
+          // validate on write — the same schemas guard reads in lib/catalog.ts
+          steps: lessonStepsSchema.parse(lesson.steps),
+          challenge: challengeSchema.parse(lesson.challenge),
         },
       });
     }
