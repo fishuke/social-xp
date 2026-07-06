@@ -47,5 +47,6 @@ pooled connection (runtime); `DATABASE_URL_UNPOOLED` is the direct one Prisma us
 - No daily lesson cap (product decision) — chapters still unlock sequentially; Premium unlocks all chapters, coach, and streak repair.
 - Two courses ship in MVP: **Social Skills** (A1–B1, 6 units incl. backchanneling) and **Courage to Be Disliked** (A1, 2 units, Adlerian psychology). Course switcher lives on the Chapters screen.
 - The full 37-unit curriculum roadmap (A1–C2, with can-do statements and shipped/planned status) lives in [`docs/CURRICULUM.md`](docs/CURRICULUM.md).
+- Prioritized next steps live in [`docs/ROADMAP.md`](docs/ROADMAP.md).
 - `/method` explains the evidence base (BST, CBT homework research, graded exposure, spaced retrieval). The expert-board line there is forward-looking copy — update it once professional review actually happens.
 - Quote attributions must be editorially verified before launch (see handover).
