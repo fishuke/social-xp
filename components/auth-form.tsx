@@ -76,6 +76,14 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         <button type="submit" className="btn btn-coral mt-2" disabled={busy}>
           {busy ? "One sec…" : isLogin ? "Log in" : "Create account"}
         </button>
+        {isLogin && (
+          <Link
+            href="/forgot-password"
+            className="text-center font-body text-[13px] font-extrabold text-sec2"
+          >
+            Forgot password?
+          </Link>
+        )}
       </form>
 
       {isLogin && (
