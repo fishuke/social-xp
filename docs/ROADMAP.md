@@ -42,8 +42,9 @@ a stable HTTPS origin.
 - Verify the domain at Resend, set `MAIL_FROM` (goodbye onboarding@resend.dev)
 - Set the launch env vars: VAPID keys + `CRON_SECRET`, `RESEND_API_KEY`,
   `GEMINI_API_KEY`
-- Landing page polish + privacy policy & terms pages (Lemon Squeezy checks
-  these during store review)
+- Landing page polish. Privacy (`/privacy`) & terms (`/terms`) pages are
+  shipped (Lemon Squeezy checks these during store review); update the
+  `SUPPORT_EMAIL` placeholder in both once the domain exists
 
 ## 6. 🔨 Payments: Lemon Squeezy (merchant of record)
 Chosen over Stripe because LS is the merchant of record: they are the legal

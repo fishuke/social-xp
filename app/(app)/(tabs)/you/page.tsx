@@ -235,6 +235,10 @@ export default async function YouPage({
           </span>
           <span className="font-display text-[18px] text-faint">→</span>
         </Link>
+
+        <p className="mt-6 text-center font-body text-[12px] font-bold text-faint2">
+          <Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link>
+        </p>
       </section>
     </div>
   );

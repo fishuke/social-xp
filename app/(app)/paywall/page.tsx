@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { startCheckout } from "@/lib/actions";
@@ -108,7 +109,14 @@ export default function PaywallPage() {
       </p>
       <p className="mt-3 text-center font-body text-[11px] font-bold leading-[1.5] text-faint2">
         Social XP builds confidence through practice. It&apos;s not therapy or mental-health
-        treatment.
+        treatment.{" "}
+        <Link href="/terms" className="underline">
+          Terms
+        </Link>{" "}
+        ·{" "}
+        <Link href="/privacy" className="underline">
+          Privacy
+        </Link>
       </p>
     </div>
   );
