@@ -6,7 +6,7 @@ import "server-only";
 import webpush from "web-push";
 import type { User } from "@prisma/client";
 import { prisma } from "./db";
-import { effectiveStreak } from "./game";
+import { effectiveStreak, localParts } from "./game";
 
 let configured = false;
 
@@ -102,19 +102,15 @@ export async function sendReminder(user: User): Promise<number> {
 }
 
 /**
- * Users due for a reminder in the given local hour ("HH"): they have a subscription,
- * their reminder time falls in this hour, and they haven't trained today yet.
- * NOTE: reminderTime is compared in server time until per-user timezones land
- * (see docs/ROADMAP.md #4).
+ * Users due for a reminder right now, evaluated in each user's own timezone:
+ * they have a subscription, their reminder time falls in their current local
+ * hour, and they haven't trained today (their today) yet. Users without a
+ * stored timezone are evaluated in server time.
  */
-export async function getUsersDueForReminder(hourHH: string, today: string): Promise<User[]> {
-  return prisma.user.findMany({
-    where: {
-      reminderTime: { startsWith: `${hourHH}:` },
-      // "not today" must include users who never trained: Prisma's `not`
-      // excludes NULL rows, so match null explicitly.
-      OR: [{ lastGoalMetDate: null }, { lastGoalMetDate: { not: today } }],
-      pushSubs: { some: {} },
-    },
+export async function getUsersDueForReminder(now = new Date()): Promise<User[]> {
+  const candidates = await prisma.user.findMany({ where: { pushSubs: { some: {} } } });
+  return candidates.filter((user: User) => {
+    const { date: localToday, hour } = localParts(user.timezone, now);
+    return user.reminderTime.startsWith(`${hour}:`) && user.lastGoalMetDate !== localToday;
   });
 }

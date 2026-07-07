@@ -3,32 +3,72 @@ import { prisma } from "./db";
 import { XP, type QuizStep, type UnitData } from "./content";
 import { getLessonData, getQuoteData, getUnits } from "./catalog";
 
-// ---------- dates (local server time; swap for user TZ when auth lands) ----------
+// ---------- dates (per-user IANA timezone; null falls back to server time) ----------
 
-export function dayString(d = new Date()): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+export type TzUser = Pick<User, "id" | "timezone">;
+
+/** YYYY-MM-DD for the given instant, in the given timezone (server tz when null). */
+export function dayString(d = new Date(), timeZone?: string | null): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: timeZone ?? undefined,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(d);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
-function daysAgoString(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() - n);
-  return dayString(d);
+/** Local date, hour ("00"-"23"), and Monday-based weekday index for a timezone. */
+export function localParts(timeZone?: string | null, d = new Date()): {
+  date: string;
+  hour: string;
+  weekdayMondayIndex: number;
+} {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: timeZone ?? undefined,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+    weekday: "short",
+  }).formatToParts(d);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  return {
+    date: `${get("year")}-${get("month")}-${get("day")}`,
+    hour: get("hour"),
+    weekdayMondayIndex: Math.max(0, weekdays.indexOf(get("weekday"))),
+  };
 }
 
-function yesterdayString(): string {
-  return daysAgoString(1);
+export function isValidTimeZone(tz: string): boolean {
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// n*24h back, formatted in the user's zone. Around a DST switch the boundary
+// shifts by an hour at most, which is fine for streak bookkeeping.
+function daysAgoString(n: number, timeZone?: string | null): string {
+  return dayString(new Date(Date.now() - n * 86_400_000), timeZone);
+}
+
+function yesterdayString(timeZone?: string | null): string {
+  return daysAgoString(1, timeZone);
 }
 
 // ---------- daily state ----------
 
-export async function getDaily(userId: string) {
-  const date = dayString();
+export async function getDaily(user: TzUser) {
+  const date = dayString(new Date(), user.timezone);
   return prisma.dailyState.upsert({
-    where: { userId_date: { userId, date } },
-    create: { userId, date },
+    where: { userId_date: { userId: user.id, date } },
+    create: { userId: user.id, date },
     update: {},
   });
 }
@@ -90,11 +130,15 @@ export function isLessonUnlocked(
 
 export function effectiveStreak(user: User): number {
   if (!user.lastGoalMetDate) return 0;
-  if (user.lastGoalMetDate === dayString() || user.lastGoalMetDate === yesterdayString()) {
+  const tz = user.timezone;
+  if (
+    user.lastGoalMetDate === dayString(new Date(), tz) ||
+    user.lastGoalMetDate === yesterdayString(tz)
+  ) {
     return user.streakCount;
   }
   // one missed day, but a shield is waiting to absorb it
-  if (user.lastGoalMetDate === daysAgoString(2) && user.streakShields > 0) {
+  if (user.lastGoalMetDate === daysAgoString(2, tz) && user.streakShields > 0) {
     return user.streakCount;
   }
   return 0; // streak reset (gentle copy in UI, never shame)
@@ -108,15 +152,16 @@ function goalMet(daily: { lessonsDoneToday: number }): boolean {
 
 /** Called after any award. Returns the new streak count if it just extended (fires once/day). */
 async function evaluateStreak(user: User): Promise<number | null> {
-  const daily = await getDaily(user.id);
-  const today = dayString();
+  const tz = user.timezone;
+  const daily = await getDaily(user);
+  const today = dayString(new Date(), tz);
   if (!goalMet(daily) || user.lastGoalMetDate === today) return null;
 
   let newStreak = 1;
   let consumeShield = false;
-  if (user.lastGoalMetDate === yesterdayString()) {
+  if (user.lastGoalMetDate === yesterdayString(tz)) {
     newStreak = user.streakCount + 1;
-  } else if (user.lastGoalMetDate === daysAgoString(2) && user.streakShields > 0) {
+  } else if (user.lastGoalMetDate === daysAgoString(2, tz) && user.streakShields > 0) {
     newStreak = user.streakCount + 1; // shield absorbs the missed day
     consumeShield = true;
   }
@@ -179,6 +224,7 @@ export type LessonClaimInput = {
   feel?: string;
   repCommitted: boolean;
   localTime?: string; // "HH:MM" in the user's timezone
+  timezone?: string; // IANA zone; self-heals users who onboarded before tz capture
 };
 
 export async function completeLesson(
@@ -188,10 +234,21 @@ export async function completeLesson(
   const lesson = await getLessonData(input.unitId, input.lessonIndex);
   if (!lesson) throw new Error("Unknown lesson");
 
-  // Daily reminder follows the time they actually train.
+  // Daily reminder follows the time they actually train; timezone follows the
+  // device (both self-adjust on every claim).
+  const newTimezone =
+    input.timezone && input.timezone !== user.timezone && isValidTimeZone(input.timezone)
+      ? input.timezone
+      : undefined;
   if (input.localTime && /^([01]\d|2[0-3]):[0-5]\d$/.test(input.localTime)) {
-    await prisma.user.update({ where: { id: user.id }, data: { reminderTime: input.localTime } });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { reminderTime: input.localTime, ...(newTimezone && { timezone: newTimezone }) },
+    });
+  } else if (newTimezone) {
+    await prisma.user.update({ where: { id: user.id }, data: { timezone: newTimezone } });
   }
+  const tz = newTimezone ?? user.timezone;
 
   const already = await prisma.lessonCompletion.findUnique({
     where: {
@@ -207,7 +264,7 @@ export async function completeLesson(
   const firstTries = Math.max(0, Math.min(input.quizFirstTries, quizCount));
   const xpAwarded = already ? 0 : XP.lessonClaim + firstTries * XP.quizFirstTry;
   const quote = await getQuoteData(input.unitId, input.lessonIndex);
-  const date = dayString();
+  const date = dayString(new Date(), tz);
 
   if (!already) {
     await prisma.lessonCompletion.create({
@@ -228,7 +285,7 @@ export async function completeLesson(
     await prisma.user.update({ where: { id: user.id }, data: { totalXP: { increment: xpAwarded } } });
   }
 
-  await getDaily(user.id); // ensure row
+  await getDaily({ id: user.id, timezone: tz }); // ensure row
   const daily = await prisma.dailyState.update({
     where: { userId_date: { userId: user.id, date } },
     data: {
@@ -251,7 +308,7 @@ export async function completeLesson(
 }
 
 export async function completeChallenge(user: User): Promise<AwardResult> {
-  const daily = await getDaily(user.id);
+  const daily = await getDaily(user);
   if (daily.repDoneToday) {
     return { xpAwarded: 0, totalXP: user.totalXP, celebrateStreak: null, quests: questState(daily) };
   }
@@ -313,9 +370,9 @@ async function grantChest(user: User, tier: ChestTier, markOpened?: string): Pro
       ...(markOpened && { openedChests: JSON.stringify([...opened, markOpened]) }),
     },
   });
-  await getDaily(user.id);
+  await getDaily(user);
   await prisma.dailyState.update({
-    where: { userId_date: { userId: user.id, date: dayString() } },
+    where: { userId_date: { userId: user.id, date: dayString(new Date(), user.timezone) } },
     data: { xpEarnedToday: { increment: xp } },
   });
   return { xpAwarded: xp, shield, tier, totalXP: fresh.totalXP };
@@ -324,7 +381,7 @@ async function grantChest(user: User, tier: ChestTier, markOpened?: string): Pro
 const NO_CHEST: Omit<ChestResult, "totalXP"> = { xpAwarded: 0, shield: false, tier: "common" };
 
 export async function openQuestChest(user: User): Promise<ChestResult> {
-  const daily = await getDaily(user.id);
+  const daily = await getDaily(user);
   const q = questState(daily);
   if (!q.allDone || q.chestOpened) return { ...NO_CHEST, totalXP: user.totalXP };
   await prisma.dailyState.update({

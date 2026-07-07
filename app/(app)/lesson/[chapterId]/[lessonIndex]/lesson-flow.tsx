@@ -78,6 +78,7 @@ export function LessonFlow(props: Props) {
       feel: feel ?? undefined,
       repCommitted,
       localTime,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || undefined,
     });
     // Let the XP chips land, then move on (streak screen fires once/day max).
     setTimeout(() => {

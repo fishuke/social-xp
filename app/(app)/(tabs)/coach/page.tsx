@@ -11,7 +11,7 @@ export default async function CoachPage() {
   if (!user) redirect("/onboarding");
 
   const [sessionsToday, recent] = await Promise.all([
-    countSessionsToday(user.id),
+    countSessionsToday(user),
     prisma.coachSession.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
@@ -30,7 +30,7 @@ export default async function CoachPage() {
   return (
     <CoachClient
       name={user.name}
-      prompt={getDailyPrompt()}
+      prompt={getDailyPrompt(user)}
       locked={coachLocked(user, sessionsToday)}
       isPremium={user.isPremium}
       history={history}

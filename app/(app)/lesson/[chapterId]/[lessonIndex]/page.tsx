@@ -37,7 +37,7 @@ export default async function LessonPage({
     .completed.includes(lessonIndex);
 
   const [daily, collectedBefore] = await Promise.all([
-    getDaily(user.id),
+    getDaily(user),
     prisma.collectedQuote.count({
       where: { userId: user.id, quoteId: { startsWith: `u${unitId}-` } },
     }),

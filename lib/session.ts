@@ -22,7 +22,13 @@ export async function getSessionUser(): Promise<User | null> {
 }
 
 // Only call from Server Actions / Route Handlers (mutates cookies).
-export async function createSessionUser(data: { name?: string; goal: string; pace: string; reminderTime?: string }) {
+export async function createSessionUser(data: {
+  name?: string;
+  goal: string;
+  pace: string;
+  reminderTime?: string;
+  timezone?: string;
+}) {
   const store = await cookies();
   const existingId = store.get(ANON_COOKIE)?.value;
   if (existingId) {

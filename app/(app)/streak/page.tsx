@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { getDaily } from "@/lib/game";
+import { getDaily, localParts } from "@/lib/game";
 import { CheckIcon, FlameIcon } from "@/components/icons";
 import { CountUp } from "@/components/count-up";
 import { ShareStreakButton } from "./share-button";
@@ -35,9 +35,9 @@ export default async function StreakPage({
 
   const { n } = await searchParams;
   const streak = Math.max(1, Number(n) || user.streakCount || 1);
-  const daily = await getDaily(user.id);
+  const daily = await getDaily(user);
 
-  const todayIndex = (new Date().getDay() + 6) % 7; // Monday = 0
+  const todayIndex = localParts(user.timezone).weekdayMondayIndex; // Monday = 0
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   // Epic chest every 7 streak days

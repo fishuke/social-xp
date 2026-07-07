@@ -29,7 +29,9 @@ export default function Onboarding() {
 
   async function finish() {
     setSaving(true);
-    await submitOnboarding({ goal, pace });
+    // Device timezone makes streaks and reminders reset at the user's midnight.
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
+    await submitOnboarding({ goal, pace, timezone });
     router.replace("/learn");
   }
 

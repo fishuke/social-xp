@@ -16,7 +16,7 @@ export default async function LearnPage() {
 
   const [progress, daily, quoteCount] = await Promise.all([
     getCourseProgress(user),
-    getDaily(user.id),
+    getDaily(user),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
   ]);
   const pos = currentPosition(progress);

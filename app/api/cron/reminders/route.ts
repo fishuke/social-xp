@@ -1,8 +1,8 @@
 // Daily-reminder cron. Vercel Cron hits this hourly; we notify users whose
-// reminder time falls in the current hour and who haven't trained today.
+// reminder time falls in their current LOCAL hour (per-user timezone) and who
+// haven't trained today (their today).
 // Protected by CRON_SECRET (Vercel sends it as `Authorization: Bearer <secret>`).
 
-import { dayString } from "@/lib/game";
 import { getUsersDueForReminder, sendReminder } from "@/lib/push";
 
 export const dynamic = "force-dynamic";
@@ -17,11 +17,7 @@ export async function GET(request: Request): Promise<Response> {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const now = new Date();
-  const hourHH = String(now.getHours()).padStart(2, "0");
-  const today = dayString(now);
-
-  const users = await getUsersDueForReminder(hourHH, today);
+  const users = await getUsersDueForReminder();
 
   let notified = 0;
   let devices = 0;
@@ -31,5 +27,5 @@ export async function GET(request: Request): Promise<Response> {
     devices += sent;
   }
 
-  return Response.json({ hour: hourHH, due: users.length, notified, devices });
+  return Response.json({ due: users.length, notified, devices });
 }

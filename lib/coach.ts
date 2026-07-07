@@ -7,7 +7,7 @@ import { z } from "zod";
 import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { XP } from "./content";
-import { dayString, getDaily, questState, type QuestState } from "./game";
+import { dayString, getDaily, questState, type QuestState, type TzUser } from "./game";
 
 const MODEL = "gemini-2.5-flash";
 const MODEL_FALLBACK = "gemini-2.5-flash-lite";
@@ -35,8 +35,9 @@ const PROMPTS: CoachPrompt[] = [
   { text: "Invite a friend to something this weekend.", sub: "When, where, why it'll be fun. 30 seconds." },
 ];
 
-/** Same prompt for everyone on a given day. */
-export function getDailyPrompt(date = dayString()): CoachPrompt {
+/** One prompt per calendar day, rolling at the user's local midnight. */
+export function getDailyPrompt(user?: TzUser | null): CoachPrompt {
+  const date = dayString(new Date(), user?.timezone);
   let seed = 0;
   for (const c of date) seed = (seed * 31 + c.charCodeAt(0)) % 997;
   return PROMPTS[seed % PROMPTS.length];
@@ -178,8 +179,10 @@ export async function analyzeRecording(
 
 /* ---------- session orchestration (gating, persistence, XP) ---------- */
 
-export async function countSessionsToday(userId: string): Promise<number> {
-  return prisma.coachSession.count({ where: { userId, date: dayString() } });
+export async function countSessionsToday(user: TzUser): Promise<number> {
+  return prisma.coachSession.count({
+    where: { userId: user.id, date: dayString(new Date(), user.timezone) },
+  });
 }
 
 export function coachLocked(user: User, sessionsToday: number): boolean {
@@ -200,11 +203,11 @@ export async function completeCoachSession(
   user: User,
   input: { audio: Buffer; mimeType: string; durationSec: number }
 ): Promise<CoachSessionResult> {
-  const date = dayString();
-  const sessionsBefore = await countSessionsToday(user.id);
+  const date = dayString(new Date(), user.timezone);
+  const sessionsBefore = await countSessionsToday(user);
   if (coachLocked(user, sessionsBefore)) throw new Error("Daily free session already used");
 
-  const promptText = getDailyPrompt(date).text;
+  const promptText = getDailyPrompt(user).text;
   const analysis = await analyzeRecording(user, { ...input, promptText });
 
   const previous = await prisma.coachSession.findFirst({
@@ -248,13 +251,13 @@ export async function completeCoachSession(
     ? await prisma.user.update({ where: { id: user.id }, data: { totalXP: { increment: xpAwarded } } })
     : user;
 
-  await getDaily(user.id); // ensure row
+  await getDaily(user); // ensure row
   const daily = xpAwarded
     ? await prisma.dailyState.update({
         where: { userId_date: { userId: user.id, date } },
         data: { xpEarnedToday: { increment: xpAwarded } },
       })
-    : await getDaily(user.id);
+    : await getDaily(user);
 
   return {
     analysis,
