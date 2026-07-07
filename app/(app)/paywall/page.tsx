@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { startPremiumTrial } from "@/lib/actions";
+import { startCheckout } from "@/lib/actions";
 import { CheckIcon, CloseIcon, Logo } from "@/components/icons";
 
 const PERKS = [
@@ -16,11 +16,22 @@ export default function PaywallPage() {
   const router = useRouter();
   const [plan, setPlan] = useState<"monthly" | "yearly">("yearly");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function startTrial() {
     setBusy(true);
-    await startPremiumTrial();
-    router.replace("/learn");
+    setError(null);
+    const result = await startCheckout({ plan });
+    if (!result.ok) {
+      setError(result.error);
+      setBusy(false);
+      return;
+    }
+    if (result.url) {
+      window.location.assign(result.url); // provider's hosted checkout
+      return;
+    }
+    router.replace("/learn"); // dev fallback - already premium
   }
 
   return (
@@ -89,6 +100,9 @@ export default function PaywallPage() {
       <button className="btn btn-coral mt-5" onClick={startTrial} disabled={busy}>
         Start 7-day free trial
       </button>
+      {error && (
+        <p className="mt-2 text-center font-body text-[13px] font-bold text-coral">{error}</p>
+      )}
       <p className="mt-2 text-center font-body text-[13px] font-bold text-sec2">
         Then {plan === "yearly" ? "$39.99/yr" : "$6.99/mo"} · cancel anytime
       </p>

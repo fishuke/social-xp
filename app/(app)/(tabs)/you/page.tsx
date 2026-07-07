@@ -6,19 +6,48 @@ import { prisma } from "@/lib/db";
 import { DiamondIcon, FlameIcon, LockIcon } from "@/components/icons";
 import { SignOutButton } from "@/components/sign-out-button";
 import { ReminderSetting } from "@/components/push-reminders";
+import { VerifyEmailBanner } from "@/components/verify-email-banner";
+import { ManageSubscriptionButton } from "@/components/manage-subscription";
 
 export const dynamic = "force-dynamic";
 
-export default async function YouPage() {
+export default async function YouPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ verified?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
+  const { verified } = await searchParams;
 
-  const [progress, quoteCount, course] = await Promise.all([
+  const [progress, quoteCount, course, subscription] = await Promise.all([
     getCourseProgress(user),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
     prisma.course.findUnique({ where: { id: 1 } }),
+    prisma.subscription.findFirst({ where: { userId: user.id }, orderBy: { updatedAt: "desc" } }),
   ]);
   const streak = effectiveStreak(user);
+  const renewDate = subscription?.renewsAt?.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const endDate = subscription?.endsAt?.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const subscriptionCopy = !subscription
+    ? null
+    : subscription.status === "trialing"
+      ? `Free trial${renewDate ? ` · first charge ${renewDate}` : ""}`
+      : subscription.status === "active"
+        ? `${subscription.plan === "yearly" ? "Yearly" : "Monthly"} plan${renewDate ? ` · renews ${renewDate}` : ""}`
+        : subscription.status === "past_due"
+          ? "Payment issue · update your card"
+          : subscription.status === "canceled"
+            ? `Canceled${endDate ? ` · access until ${endDate}` : ""}`
+            : "Not active";
 
   return (
     <div className="page-enter flex flex-col pb-6">
@@ -125,18 +154,35 @@ export default async function YouPage() {
         </div>
 
         {user.email ? (
-          <div className="mt-5 flex items-center gap-3 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]">
-            <span className="text-[22px]">👤</span>
-            <span className="flex-1">
-              <span className="block font-display text-[15px] font-semibold text-cocoa">
-                {user.email}
-              </span>
-              <span className="block font-body text-[12px] font-bold text-sec2">
-                Progress synced to your account
-              </span>
-            </span>
-            <SignOutButton />
-          </div>
+          <>
+            <div className="mt-5 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]">
+              <div className="flex items-center gap-3">
+                <span className="text-[22px]">👤</span>
+                <span className="flex-1">
+                  <span className="block font-display text-[15px] font-semibold text-cocoa">
+                    {user.email}
+                  </span>
+                  <span className="block font-body text-[12px] font-bold text-sec2">
+                    {user.emailVerified ? "Verified · progress synced" : "Progress synced to your account"}
+                  </span>
+                </span>
+                <SignOutButton />
+              </div>
+              <div className="mt-3 border-t border-line pt-3">
+                <Link href="/account/password" className="font-display text-[13px] font-semibold text-coral">
+                  Change password
+                </Link>
+              </div>
+            </div>
+            {verified === "1" && user.emailVerified && (
+              <div className="mt-3 rounded-[18px] border-2 border-go-border bg-go-tint p-4">
+                <p className="font-body text-[13px] font-extrabold text-go-text">
+                  Email verified. You&apos;re all set ✅
+                </p>
+              </div>
+            )}
+            {!user.emailVerified && <VerifyEmailBanner linkFailed={verified === "0"} />}
+          </>
         ) : (
           <Link
             href="/register"
@@ -153,6 +199,23 @@ export default async function YouPage() {
             </span>
             <span className="font-display text-[18px] text-coral">→</span>
           </Link>
+        )}
+
+        {subscription && (
+          <div className="mt-5 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]">
+            <div className="flex items-center gap-3">
+              <span className="text-[22px]">⭐️</span>
+              <span className="flex-1">
+                <span className="block font-display text-[15px] font-semibold text-cocoa">
+                  Social XP+
+                </span>
+                <span className="block font-body text-[12px] font-bold text-sec2">
+                  {subscriptionCopy}
+                </span>
+              </span>
+              <ManageSubscriptionButton />
+            </div>
+          </div>
         )}
 
         <ReminderSetting />

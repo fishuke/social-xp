@@ -15,11 +15,13 @@ generator client {
 model User {
   id              String   @id @default(cuid())
   email           String?  @unique // set when the anonymous user creates an account
+  emailVerified   DateTime? // set when the verification link is clicked
   passwordHash    String?
   role            String   @default("user") // "user" | "admin" — admin unlocks /admin
   name            String   @default("Alex")
   goal            String?
   pace            String   @default("steady") // chill | steady | beast
+  timezone        String? // IANA zone from onboarding/claim; null = server time
   reminderTime    String   @default("19:30")
   isPremium       Boolean  @default(false)
   activeCourseId  Int      @default(1)
@@ -36,6 +38,67 @@ model User {
   daily   DailyState[]
   pushSubs PushSubscription[]
   coachSessions CoachSession[]
+  authTokens AuthToken[]
+  subscriptions Subscription[]
+}
+
+// ---------- payments (provider-agnostic; adapters live in lib/payments) ----------
+
+// One row per provider subscription. Re-subscribing after expiry creates a new
+// provider subscription id, hence a new row; User.isPremium follows whichever
+// subscription still grants access (lib/payments/subscriptions.ts).
+model Subscription {
+  id                     String    @id @default(cuid())
+  userId                 String
+  provider               String // "lemonsqueezy" | future providers
+  providerSubscriptionId String // the provider's own id - webhook lookups + portal calls
+  customerId             String? // provider customer id
+  status                 String // normalized: trialing|active|past_due|canceled|paused|expired
+  plan                   String? // "monthly" | "yearly"
+  renewsAt               DateTime?
+  endsAt                 DateTime? // set once canceled; access runs until here
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerSubscriptionId])
+  @@index([userId])
+}
+
+// Every signature-verified webhook payload, verbatim - audit trail plus the
+// raw material for the revenue dashboards (docs/ROADMAP.md item 8).
+model PaymentEvent {
+  id        String   @id @default(cuid())
+  provider  String
+  eventName String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  @@index([provider, createdAt])
+}
+
+// Single-use, expiring tokens for password reset and email verification.
+// Only the sha256 hash is stored; the raw token lives in the emailed link.
+model AuthToken {
+  tokenHash String   @id
+  userId    String
+  type      String // "reset" | "verify"
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+
+// Sliding-window rate limiting (login failures, reset requests).
+// key example: "login:demo@social.xp"
+model AuthThrottle {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
 }
 
 // One AI-coach rep: a short voice recording analyzed by Gemini (see lib/coach.ts).
