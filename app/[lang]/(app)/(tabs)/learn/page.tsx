@@ -53,10 +53,28 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   return (
     <div className="page-enter flex flex-col gap-4 px-5 pt-[58px]">
       <header className="flex items-center justify-between">
-        <StatPill icon={<FlameIcon size={20} />} label={String(effectiveStreak(user))} />
+        <Link
+          href={withLocale(locale, "/streak")}
+          aria-label={t.you.dayStreak(effectiveStreak(user))}
+          className="transition-transform active:scale-95"
+        >
+          <StatPill icon={<FlameIcon size={20} />} label={String(effectiveStreak(user))} />
+        </Link>
         <div className="flex gap-2">
-          <StatPill icon={<DiamondIcon size={18} />} label={String(quoteCount)} />
-          <StatPill icon={<XpSquareIcon size={18} />} label={user.totalXP.toLocaleString(INTL_LOCALE[locale])} />
+          <Link
+            href={withLocale(locale, "/quotes")}
+            aria-label={t.you.quotesCount(quoteCount)}
+            className="transition-transform active:scale-95"
+          >
+            <StatPill icon={<DiamondIcon size={18} />} label={String(quoteCount)} />
+          </Link>
+          <Link
+            href={withLocale(locale, "/you")}
+            aria-label={t.you.totalXp}
+            className="transition-transform active:scale-95"
+          >
+            <StatPill icon={<XpSquareIcon size={18} />} label={user.totalXP.toLocaleString(INTL_LOCALE[locale])} />
+          </Link>
         </div>
       </header>
 
