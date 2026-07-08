@@ -86,7 +86,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
 
       <Link
         href={withLocale(locale, "/chapters")}
-        className="block rounded-[20px] p-4 text-white"
+        className="block rounded-[20px] p-4 text-white transition-transform active:scale-[0.98]"
         style={{
           background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
           boxShadow: "0 6px 16px rgba(255,90,44,0.28)",

@@ -47,7 +47,7 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
             <button
               key={quote.id}
               onClick={() => setOpen(slot)}
-              className="relative flex min-h-[170px] flex-col rounded-[20px] bg-white p-4 text-left shadow-[0_4px_0_rgba(0,0,0,0.04)]"
+              className="relative flex min-h-[170px] flex-col rounded-[20px] bg-white p-4 text-left shadow-[0_4px_0_rgba(0,0,0,0.04)] transition-transform active:scale-[0.97]"
               style={slot.isNew ? { border: "2px solid #FF914D" } : undefined}
             >
               {slot.isNew && (
