@@ -69,7 +69,19 @@ export function XpSquareIcon({ size = 18, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" className={className} aria-hidden>
       <rect x="3" y="3" width="18" height="18" rx="6" fill="#FFC24A" />
-      <path d="M8.6 8.6l6.8 6.8M15.4 8.6l-6.8 6.8" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" />
+      <text
+        x="12"
+        y="12.6"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontFamily="var(--font-fredoka), ui-sans-serif, system-ui, sans-serif"
+        fontSize="10"
+        fontWeight="700"
+        letterSpacing="-0.4"
+        fill="#fff"
+      >
+        XP
+      </text>
     </svg>
   );
 }
