@@ -298,6 +298,15 @@ body {
   animation: sx-float-up 380ms ease-out both;
 }
 
+/* chest tap while the open request is in flight: a soft pulse so the button reads as working, not dead */
+@keyframes sx-chest-pending {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(0.94); opacity: 0.6; }
+}
+.chest-pending {
+  animation: sx-chest-pending 700ms ease-in-out infinite;
+}
+
 /* full-screen overlays fade their backdrop in so the takeover feels smooth */
 @keyframes sx-fade-in {
   from { opacity: 0; }
@@ -317,6 +326,7 @@ body {
   .pop-in,
   .beat-enter,
   .overlay-in,
+  .chest-pending,
   .bar-grow {
     animation: none;
   }

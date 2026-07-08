@@ -77,7 +77,7 @@ export function QuestsCard({
         <button
           onClick={() => chest.open({ type: "quest" })}
           disabled={chest.busy || !chestReady}
-          className={`flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[14px] ${chestReady ? "wiggle" : ""}`}
+          className={`flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[14px] ${chest.busy ? "chest-pending" : chestReady ? "wiggle" : ""}`}
           style={{ background: quests.chestOpened ? "#EAF8F0" : chestReady ? "#FFF3D6" : "#EADFD5" }}
           aria-label={t.chest.questChestLabel}
         >

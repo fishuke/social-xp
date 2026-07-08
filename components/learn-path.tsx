@@ -31,7 +31,7 @@ export function LearnPath({ chapterId, nodes }: { chapterId: number; nodes: Path
           <div key={i} className="flex w-full flex-col items-center">
             <div style={{ transform: `translateX(${offset}px)` }}>
               {node.kind === "chest" ? (
-                <ChestNode node={node} onOpen={() => chest.open({ type: "path", unitId: chapterId })} />
+                <ChestNode node={node} busy={chest.busy} onOpen={() => chest.open({ type: "path", unitId: chapterId })} />
               ) : (
                 <LessonNode node={node} chapterId={chapterId} />
               )}
@@ -126,9 +126,11 @@ function LessonNode({
 
 function ChestNode({
   node,
+  busy,
   onOpen,
 }: {
   node: Extract<PathNode, { kind: "chest" }>;
+  busy: boolean;
   onOpen: () => void;
 }) {
   const t = useT();
@@ -138,8 +140,8 @@ function ChestNode({
     <div className="flex flex-col items-center gap-2">
       <button
         onClick={openable ? onOpen : undefined}
-        disabled={!openable}
-        className={`flex h-[56px] w-[56px] items-center justify-center rounded-full ${openable ? "wiggle" : ""}`}
+        disabled={!openable || busy}
+        className={`flex h-[56px] w-[56px] items-center justify-center rounded-full ${busy ? "chest-pending" : openable ? "wiggle" : ""}`}
         style={
           node.opened
             ? { background: "#58C08A", boxShadow: "0 5px 0 #3F9E6E" }
