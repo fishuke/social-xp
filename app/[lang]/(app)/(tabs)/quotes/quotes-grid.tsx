@@ -70,7 +70,7 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex flex-col justify-center px-6"
+          className="overlay-in fixed inset-0 z-50 flex flex-col justify-center px-6"
           style={{ background: "linear-gradient(170deg, #2E2018, #43301F)" }}
         >
           <button
