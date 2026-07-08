@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { QuoteData } from "@/lib/content";
-import { quoteShareText, shareText } from "@/lib/share";
+import { shareText } from "@/lib/share";
 import { useT } from "@/components/i18n-provider";
 import { CloseIcon, FlagIcon, LockIcon } from "@/components/icons";
 import { QuoteCard } from "@/components/quote-card";
@@ -18,7 +18,7 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
   const [open, setOpen] = useState<QuoteSlot | null>(null);
   const collectedCount = slots.filter((s) => s.collected).length;
 
-  const share = (quote: QuoteData) => shareText(quoteShareText(quote));
+  const share = (quote: QuoteData) => shareText(t.quotes.shareMessage(quote.text, quote.author));
 
   return (
     <>

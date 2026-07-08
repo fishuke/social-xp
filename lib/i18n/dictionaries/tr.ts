@@ -292,6 +292,7 @@ const tr: Dictionary = {
     isNew: "YENİ",
     lesson: (index: number) => `Ders ${index}`,
     ofSix: (n: number) => `6 sözden ${n} tanesi`,
+    shareMessage: (text: string, author: string) => `“${text}” · ${author} · Social XP'de toplandı`,
   },
 
   coach: {

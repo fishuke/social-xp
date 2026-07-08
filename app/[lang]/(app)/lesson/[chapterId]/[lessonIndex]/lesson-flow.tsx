@@ -6,7 +6,7 @@ import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content
 import { XP } from "@/lib/content";
 import { claimLesson } from "@/lib/actions";
 import { haptic, sfx } from "@/lib/juice";
-import { quoteShareText, shareText } from "@/lib/share";
+import { shareText } from "@/lib/share";
 import { ChatIcon, CheckIcon, CloseIcon, DiamondIcon, Logo, XpSquareIcon } from "@/components/icons";
 import { QuoteCard } from "@/components/quote-card";
 import { QuestRow } from "@/components/quest-row";
@@ -356,7 +356,7 @@ function QuoteScreen({
   const t = useT();
   const collected = Math.min(collectedBefore + 1, 6);
 
-  const share = () => shareText(quoteShareText(quote));
+  const share = () => shareText(t.quotes.shareMessage(quote.text, quote.author));
 
   return (
     <>

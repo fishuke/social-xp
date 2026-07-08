@@ -291,6 +291,7 @@ const en = {
     isNew: "NEW",
     lesson: (index: number) => `Lesson ${index}`,
     ofSix: (n: number) => `${n} of 6`,
+    shareMessage: (text: string, author: string) => `“${text}” · ${author} · collected on Social XP`,
   },
 
   coach: {
