@@ -26,7 +26,7 @@ export function TabBar() {
             <LocaleLink
               key={href}
               href={href}
-              className="relative flex flex-1 flex-col items-center gap-0.5 py-2.5"
+              className="relative flex flex-1 flex-col items-center gap-0.5 py-2.5 transition-transform duration-100 active:scale-90"
             >
               <span className={active ? "pop-in" : undefined}>
                 {href === "/quotes" ? (
