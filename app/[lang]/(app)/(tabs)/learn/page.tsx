@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { currentPosition, effectiveStreak, getCourseProgress, getDaily, questState, streakAtRisk } from "@/lib/game";
+import { currentPosition, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
@@ -32,6 +32,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   const openedChests: string[] = JSON.parse(user.openedChests || "[]");
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
+  const level = levelInfo(user.totalXP);
 
   const nodes: PathNode[] = [];
   for (const lesson of unit.lessons) {
@@ -67,6 +68,18 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
           />
         </Link>
         <div className="flex gap-2">
+          <Link
+            href={withLocale(locale, "/you")}
+            aria-label={t.you.level(level.level)}
+            className="transition-transform active:scale-95"
+          >
+            <span
+              className="inline-flex items-center rounded-[14px] px-3 py-2 font-display text-[17px] font-semibold text-white shadow-[0_2px_0_rgba(0,0,0,0.04)]"
+              style={{ background: "linear-gradient(160deg, #FF7A45, #FF5A2C)" }}
+            >
+              {t.you.levelShort(level.level)}
+            </span>
+          </Link>
           <Link
             href={withLocale(locale, "/quotes")}
             aria-label={t.you.quotesCount(quoteCount)}
