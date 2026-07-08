@@ -14,7 +14,7 @@ export function MilestoneChest({ milestone }: { milestone: number }) {
       <button
         onClick={() => chest.open({ type: "streak", milestone })}
         disabled={chest.busy}
-        className="wiggle mt-5 flex items-center gap-3 rounded-[20px] border-2 border-amber bg-white/12 px-5 py-3"
+        className={`mt-5 flex items-center gap-3 rounded-[20px] border-2 border-amber bg-white/12 px-5 py-3 ${chest.busy ? "chest-pending" : "wiggle"}`}
       >
         <ChestIcon size={30} />
         <span className="text-left">
