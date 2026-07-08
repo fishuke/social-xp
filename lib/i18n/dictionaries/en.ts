@@ -510,6 +510,7 @@ const en = {
     earnXp: (xp: number) => `Earn ${xp} XP`,
     doChallenge: "Do today's challenge",
     markDone: "Mark done",
+    allDone: "All done!",
   },
 
   errors: {

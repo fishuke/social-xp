@@ -26,6 +26,7 @@ export function QuestsCard({
   const [busy, setBusy] = useState(false);
   const questsDone = [quests.lessonDone, quests.xpToday >= 30, quests.repDone].filter(Boolean).length;
   const chestReady = quests.allDone && !quests.chestOpened;
+  const allComplete = questsDone === 3;
 
   async function completeChallenge() {
     if (busy) return;
@@ -48,7 +49,11 @@ export function QuestsCard({
         <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-sec2">
           {t.quests.dailyQuests}
         </p>
-        <p className="font-display text-[13px] font-semibold text-faint">{t.quests.progress(questsDone, 3)}</p>
+        {allComplete ? (
+          <p className="font-display text-[13px] font-semibold text-[#58C08A]">{t.quests.allDone}</p>
+        ) : (
+          <p className="font-display text-[13px] font-semibold text-faint">{t.quests.progress(questsDone, 3)}</p>
+        )}
       </div>
       <div className="flex items-center gap-3">
         <div className="flex flex-1 flex-col gap-2.5">

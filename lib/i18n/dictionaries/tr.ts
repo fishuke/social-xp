@@ -513,6 +513,7 @@ const tr: Dictionary = {
     earnXp: (xp: number) => `${xp} XP kazan`,
     doChallenge: "Bugünün görevini yap",
     markDone: "Yapıldı işaretle",
+    allDone: "Hepsi tamam!",
   },
 
   errors: {
