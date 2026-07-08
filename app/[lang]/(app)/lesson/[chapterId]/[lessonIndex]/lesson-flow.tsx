@@ -103,7 +103,7 @@ export function LessonFlow(props: Props) {
     >
       {/* shared chrome: close + segmented progress */}
       <div className="flex items-center gap-3">
-        <button onClick={close} aria-label="Close" style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}>
+        <button onClick={close} aria-label={t.common.close} style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}>
           <CloseIcon size={24} />
         </button>
         <div className="flex flex-1 gap-1">
