@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { coachLocked, countSessionsToday, getDailyPrompt } from "@/lib/coach";
-import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
+import { coerceLocale, formatDate } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CoachClient, type CoachHistoryItem } from "./coach-client";
 
@@ -28,7 +28,7 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
     id: s.id,
     promptText: s.promptText,
     overall: s.overall,
-    when: s.createdAt.toLocaleDateString(INTL_LOCALE[locale], { month: "short", day: "numeric" }),
+    when: formatDate(locale, s.createdAt, { month: "short", day: "numeric" }),
   }));
 
   return (

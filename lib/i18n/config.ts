@@ -26,5 +26,14 @@ export function formatNumber(locale: Locale, value: number): string {
   return value.toLocaleString(INTL_LOCALE[locale]);
 }
 
+/** Locale-aware date formatting via Intl, keyed by app locale. */
+export function formatDate(
+  locale: Locale,
+  date: Date,
+  options?: Intl.DateTimeFormatOptions,
+): string {
+  return date.toLocaleDateString(INTL_LOCALE[locale], options);
+}
+
 // Cookie the proxy writes so returning visitors keep their language.
 export const LOCALE_COOKIE = "NEXT_LOCALE";

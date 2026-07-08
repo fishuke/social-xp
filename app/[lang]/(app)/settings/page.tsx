@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
+import { coerceLocale, formatDate } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { BackButton } from "@/components/back-button";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -32,16 +32,17 @@ export default async function SettingsPage({
     where: { userId: user.id },
     orderBy: { updatedAt: "desc" },
   });
-  const renewDate = subscription?.renewsAt?.toLocaleDateString(INTL_LOCALE[locale], {
+  const dateOpts: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
     year: "numeric",
-  });
-  const endDate = subscription?.endsAt?.toLocaleDateString(INTL_LOCALE[locale], {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  };
+  const renewDate = subscription?.renewsAt
+    ? formatDate(locale, subscription.renewsAt, dateOpts)
+    : undefined;
+  const endDate = subscription?.endsAt
+    ? formatDate(locale, subscription.endsAt, dateOpts)
+    : undefined;
   const subscriptionCopy = !subscription
     ? null
     : subscription.status === "trialing"
