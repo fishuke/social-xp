@@ -270,6 +270,9 @@ const en = {
     startLessonAria: (title: string) => `Start lesson: ${title}`,
     reward: "Reward",
     rewardChestAria: "Reward chest",
+    dailyGoalLabel: "Daily goal",
+    dailyGoalCount: (done: number, total: number) => `${done} of ${total} lessons`,
+    dailyGoalDone: "Done for today",
   },
 
   chapters: {

@@ -271,6 +271,9 @@ const tr: Dictionary = {
     startLessonAria: (title: string) => `Dersi başlat: ${title}`,
     reward: "Ödül",
     rewardChestAria: "Ödül sandığı",
+    dailyGoalLabel: "Günlük hedef",
+    dailyGoalCount: (done: number, total: number) => `${total} dersin ${done} tanesi`,
+    dailyGoalDone: "Bugünlük tamam",
   },
 
   chapters: {

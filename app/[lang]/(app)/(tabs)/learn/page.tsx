@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { courseTotals, currentPosition, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
+import { courseTotals, currentPosition, dailyLessonGoal, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
-import { BookIcon, ChevronRightIcon, DiamondIcon, FlameIcon, XpSquareIcon } from "@/components/icons";
+import { BookIcon, CheckIcon, ChevronRightIcon, DiamondIcon, FlameIcon, XpSquareIcon } from "@/components/icons";
 import { StatPill, ProgressBar } from "@/components/ui";
 import { QuestsCard } from "@/components/quests-card";
 import { LearnPath, type PathNode } from "@/components/learn-path";
@@ -34,6 +34,9 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
   const course = courseTotals(progress);
+  const goal = dailyLessonGoal(user.pace);
+  const goalDone = Math.min(daily.lessonsDoneToday, goal);
+  const goalMet = daily.lessonsDoneToday >= goal;
 
   const nodes: PathNode[] = [];
   for (const lesson of unit.lessons) {
@@ -141,6 +144,26 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
           {t.you.courseComplete(course.percent)}
         </span>
       </Link>
+
+      <section className="rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]">
+        <div className="mb-2.5 flex items-center justify-between">
+          <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-sec2">
+            {t.learn.dailyGoalLabel}
+          </p>
+          <p
+            className={`flex items-center gap-1 font-display text-[13px] font-semibold ${goalMet ? "text-go-text" : "text-faint"}`}
+          >
+            {goalMet && <CheckIcon size={15} color="#58C08A" />}
+            {goalMet ? t.learn.dailyGoalDone : t.learn.dailyGoalCount(goalDone, goal)}
+          </p>
+        </div>
+        <ProgressBar
+          percent={(goalDone / goal) * 100}
+          height={9}
+          track="#EADFD5"
+          fill={goalMet ? "#58C08A" : "linear-gradient(90deg, #FFC24A, #FF914D)"}
+        />
+      </section>
 
       <QuestsCard quests={questState(daily)} showChallengeAction />
 

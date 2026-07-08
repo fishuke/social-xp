@@ -257,6 +257,24 @@ async function evaluateStreak(user: User): Promise<number | null> {
   return newStreak;
 }
 
+// ---------- daily goal ----------
+
+/**
+ * Lessons the user aims to finish each day, derived from the pace they chose at
+ * onboarding (chill = a lesson a day, steady adds a challenge, beast stacks more).
+ * This gives that onboarding choice a visible effect on the learn tab.
+ */
+export function dailyLessonGoal(pace: string): number {
+  switch (pace) {
+    case "chill":
+      return 1;
+    case "beast":
+      return 3;
+    default:
+      return 2; // steady
+  }
+}
+
 // ---------- quests ----------
 
 export type QuestState = {
