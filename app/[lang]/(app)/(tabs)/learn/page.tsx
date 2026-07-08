@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { currentPosition, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
+import { courseTotals, currentPosition, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
@@ -33,6 +33,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
+  const course = courseTotals(progress);
 
   const nodes: PathNode[] = [];
   for (const lesson of unit.lessons) {
@@ -122,6 +123,23 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
           <BookIcon size={26} />
           <ChevronRightIcon size={20} color="#fff" />
         </div>
+      </Link>
+
+      <Link
+        href={withLocale(locale, "/you")}
+        aria-label={`${t.you.lessonsOfTotal(course.done, course.total)} ${t.you.courseComplete(course.percent)}`}
+        className="flex items-center gap-3 px-1 transition-transform active:scale-[0.98]"
+      >
+        <ProgressBar
+          percent={course.percent}
+          height={7}
+          track="#EADFD5"
+          fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+          className="flex-1"
+        />
+        <span className="font-display text-[12px] font-semibold text-sec2">
+          {t.you.courseComplete(course.percent)}
+        </span>
       </Link>
 
       <QuestsCard quests={questState(daily)} showChallengeAction />

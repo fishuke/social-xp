@@ -108,6 +108,16 @@ export async function getCourseProgress(user: User, locale: Locale): Promise<Uni
   });
 }
 
+/** Overall course completion across every unit, clamped so extra completions cannot exceed the total. */
+export function courseTotals(progress: UnitProgress[]): { done: number; total: number; percent: number } {
+  const total = progress.reduce((sum, p) => sum + p.unit.lessons.length, 0);
+  const done = progress.reduce(
+    (sum, p) => sum + Math.min(p.completed.length, p.unit.lessons.length),
+    0
+  );
+  return { done, total, percent: total ? Math.round((done / total) * 100) : 0 };
+}
+
 export function currentPosition(progress: UnitProgress[]): { unitId: number; lessonIndex: number } {
   for (const p of progress) {
     if (!p.unlocked || p.complete) continue;

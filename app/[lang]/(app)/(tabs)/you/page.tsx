@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import {
   collectedQuotes,
+  courseTotals,
   effectiveStreak,
   getCourseProgress,
   levelInfo,
@@ -37,12 +38,7 @@ export default async function YouPage({
   ]);
   const quoteCount = quotes.total;
   const activeDays = week.filter((d) => d.active).length;
-  const totalLessons = progress.reduce((sum, p) => sum + p.unit.lessons.length, 0);
-  const doneLessons = progress.reduce(
-    (sum, p) => sum + Math.min(p.completed.length, p.unit.lessons.length),
-    0
-  );
-  const coursePercent = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
+  const { done: doneLessons, total: totalLessons, percent: coursePercent } = courseTotals(progress);
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
