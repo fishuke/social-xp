@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { courseTotals, getCourseProgress, getDaily, weeklyActivity } from "@/lib/game";
+import { courseTotals, getCourseProgress, getDaily, streakAtRisk, weeklyActivity } from "@/lib/game";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
@@ -62,6 +62,9 @@ export default async function StreakPage({
       : null;
   const daysToChest = milestone ? 0 : (7 - (streak % 7)) % 7 || 7;
 
+  // Alive but not extended today: mute the flame so a routine visit does not read as just-earned.
+  const atRisk = streakAtRisk(user);
+
   return (
     <div
       className="relative flex flex-1 flex-col items-center px-6 pb-8 pt-[70px] text-center"
@@ -92,13 +95,26 @@ export default async function StreakPage({
         {t.streak.kicker}
       </p>
 
-      <div className="pop-in relative mt-6">
-        <svg width="190" height="206" viewBox="0 0 190 206" aria-hidden className="flame-flicker">
+      <div
+        className={`pop-in relative mt-6${atRisk ? "" : " flame-flicker"}`}
+        aria-label={atRisk ? t.you.streakAtRisk(streak) : t.you.dayStreak(streak)}
+      >
+        <svg width="190" height="206" viewBox="0 0 190 206" aria-hidden>
           <defs>
             <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#FF5A2C" />
-              <stop offset="0.55" stopColor="#FF914D" />
-              <stop offset="1" stopColor="#FFC24A" />
+              {atRisk ? (
+                <>
+                  <stop offset="0" stopColor="#C79A80" />
+                  <stop offset="0.55" stopColor="#D9BBA2" />
+                  <stop offset="1" stopColor="#EAD3BF" />
+                </>
+              ) : (
+                <>
+                  <stop offset="0" stopColor="#FF5A2C" />
+                  <stop offset="0.55" stopColor="#FF914D" />
+                  <stop offset="1" stopColor="#FFC24A" />
+                </>
+              )}
             </linearGradient>
           </defs>
           <path
@@ -107,7 +123,7 @@ export default async function StreakPage({
           />
         </svg>
         <span
-          className="pop-in absolute inset-x-0 bottom-[38px] font-display text-[58px] font-bold text-white"
+          className={`pop-in absolute inset-x-0 bottom-[38px] font-display text-[58px] font-bold ${atRisk ? "text-white/80" : "text-white"}`}
           style={{ animationDelay: "250ms" }}
         >
           {streak}
