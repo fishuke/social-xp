@@ -100,7 +100,7 @@ const en = {
     repeatNewPlaceholder: "Repeat the new one",
     updatePassword: "Update password",
     passwordUpdated: "Password updated ✅",
-    backToProfile: "Back to profile",
+    backToProfile: "Back to settings",
   },
 
   landing: {
@@ -370,6 +370,12 @@ const en = {
     subNotActive: "Not active",
     methodCardTitle: "The method behind the lessons",
     methodCardSub: "Built on peer-reviewed behavioral science",
+    settingsCardTitle: "Settings",
+    settingsCardSub: "Account, reminders, language",
+  },
+
+  settings: {
+    title: "Settings",
   },
 
   paywall: {

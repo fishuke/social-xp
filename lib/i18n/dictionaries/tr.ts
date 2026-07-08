@@ -101,7 +101,7 @@ const tr: Dictionary = {
     repeatNewPlaceholder: "Yeni şifreyi tekrar gir",
     updatePassword: "Şifreyi güncelle",
     passwordUpdated: "Şifre güncellendi ✅",
-    backToProfile: "Profile dön",
+    backToProfile: "Ayarlara dön",
   },
 
   landing: {
@@ -372,6 +372,12 @@ const tr: Dictionary = {
     subNotActive: "Aktif değil",
     methodCardTitle: "Derslerin ardındaki yöntem",
     methodCardSub: "Hakemli davranış bilimine dayalı",
+    settingsCardTitle: "Ayarlar",
+    settingsCardSub: "Hesap, hatırlatıcılar, dil",
+  },
+
+  settings: {
+    title: "Ayarlar",
   },
 
   paywall: {

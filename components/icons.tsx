@@ -171,6 +171,20 @@ export function HomeIcon({ size, color = "currentColor", className }: IconProps)
   );
 }
 
+export function GearIcon({ size, color = "currentColor", className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <circle cx="12" cy="12" r="3" stroke={color} strokeWidth="2.2" />
+      <path
+        d="M12 3.5v2.4M12 18.1v2.4M4.9 6.2l1.7 1.7M17.4 16.1l1.7 1.7M3.5 12h2.4M18.1 12h2.4M4.9 17.8l1.7-1.7M17.4 7.9l1.7-1.7"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
+
 export function ChevronRightIcon({ size, color = "currentColor", className }: IconProps) {
   return (
     <Svg size={size} className={className}>

@@ -1,5 +1,5 @@
 // Email-verification landing. The mailed link is a GET, so this lives in a
-// route handler; it burns the token and bounces to the You page with a flag.
+// route handler; it burns the token and bounces to Settings with a flag.
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -14,11 +14,11 @@ export async function GET(request: Request): Promise<Response> {
   const user = await consumeAuthToken(token, "verify");
   if (!user) {
     const locale = coerceLocale((await cookies()).get(LOCALE_COOKIE)?.value);
-    redirect(`/${locale}/you?verified=0`);
+    redirect(`/${locale}/settings?verified=0`);
   }
   await prisma.user.update({
     where: { id: user.id },
     data: { emailVerified: user.emailVerified ?? new Date() },
   });
-  redirect(`/${coerceLocale(user.locale)}/you?verified=1`);
+  redirect(`/${coerceLocale(user.locale)}/settings?verified=1`);
 }

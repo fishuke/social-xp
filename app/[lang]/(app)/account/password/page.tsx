@@ -33,7 +33,7 @@ export default function ChangePasswordPage() {
     const result = await changePassword({ currentPassword: current, newPassword: next });
     if (result.ok) {
       setDone(true);
-      setTimeout(() => router.push(withLocale(locale, "/you")), 1200);
+      setTimeout(() => router.push(withLocale(locale, "/settings")), 1200);
     } else {
       setError(result.error);
       setBusy(false);
@@ -96,7 +96,7 @@ export default function ChangePasswordPage() {
       )}
 
       <div className="mt-auto pt-6 text-center">
-        <LocaleLink href="/you" className="font-display text-[15px] font-medium text-sec2">
+        <LocaleLink href="/settings" className="font-display text-[15px] font-medium text-sec2">
           {t.auth.backToProfile}
         </LocaleLink>
       </div>
