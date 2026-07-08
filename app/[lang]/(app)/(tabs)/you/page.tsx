@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { effectiveStreak, getCourseProgress, levelInfo } from "@/lib/game";
+import { effectiveStreak, getCourseProgress, levelInfo, streakAtRisk } from "@/lib/game";
 import { getCourse } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -29,6 +29,7 @@ export default async function YouPage({
     getCourse(1, locale),
   ]);
   const streak = effectiveStreak(user);
+  const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
   const fmt = (n: number) => formatNumber(locale, n);
 
@@ -72,8 +73,11 @@ export default async function YouPage({
           </div>
         </div>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
-            <FlameIcon size={16} color="#FFC24A" />
+          <span
+            aria-label={atRisk ? t.you.streakAtRisk(streak) : t.you.dayStreak(streak)}
+            className={`flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold ${atRisk ? "text-white/70" : ""}`}
+          >
+            <FlameIcon size={16} color={atRisk ? "#FFD9C2" : "#FFC24A"} />
             {t.you.dayStreak(streak)}
           </span>
           <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
