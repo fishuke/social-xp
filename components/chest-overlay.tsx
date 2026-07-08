@@ -7,11 +7,16 @@ import { BigChest } from "./big-chest";
 import { ConfettiBurst } from "./confetti";
 import { CountUp } from "./count-up";
 import { XpSquareIcon } from "./icons";
-
-const TIER_LABELS = { common: "Daily Chest", rare: "Path Chest", epic: "Streak Chest" } as const;
+import { useT } from "./i18n-provider";
 
 // Full-screen chest ceremony: wiggle → tap → shake & glow → burst open → reveal.
 export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: () => void }) {
+  const t = useT();
+  const tierLabels = {
+    common: t.chest.tierCommon,
+    rare: t.chest.tierRare,
+    epic: t.chest.tierEpic,
+  } as const;
   const [phase, setPhase] = useState<"idle" | "opening" | "revealed">("idle");
 
   function tap() {
@@ -32,7 +37,7 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
       onClick={phase === "idle" ? tap : undefined}
     >
       <p className="pop-in mb-8 font-display text-[15px] font-semibold uppercase tracking-[2px] text-amber">
-        {TIER_LABELS[result.tier]}
+        {tierLabels[result.tier]}
       </p>
 
       <div className="relative flex items-center justify-center">
@@ -49,7 +54,7 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
 
       {phase !== "revealed" ? (
         <p className="bob mt-10 font-display text-[18px] font-semibold text-ondark">
-          {phase === "idle" ? "Tap to open!" : "…"}
+          {phase === "idle" ? t.chest.tapToOpen : t.chest.opening}
         </p>
       ) : (
         <div className="float-up mt-8 flex w-full flex-col items-center gap-3">
@@ -67,16 +72,16 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
               <span className="text-[22px]">🛡️</span>
               <span className="text-left">
                 <span className="block font-display text-[15px] font-semibold text-cocoa">
-                  Streak Shield!
+                  {t.chest.shieldTitle}
                 </span>
                 <span className="block font-body text-[12px] font-bold text-sec2">
-                  Protects your streak for one missed day
+                  {t.chest.shieldBody}
                 </span>
               </span>
             </span>
           )}
           <button className="btn btn-amber mt-3 max-w-[280px]" onClick={onDone}>
-            Collect
+            {t.chest.collect}
           </button>
         </div>
       )}

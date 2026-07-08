@@ -1,4 +1,7 @@
+"use client";
+
 import type { QuoteData } from "@/lib/content";
+import { useT } from "@/components/i18n-provider";
 import { DiamondIcon } from "./icons";
 
 // The big collectible card - lesson Beat 3 and the Quotes full-screen view.
@@ -11,11 +14,12 @@ export function QuoteCard({
   collectedInChapter?: number; // "N of 6"
   isNew?: boolean;
 }) {
+  const t = useT();
   return (
     <div className="relative w-full rounded-[24px] bg-cream px-6 pb-6 pt-9 shadow-[0_16px_40px_rgba(0,0,0,0.4)]">
       {isNew && (
         <span className="absolute -top-3 right-5 rounded-full bg-coral px-3 py-1 font-display text-[12px] font-semibold tracking-[1px] text-white">
-          NEW
+          {t.quotes.isNew}
         </span>
       )}
       <span aria-hidden className="block font-display text-[64px] font-bold leading-none text-ember">
@@ -36,7 +40,7 @@ export function QuoteCard({
         {collectedInChapter !== undefined && (
           <span className="flex items-center gap-1.5 font-body text-[13px] font-extrabold text-sec2">
             <DiamondIcon size={16} />
-            {collectedInChapter} of 6
+            {t.quotes.ofSix(collectedInChapter)}
           </span>
         )}
       </div>

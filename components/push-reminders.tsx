@@ -12,6 +12,7 @@ import {
   subscribeToReminders,
   unsubscribeFromReminders,
 } from "@/lib/actions";
+import { useT } from "@/components/i18n-provider";
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 
@@ -98,6 +99,7 @@ function usePushReminders() {
 
 /** Full reminder control for the You page. */
 export function ReminderSetting() {
+  const t = useT();
   const { status, busy, subscribe, unsubscribe } = usePushReminders();
   const [testMsg, setTestMsg] = useState<string | null>(null);
 
@@ -108,7 +110,7 @@ export function ReminderSetting() {
   async function test() {
     setTestMsg(null);
     const { sent } = await sendTestReminder();
-    setTestMsg(sent > 0 ? "Sent! Check your notifications." : "No device to send to yet.");
+    setTestMsg(sent > 0 ? t.reminders.testSent : t.reminders.testNoDevice);
   }
 
   return (
@@ -117,14 +119,10 @@ export function ReminderSetting() {
         <span className="text-[24px]">🔔</span>
         <span className="flex-1">
           <span className="block font-display text-[15px] font-semibold text-cocoa">
-            Daily reminders
+            {t.reminders.title}
           </span>
           <span className="block font-body text-[12px] font-bold text-sec2">
-            {status === "denied"
-              ? "Blocked. Enable notifications in your browser settings"
-              : on
-                ? "On. A nudge at your usual training time"
-                : "Get a gentle nudge to keep your streak alive"}
+            {status === "denied" ? t.reminders.denied : on ? t.reminders.on : t.reminders.off}
           </span>
         </span>
         {status !== "denied" && (
@@ -148,7 +146,7 @@ export function ReminderSetting() {
             onClick={test}
             className="font-display text-[13px] font-semibold text-coral"
           >
-            Send a test reminder
+            {t.reminders.sendTest}
           </button>
           {testMsg && <span className="font-body text-[12px] font-bold text-sec2">{testMsg}</span>}
         </div>
@@ -159,6 +157,7 @@ export function ReminderSetting() {
 
 /** Gentle post-streak prompt (dark background - matches the streak screen). */
 export function ReminderNudge() {
+  const t = useT();
   const { status, busy, subscribe } = usePushReminders();
   const [dismissed, setDismissed] = useState(false);
 
@@ -166,19 +165,19 @@ export function ReminderNudge() {
 
   return (
     <div className="pop-in mt-6 w-full rounded-[18px] bg-white/12 p-4 text-left" style={{ animationDelay: "650ms" }}>
-      <p className="font-display text-[16px] font-semibold text-white">Want a nudge tomorrow? 🔔</p>
+      <p className="font-display text-[16px] font-semibold text-white">{t.streak.nudgeTitle}</p>
       <p className="mt-1 font-body text-[13px] font-bold leading-[1.5] text-ondark">
-        A gentle reminder at your usual time keeps the streak alive.
+        {t.streak.nudgeBody}
       </p>
       <div className="mt-3 flex gap-2">
         <button onClick={subscribe} disabled={busy} className="btn btn-amber flex-1">
-          Turn on reminders
+          {t.streak.turnOnReminders}
         </button>
         <button
           onClick={() => setDismissed(true)}
           className="rounded-full px-4 font-display text-[14px] font-semibold text-ondark/70"
         >
-          Not now
+          {t.common.notNow}
         </button>
       </div>
     </div>

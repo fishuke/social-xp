@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useLocale, useT } from "@/components/i18n-provider";
+import { withLocale } from "@/lib/i18n/routing";
 import { CheckIcon, ChestIcon, FlagIcon, LockIcon, PlayIcon } from "./icons";
 import { ChestOverlay } from "./chest-overlay";
 import { useChest } from "./use-chest";
@@ -64,21 +66,23 @@ function LessonNode({
   chapterId: number;
 }) {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useT();
 
   if (node.state === "current") {
     return (
       <div className="flex flex-col items-center gap-2">
         <span className="bob rounded-full bg-cocoa px-3.5 py-1.5 font-display text-[13px] font-semibold tracking-[0.5px] text-white">
-          START · +20 XP
+          {t.learn.startPill(20)}
         </span>
         <button
-          onClick={() => router.push(`/lesson/${chapterId}/${node.index}`)}
+          onClick={() => router.push(withLocale(locale, `/lesson/${chapterId}/${node.index}`))}
           className="node-pulse flex h-[82px] w-[82px] items-center justify-center rounded-full active:translate-y-1"
           style={{
             background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
             boxShadow: "0 7px 0 #D8431B, 0 0 0 6px rgba(255,90,44,0.18)",
           }}
-          aria-label={`Start lesson: ${node.title}`}
+          aria-label={t.learn.startLessonAria(node.title)}
         >
           <PlayIcon size={36} />
         </button>
@@ -127,6 +131,7 @@ function ChestNode({
   node: Extract<PathNode, { kind: "chest" }>;
   onOpen: () => void;
 }) {
+  const t = useT();
   const openable = node.reached && !node.opened;
   return (
     <div className="flex flex-col items-center gap-2">
@@ -138,12 +143,12 @@ function ChestNode({
           background: node.opened ? "#58C08A" : "#FFC24A",
           boxShadow: node.opened ? "0 5px 0 #3F9E6E" : "0 5px 0 #E0A52F",
         }}
-        aria-label="Reward chest"
+        aria-label={t.learn.rewardChestAria}
       >
         {node.opened ? <CheckIcon size={28} /> : <ChestIcon size={28} color="#fff" />}
       </button>
       <span className="font-body text-[12px] font-extrabold" style={{ color: "#C9A23B" }}>
-        Reward
+        {t.learn.reward}
       </span>
     </div>
   );

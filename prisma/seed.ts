@@ -12,6 +12,9 @@ import {
   type Challenge,
   type LessonStep,
 } from "../lib/content";
+import { courseTr, quotesTr, unitsTr } from "./seed-tr";
+
+const TR = "tr";
 
 const prisma = new PrismaClient();
 
@@ -1677,6 +1680,18 @@ async function main() {
       }
     }
   }
+  // Same up-front validation for the Turkish translations.
+  for (const unit of unitsTr) {
+    for (const lesson of unit.lessons) {
+      const where = `[tr] unit ${unit.id}, lesson ${lesson.index}`;
+      try {
+        lessonStepsSchema.parse(lesson.steps);
+        challengeSchema.parse(lesson.challenge);
+      } catch (e) {
+        throw new Error(`Invalid seed content in ${where}: ${(e as Error).message}`);
+      }
+    }
+  }
 
   // content only, user tables untouched
   await prisma.quote.deleteMany({});
@@ -1711,8 +1726,58 @@ async function main() {
     });
   }
 
-  const counts = await Promise.all([prisma.unit.count(), prisma.lesson.count(), prisma.quote.count()]);
-  console.log(`Seeded: ${counts[0]} units, ${counts[1]} lessons, ${counts[2]} quotes`);
+  // ---- Turkish translations (English base rows already exist above) ----
+  await prisma.courseTranslation.create({
+    data: { courseId: 1, locale: TR, title: courseTr.title, tagline: courseTr.tagline },
+  });
+  for (const unit of unitsTr) {
+    await prisma.unitTranslation.create({
+      data: {
+        unitId: unit.id,
+        locale: TR,
+        levelTitle: unit.levelTitle,
+        title: unit.title,
+        tagline: unit.tagline,
+        canDo: unit.canDo,
+      },
+    });
+    for (const lesson of unit.lessons) {
+      const base = await prisma.lesson.findUnique({
+        where: { unitId_index: { unitId: unit.id, index: lesson.index } },
+      });
+      if (!base) throw new Error(`No base lesson for tr unit ${unit.id}, lesson ${lesson.index}`);
+      await prisma.lessonTranslation.create({
+        data: {
+          lessonId: base.id,
+          locale: TR,
+          title: lesson.title,
+          steps: lessonStepsSchema.parse(lesson.steps),
+          challenge: challengeSchema.parse(lesson.challenge),
+        },
+      });
+    }
+  }
+  for (const quote of quotesTr) {
+    await prisma.quoteTranslation.create({
+      data: {
+        quoteId: `u${quote.unitId}-l${quote.lessonIndex}`,
+        locale: TR,
+        text: quote.text,
+        author: quote.author,
+        authorNote: quote.authorNote,
+      },
+    });
+  }
+
+  const counts = await Promise.all([
+    prisma.unit.count(),
+    prisma.lesson.count(),
+    prisma.quote.count(),
+    prisma.lessonTranslation.count(),
+  ]);
+  console.log(
+    `Seeded: ${counts[0]} units, ${counts[1]} lessons, ${counts[2]} quotes, ${counts[3]} tr lessons`,
+  );
 }
 
 main()

@@ -1,4 +1,5 @@
 import "server-only";
+import { coerceLocale, DEFAULT_LOCALE, type Locale } from "./i18n/config";
 
 // Outbound email via Resend's REST API (no SDK needed). Without RESEND_API_KEY
 // the mail is logged to the server console instead, so reset/verify flows stay
@@ -33,10 +34,8 @@ function appUrl(): string {
   );
 }
 
-export async function sendPasswordResetMail(to: string, token: string): Promise<void> {
-  const link = `${appUrl()}/reset-password/${token}`;
-  await sendMail({
-    to,
+const resetMail: Record<Locale, (link: string) => { subject: string; text: string }> = {
+  en: (link) => ({
     subject: "Reset your Social XP password",
     text: [
       "Hi,",
@@ -50,13 +49,26 @@ export async function sendPasswordResetMail(to: string, token: string): Promise<
       "",
       "Social XP",
     ].join("\n"),
-  });
-}
+  }),
+  tr: (link) => ({
+    subject: "Social XP şifreni sıfırla",
+    text: [
+      "Merhaba,",
+      "",
+      "Birisi (umarız sensindir) bu Social XP hesabının şifresini sıfırlamak istedi.",
+      "Aşağıdaki bağlantı bir kez çalışır ve 1 saat içinde geçerliliğini yitirir:",
+      "",
+      link,
+      "",
+      "Bunu sen istemediysen bu e-postayı yok sayabilirsin. Şifren olduğu gibi kalır.",
+      "",
+      "Social XP",
+    ].join("\n"),
+  }),
+};
 
-export async function sendVerificationMail(to: string, token: string): Promise<void> {
-  const link = `${appUrl()}/api/verify?token=${token}`;
-  await sendMail({
-    to,
+const verifyMail: Record<Locale, (link: string) => { subject: string; text: string }> = {
+  en: (link) => ({
     subject: "Verify your Social XP email",
     text: [
       "Hi,",
@@ -70,5 +82,40 @@ export async function sendVerificationMail(to: string, token: string): Promise<v
       "",
       "Social XP",
     ].join("\n"),
-  });
+  }),
+  tr: (link) => ({
+    subject: "Social XP e-postanı doğrula",
+    text: [
+      "Merhaba,",
+      "",
+      "Aşağıdaki bağlantıyı açarak bu e-posta adresini Social XP hesabın için doğrula.",
+      "Bağlantı 24 saat içinde geçerliliğini yitirir:",
+      "",
+      link,
+      "",
+      "Bir hesap oluşturmadıysan bu e-postayı yok sayabilirsin.",
+      "",
+      "Social XP",
+    ].join("\n"),
+  }),
+};
+
+export async function sendPasswordResetMail(
+  to: string,
+  token: string,
+  locale: string = DEFAULT_LOCALE,
+): Promise<void> {
+  const l = coerceLocale(locale);
+  const link = `${appUrl()}/${l}/reset-password/${token}`;
+  await sendMail({ to, ...resetMail[l](link) });
+}
+
+export async function sendVerificationMail(
+  to: string,
+  token: string,
+  locale: string = DEFAULT_LOCALE,
+): Promise<void> {
+  // /api/verify is not locale-prefixed; the post-verify redirect adds the locale.
+  const link = `${appUrl()}/api/verify?token=${token}`;
+  await sendMail({ to, ...verifyMail[coerceLocale(locale)](link) });
 }

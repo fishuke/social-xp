@@ -28,6 +28,7 @@ export async function createSessionUser(data: {
   pace: string;
   reminderTime?: string;
   timezone?: string;
+  locale?: string;
 }) {
   const store = await cookies();
   const existingId = store.get(ANON_COOKIE)?.value;

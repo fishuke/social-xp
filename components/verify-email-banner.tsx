@@ -5,10 +5,12 @@
 
 import { useState } from "react";
 import { resendVerification } from "@/lib/actions";
+import { useT } from "@/components/i18n-provider";
 
 export function VerifyEmailBanner({ linkFailed }: { linkFailed: boolean }) {
+  const t = useT();
   const [message, setMessage] = useState<string | null>(
-    linkFailed ? "That link was invalid or expired. Send a fresh one below." : null
+    linkFailed ? t.verifyEmail.linkFailed : null
   );
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -16,7 +18,7 @@ export function VerifyEmailBanner({ linkFailed }: { linkFailed: boolean }) {
   async function resend() {
     setBusy(true);
     const result = await resendVerification();
-    setMessage(result.ok ? "Sent! Check your inbox (and spam)." : (result.error ?? null));
+    setMessage(result.ok ? t.verifyEmail.resent : (result.error ?? null));
     setSent(result.ok);
     setBusy(false);
   }
@@ -24,10 +26,10 @@ export function VerifyEmailBanner({ linkFailed }: { linkFailed: boolean }) {
   return (
     <div className="mt-3 rounded-[18px] border-2 border-dashed border-amber bg-tint-rare p-4">
       <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-amber-dark">
-        Verify your email
+        {t.verifyEmail.title}
       </p>
       <p className="mt-1 font-body text-[13px] font-bold text-sec">
-        {message ?? "One click in the email we sent keeps your account recoverable."}
+        {message ?? t.verifyEmail.body}
       </p>
       {!sent && (
         <button
@@ -35,7 +37,7 @@ export function VerifyEmailBanner({ linkFailed }: { linkFailed: boolean }) {
           disabled={busy}
           className="mt-2 font-display text-[14px] font-semibold text-coral disabled:opacity-60"
         >
-          {busy ? "Sending…" : "Resend the email"}
+          {busy ? t.verifyEmail.sending : t.verifyEmail.resend}
         </button>
       )}
     </div>

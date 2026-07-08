@@ -18,6 +18,7 @@ model User {
   emailVerified   DateTime? // set when the verification link is clicked
   passwordHash    String?
   role            String   @default("user") // "user" | "admin" — admin unlocks /admin
+  locale          String   @default("en") // UI + content language: "en" | "tr"
   name            String   @default("Alex")
   goal            String?
   pace            String   @default("steady") // chill | steady | beast
@@ -172,6 +173,8 @@ model Course {
   tagline   String
   sortOrder Int    @default(0)
   units     Unit[]
+
+  translations CourseTranslation[]
 }
 
 model Unit {
@@ -188,6 +191,8 @@ model Unit {
   lessons Lesson[]
   quotes  Quote[]
 
+  translations UnitTranslation[]
+
   @@unique([courseId, number])
 }
 
@@ -201,6 +206,8 @@ model Lesson {
   challenge    Json // {text, sub}
 
   unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  translations LessonTranslation[]
 
   @@unique([unitId, index])
 }
@@ -216,7 +223,62 @@ model Quote {
 
   unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
 
+  translations QuoteTranslation[]
+
   @@unique([unitId, lessonIndex])
+}
+
+// ---------- content translations (per-locale overlay; English lives in the base rows) ----------
+// Base Course/Unit/Lesson/Quote rows hold the English (default) content and own
+// the ids that user progress keys on. Non-English locales add a row here; the
+// catalog (lib/catalog.ts) overlays these on read and falls back to base.
+
+model CourseTranslation {
+  courseId Int
+  locale   String
+  title    String
+  tagline  String
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, locale])
+}
+
+model UnitTranslation {
+  unitId     Int
+  locale     String
+  levelTitle String
+  title      String
+  tagline    String
+  canDo      String
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@id([unitId, locale])
+}
+
+model LessonTranslation {
+  lessonId  Int
+  locale    String
+  title     String
+  steps     Json // same shape as Lesson.steps — validated in lib/catalog.ts
+  challenge Json // same shape as Lesson.challenge
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@id([lessonId, locale])
+}
+
+model QuoteTranslation {
+  quoteId    String
+  locale     String
+  text       String
+  author     String
+  authorNote String
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@id([quoteId, locale])
 }
 
 // One row per user per local day; all quest/gating counters reset by keying on date.

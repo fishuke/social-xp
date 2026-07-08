@@ -8,6 +8,7 @@ import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { XP } from "./content";
 import { dayString, getDaily, questState, type QuestState, type TzUser } from "./game";
+import { coerceLocale, type Locale } from "./i18n/config";
 
 const MODEL = "gemini-2.5-flash";
 const MODEL_FALLBACK = "gemini-2.5-flash-lite";
@@ -18,29 +19,50 @@ const XP_SESSIONS_PER_DAY = 3; // reps that earn XP each day (anti-farming)
 
 export type CoachPrompt = { text: string; sub: string };
 
-const PROMPTS: CoachPrompt[] = [
-  { text: "Introduce yourself like we just met at an event.", sub: "Aim for 30 seconds. No script — just talk." },
-  { text: "Tell me about something you're into lately.", sub: "Let your enthusiasm show. 30 seconds." },
-  { text: "Describe your ideal Saturday, start to finish.", sub: "Paint the picture. 30 seconds." },
-  { text: "Recommend a movie, show, or book — and sell it.", sub: "Make me want it. 30 seconds." },
-  { text: "Tell the story of your week in three beats.", sub: "Beginning, middle, end. 30 seconds." },
-  { text: "Politely disagree: \"Cold weather is better than warm.\"", sub: "Kind but firm. 30 seconds." },
-  { text: "Give a genuine compliment to a friend — out loud.", sub: "Specific beats generic. 30 seconds." },
-  { text: "Explain what you do (or study) to a curious stranger.", sub: "No jargon. 30 seconds." },
-  { text: "You just won a small award. Give the thank-you speech.", sub: "Have fun with it. 30 seconds." },
-  { text: "Describe a place you'd take a visitor in your city.", sub: "Why there? 30 seconds." },
-  { text: "Teach me something simple you know how to do.", sub: "One skill, three steps. 30 seconds." },
-  { text: "Tell me about a small win you had recently.", sub: "Own it — no downplaying. 30 seconds." },
-  { text: "Order for the whole table at your favorite restaurant.", sub: "Confident and clear. 30 seconds." },
-  { text: "Invite a friend to something this weekend.", sub: "When, where, why it'll be fun. 30 seconds." },
-];
+// One list per locale; kept index-aligned so the daily prompt is the same
+// idea in every language.
+const PROMPTS_BY_LOCALE: Record<Locale, CoachPrompt[]> = {
+  en: [
+    { text: "Introduce yourself like we just met at an event.", sub: "Aim for 30 seconds. No script, just talk." },
+    { text: "Tell me about something you're into lately.", sub: "Let your enthusiasm show. 30 seconds." },
+    { text: "Describe your ideal Saturday, start to finish.", sub: "Paint the picture. 30 seconds." },
+    { text: "Recommend a movie, show, or book, and sell it.", sub: "Make me want it. 30 seconds." },
+    { text: "Tell the story of your week in three beats.", sub: "Beginning, middle, end. 30 seconds." },
+    { text: "Politely disagree: \"Cold weather is better than warm.\"", sub: "Kind but firm. 30 seconds." },
+    { text: "Give a genuine compliment to a friend, out loud.", sub: "Specific beats generic. 30 seconds." },
+    { text: "Explain what you do (or study) to a curious stranger.", sub: "No jargon. 30 seconds." },
+    { text: "You just won a small award. Give the thank-you speech.", sub: "Have fun with it. 30 seconds." },
+    { text: "Describe a place you'd take a visitor in your city.", sub: "Why there? 30 seconds." },
+    { text: "Teach me something simple you know how to do.", sub: "One skill, three steps. 30 seconds." },
+    { text: "Tell me about a small win you had recently.", sub: "Own it, no downplaying. 30 seconds." },
+    { text: "Order for the whole table at your favorite restaurant.", sub: "Confident and clear. 30 seconds." },
+    { text: "Invite a friend to something this weekend.", sub: "When, where, why it'll be fun. 30 seconds." },
+  ],
+  tr: [
+    { text: "Bir etkinlikte yeni tanışmışız gibi kendini tanıt.", sub: "30 saniye hedefle. Metin yok, sadece konuş." },
+    { text: "Son zamanlarda ilgini çeken bir şeyi anlat.", sub: "Hevesin belli olsun. 30 saniye." },
+    { text: "İdeal cumartesini baştan sona anlat.", sub: "Tabloyu gözümde canlandır. 30 saniye." },
+    { text: "Bir film, dizi ya da kitap öner ve beni ikna et.", sub: "Canımın istemesini sağla. 30 saniye." },
+    { text: "Haftanı üç adımda anlat.", sub: "Başı, ortası, sonu. 30 saniye." },
+    { text: "Kibarca karşı çık: \"Soğuk hava sıcaktan iyidir.\"", sub: "Nazik ama net. 30 saniye." },
+    { text: "Bir arkadaşına içten bir iltifat et, sesli söyle.", sub: "Somut olsun, genel geçer değil. 30 saniye." },
+    { text: "Meraklı bir yabancıya ne iş yaptığını ya da okuduğunu anlat.", sub: "Terim kullanma. 30 saniye." },
+    { text: "Küçük bir ödül kazandın. Teşekkür konuşmanı yap.", sub: "Keyfini çıkar. 30 saniye." },
+    { text: "Şehrinde bir misafiri götüreceğin yeri anlat.", sub: "Neden orası? 30 saniye." },
+    { text: "Yapmayı bildiğin basit bir şeyi bana öğret.", sub: "Tek beceri, üç adım. 30 saniye." },
+    { text: "Son zamanlarda yaşadığın küçük bir başarını anlat.", sub: "Sahiplen, küçümseme. 30 saniye." },
+    { text: "En sevdiğin restoranda tüm masa için sipariş ver.", sub: "Kendinden emin ve net. 30 saniye." },
+    { text: "Bir arkadaşını bu hafta sonu bir şeye davet et.", sub: "Ne zaman, nerede, neden eğlenceli olacak. 30 saniye." },
+  ],
+};
 
 /** One prompt per calendar day, rolling at the user's local midnight. */
-export function getDailyPrompt(user?: TzUser | null): CoachPrompt {
+export function getDailyPrompt(user?: (TzUser & { locale?: string }) | null): CoachPrompt {
+  const prompts = PROMPTS_BY_LOCALE[coerceLocale(user?.locale)];
   const date = dayString(new Date(), user?.timezone);
   let seed = 0;
   for (const c of date) seed = (seed * 31 + c.charCodeAt(0)) % 997;
-  return PROMPTS[seed % PROMPTS.length];
+  return prompts[seed % prompts.length];
 }
 
 /* ---------- analysis (Gemini, structured output) ---------- */
@@ -106,9 +128,17 @@ const responseSchema = {
   ],
 };
 
+const LANGUAGE_DIRECTIVE: Record<Locale, string> = {
+  en: "",
+  tr: `
+
+LANGUAGE: Write every text field you return (headline, summary, paceLabel, strengths, oneThing, tryNext) in natural, warm Turkish. Keep the transcript verbatim in whatever language the speaker actually used. Do not use em-dashes.`,
+};
+
 function coachInstructions(user: User, promptText: string, durationSec: number): string {
   const goal = user.goal ? ` Their goal in the app: ${user.goal.replaceAll("-", " ")}.` : "";
-  return `You are the Social XP coach — a warm, upbeat speaking coach inside a social-confidence training app.
+  const language = LANGUAGE_DIRECTIVE[coerceLocale(user.locale)];
+  return `You are the Social XP coach — a warm, upbeat speaking coach inside a social-confidence training app.${language}
 
 ${user.name} just recorded a ${durationSec}-second speaking rep. Today's prompt was: "${promptText}".${goal}
 

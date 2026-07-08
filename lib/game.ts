@@ -2,6 +2,7 @@ import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { XP, type QuizStep, type UnitData } from "./content";
 import { getLessonData, getQuoteData, getUnits } from "./catalog";
+import { coerceLocale } from "./i18n/config";
 
 // ---------- dates (per-user IANA timezone; null falls back to server time) ----------
 
@@ -86,7 +87,7 @@ export type UnitProgress = {
 // LessonCompletion.chapterId stores the unit id.
 export async function getCourseProgress(user: User): Promise<UnitProgress[]> {
   const [units, rows] = await Promise.all([
-    getUnits(1),
+    getUnits(coerceLocale(user.locale)),
     prisma.lessonCompletion.findMany({ where: { userId: user.id } }),
   ]);
   const byUnit = new Map<number, number[]>();
@@ -231,7 +232,7 @@ export async function completeLesson(
   user: User,
   input: LessonClaimInput
 ): Promise<LessonClaimResult> {
-  const lesson = await getLessonData(input.unitId, input.lessonIndex);
+  const lesson = await getLessonData(input.unitId, input.lessonIndex, coerceLocale(user.locale));
   if (!lesson) throw new Error("Unknown lesson");
 
   // Daily reminder follows the time they actually train; timezone follows the
@@ -263,7 +264,7 @@ export async function completeLesson(
   const quizCount = lesson.steps.filter((s): s is QuizStep => s.type === "quiz").length;
   const firstTries = Math.max(0, Math.min(input.quizFirstTries, quizCount));
   const xpAwarded = already ? 0 : XP.lessonClaim + firstTries * XP.quizFirstTry;
-  const quote = await getQuoteData(input.unitId, input.lessonIndex);
+  const quote = await getQuoteData(input.unitId, input.lessonIndex, coerceLocale(user.locale));
   const date = dayString(new Date(), tz);
 
   if (!already) {
