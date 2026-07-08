@@ -185,6 +185,32 @@ export async function weeklyActivity(user: TzUser): Promise<ActivityDay[]> {
   return days;
 }
 
+export type CollectedQuotes = {
+  total: number;
+  byUnit: Map<number, number>; // unitId -> quotes collected from that unit
+};
+
+/** How many quotes the user has collected, in total and grouped by unit. */
+export async function collectedQuotes(user: Pick<User, "id">): Promise<CollectedQuotes> {
+  const collected = await prisma.collectedQuote.findMany({
+    where: { userId: user.id },
+    select: { quoteId: true },
+  });
+  const byUnit = new Map<number, number>();
+  if (collected.length) {
+    const quotes = await prisma.quote.findMany({
+      where: { id: { in: collected.map((c) => c.quoteId) } },
+      select: { id: true, unitId: true },
+    });
+    const unitOf = new Map(quotes.map((q) => [q.id, q.unitId]));
+    for (const c of collected) {
+      const unitId = unitOf.get(c.quoteId);
+      if (unitId != null) byUnit.set(unitId, (byUnit.get(unitId) ?? 0) + 1);
+    }
+  }
+  return { total: collected.length, byUnit };
+}
+
 // ---------- levels (derived purely from totalXP; see lib/levels) ----------
 
 export { levelInfo, type LevelInfo } from "./levels";

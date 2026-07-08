@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { effectiveStreak, getCourseProgress, levelInfo, streakAtRisk, weeklyActivity } from "@/lib/game";
+import {
+  collectedQuotes,
+  effectiveStreak,
+  getCourseProgress,
+  levelInfo,
+  streakAtRisk,
+  weeklyActivity,
+} from "@/lib/game";
 import { getCourse } from "@/lib/catalog";
-import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
@@ -23,12 +29,13 @@ export default async function YouPage({
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
-  const [progress, quoteCount, course, week] = await Promise.all([
+  const [progress, quotes, course, week] = await Promise.all([
     getCourseProgress(user, locale),
-    prisma.collectedQuote.count({ where: { userId: user.id } }),
+    collectedQuotes(user),
     getCourse(1, locale),
     weeklyActivity(user),
   ]);
+  const quoteCount = quotes.total;
   const activeDays = week.filter((d) => d.active).length;
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
@@ -195,6 +202,12 @@ export default async function YouPage({
                       </span>
                       {chapter.canDo}
                     </p>
+                    {(quotes.byUnit.get(chapter.id) ?? 0) > 0 && (
+                      <p className="mt-2 flex items-center gap-1.5 font-body text-[12px] font-bold text-go-text">
+                        <DiamondIcon size={13} color="#58C08A" />
+                        {t.you.quotesFromChapter(quotes.byUnit.get(chapter.id) ?? 0)}
+                      </p>
+                    )}
                   </div>
                 ) : (
                   <div className="mt-3 h-[11px] overflow-hidden rounded-full bg-line">

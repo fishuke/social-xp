@@ -360,6 +360,7 @@ const en = {
     roadTitle: (courseTitle?: string) => `The road · ${courseTitle ?? ""}`,
     lessonsOfTotal: (done: number, total: number) => `${done} of ${total} lessons`,
     youLearned: "What you learned",
+    quotesFromChapter: (n: number) => `${n} quote${n > 1 ? "s" : ""} collected`,
     verifiedSynced: "Verified · progress synced",
     progressSynced: "Progress synced to your account",
     changePassword: "Change password",
