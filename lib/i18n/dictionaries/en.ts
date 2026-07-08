@@ -377,8 +377,8 @@ const en = {
     settingsCardTitle: "Settings",
     settingsCardSub: "Account, reminders, language",
     shareProgress: "Share progress",
-    shareMessage: (xp: string, streak: number, quotes: number) =>
-      `⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quotes on Social XP. Social skills are just reps.`,
+    shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
+      `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quotes on Social XP. Social skills are just reps.`,
   },
 
   settings: {

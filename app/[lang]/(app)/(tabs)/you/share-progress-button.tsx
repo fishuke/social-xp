@@ -6,10 +6,12 @@ import { ShareIcon } from "@/components/icons";
 
 // Share a one-line summary of the user's XP, streak, and collected quotes.
 export function ShareProgressButton({
+  level,
   xp,
   streak,
   quotes,
 }: {
+  level: number;
   xp: string;
   streak: number;
   quotes: number;
@@ -19,7 +21,7 @@ export function ShareProgressButton({
     <button
       type="button"
       aria-label={t.you.shareProgress}
-      onClick={() => shareText(t.you.shareMessage(xp, streak, quotes))}
+      onClick={() => shareText(t.you.shareMessage(level, xp, streak, quotes))}
       className="absolute left-5 top-[58px] rounded-full bg-white/16 p-2 transition-transform active:scale-90"
     >
       <ShareIcon size={20} color="#fff" />

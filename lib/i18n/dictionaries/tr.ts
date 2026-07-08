@@ -379,8 +379,8 @@ const tr: Dictionary = {
     settingsCardTitle: "Ayarlar",
     settingsCardSub: "Hesap, hatırlatıcılar, dil",
     shareProgress: "İlerlememi paylaş",
-    shareMessage: (xp: string, streak: number, quotes: number) =>
-      `⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Social XP'de. Sosyal beceriler sadece tekrar meselesi.`,
+    shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
+      `🏆 Seviye ${level} · ⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Social XP'de. Sosyal beceriler sadece tekrar meselesi.`,
   },
 
   settings: {

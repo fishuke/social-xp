@@ -39,6 +39,7 @@ export default async function YouPage({
         style={{ background: "linear-gradient(160deg, #FF7A45, #FF5A2C)" }}
       >
         <ShareProgressButton
+          level={level.level}
           xp={user.totalXP.toLocaleString(INTL_LOCALE[locale])}
           streak={streak}
           quotes={quoteCount}
