@@ -147,6 +147,11 @@ export function effectiveStreak(user: User): number {
   return 0; // streak reset (gentle copy in UI, never shame)
 }
 
+/** A live streak that has not yet been extended today: still alive, but lost if no lesson today. */
+export function streakAtRisk(user: User): boolean {
+  return effectiveStreak(user) > 0 && user.lastGoalMetDate !== dayString(new Date(), user.timezone);
+}
+
 // Duolingo rule: the first lesson of the day keeps the streak alive, on any pace.
 // Challenges power the daily quests + chest instead of gating the streak.
 function goalMet(daily: { lessonsDoneToday: number }): boolean {

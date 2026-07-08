@@ -351,6 +351,7 @@ const tr: Dictionary = {
     totalXp: "Toplam XP'n",
     totalXpValue: (xp: string) => `${xp} XP`,
     dayStreak: (n: number) => `${n} günlük seri`,
+    streakAtRisk: (n: number) => `${n} günlük seri · bugün bir ders bitirerek koru`,
     challengesCount: (n: number) => `⚡ ${n} görev`,
     quotesCount: (n: number) => `${n} söz`,
     shieldsCount: (n: number) => `🛡️ ${n} kalkan`,

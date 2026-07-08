@@ -349,6 +349,7 @@ const en = {
     totalXp: "Your total XP",
     totalXpValue: (xp: string) => `${xp} XP`,
     dayStreak: (n: number) => `${n}-day streak`,
+    streakAtRisk: (n: number) => `${n}-day streak · finish a lesson today to keep it`,
     challengesCount: (n: number) => `⚡ ${n} challenges`,
     quotesCount: (n: number) => `${n} quotes`,
     shieldsCount: (n: number) => `🛡️ ${n} shield${n > 1 ? "s" : ""}`,

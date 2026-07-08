@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { currentPosition, effectiveStreak, getCourseProgress, getDaily, questState } from "@/lib/game";
+import { currentPosition, effectiveStreak, getCourseProgress, getDaily, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
@@ -30,6 +30,8 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   const unit = unitProgress.unit;
   const doneCount = unitProgress.completed.length;
   const openedChests: string[] = JSON.parse(user.openedChests || "[]");
+  const streak = effectiveStreak(user);
+  const atRisk = streakAtRisk(user);
 
   const nodes: PathNode[] = [];
   for (const lesson of unit.lessons) {
@@ -55,10 +57,14 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
       <header className="flex items-center justify-between">
         <Link
           href={withLocale(locale, "/streak")}
-          aria-label={t.you.dayStreak(effectiveStreak(user))}
+          aria-label={atRisk ? t.you.streakAtRisk(streak) : t.you.dayStreak(streak)}
           className="transition-transform active:scale-95"
         >
-          <StatPill icon={<FlameIcon size={20} />} label={String(effectiveStreak(user))} />
+          <StatPill
+            icon={<FlameIcon size={20} color={atRisk ? "#C4B4A6" : undefined} />}
+            label={String(streak)}
+            className={atRisk ? "text-faint" : undefined}
+          />
         </Link>
         <div className="flex gap-2">
           <Link
