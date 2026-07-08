@@ -78,10 +78,14 @@ export function QuestsCard({
           onClick={() => chest.open({ type: "quest" })}
           disabled={chest.busy || !chestReady}
           className={`flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[14px] ${chestReady ? "wiggle" : ""}`}
-          style={{ background: quests.chestOpened ? "#EAF8F0" : "#FFF3D6" }}
+          style={{ background: quests.chestOpened ? "#EAF8F0" : chestReady ? "#FFF3D6" : "#EADFD5" }}
           aria-label={t.chest.questChestLabel}
         >
-          {quests.chestOpened ? <CheckIcon size={26} color="#58C08A" /> : <ChestIcon size={30} />}
+          {quests.chestOpened ? (
+            <CheckIcon size={26} color="#58C08A" />
+          ) : (
+            <ChestIcon size={30} color={chestReady ? undefined : "#B8A99C"} />
+          )}
         </button>
       </div>
     </section>
