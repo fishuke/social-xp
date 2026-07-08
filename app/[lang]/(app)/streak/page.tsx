@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { getDaily, weeklyActivity } from "@/lib/game";
+import { courseTotals, getCourseProgress, getDaily, weeklyActivity } from "@/lib/game";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CheckIcon, FlameIcon } from "@/components/icons";
+import { ProgressBar } from "@/components/ui";
 import { CountUp } from "@/components/count-up";
 import { ShareStreakButton } from "./share-button";
 import { MilestoneChest } from "./milestone-chest";
@@ -44,7 +45,12 @@ export default async function StreakPage({
 
   const { n } = await searchParams;
   const streak = Math.max(1, Number(n) || user.streakCount || 1);
-  const [daily, week] = await Promise.all([getDaily(user), weeklyActivity(user)]);
+  const [daily, week, progress] = await Promise.all([
+    getDaily(user),
+    weeklyActivity(user),
+    getCourseProgress(user, locale),
+  ]);
+  const course = courseTotals(progress);
 
   // Epic chest every 7 streak days
   const openedChests: string[] = JSON.parse(user.openedChests || "[]");
@@ -162,6 +168,24 @@ export default async function StreakPage({
           </p>
         </div>
       </div>
+
+      <Link
+        href={withLocale(locale, "/you")}
+        aria-label={`${t.you.lessonsOfTotal(course.done, course.total)} ${t.you.courseComplete(course.percent)}`}
+        className="pop-in mt-3 flex w-full items-center gap-3 rounded-[18px] bg-white/12 px-4 py-3 transition-transform active:scale-[0.98]"
+        style={{ animationDelay: "650ms" }}
+      >
+        <ProgressBar
+          percent={course.percent}
+          height={8}
+          track="rgba(255,255,255,0.2)"
+          fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+          className="flex-1"
+        />
+        <span className="whitespace-nowrap font-display text-[12px] font-semibold text-amber">
+          {t.you.courseComplete(course.percent)}
+        </span>
+      </Link>
 
       {milestone && <MilestoneChest milestone={milestone} />}
 
