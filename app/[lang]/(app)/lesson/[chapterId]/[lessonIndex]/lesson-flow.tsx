@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content";
 import { XP } from "@/lib/content";
 import { claimLesson } from "@/lib/actions";
@@ -483,6 +483,17 @@ function ClaimScreen({
   const xpAfter = xpTodayBefore + claimXP;
   const newLevel = levelInfo(totalXPBefore + claimXP).level;
   const leveledUp = newLevel > levelInfo(totalXPBefore).level;
+
+  // A level-up deserves its own reward beat, timed to the pill appearing.
+  useEffect(() => {
+    if (!leveledUp) return;
+    const id = setTimeout(() => {
+      sfx("reward");
+      haptic([30, 40, 30, 40, 90]);
+    }, 560);
+    return () => clearTimeout(id);
+  }, [leveledUp]);
+
   return (
     <>
       <ConfettiBurst height={340} />
@@ -523,15 +534,18 @@ function ClaimScreen({
           )}
         </div>
         {leveledUp && (
-          <span
-            className="pop-in mt-4 rounded-full px-4 py-2 font-display text-[15px] font-semibold text-white shadow-[0_3px_0_rgba(0,0,0,0.06)]"
-            style={{
-              animationDelay: "540ms",
-              background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
-            }}
-          >
-            {t.lessonFlow.levelUp(newLevel)}
-          </span>
+          <div className="relative mt-4 flex items-center justify-center">
+            <div aria-hidden className="sunburst h-[190px] w-[190px]" />
+            <span
+              className="pop-in relative rounded-full px-5 py-2.5 font-display text-[16px] font-semibold text-white shadow-[0_3px_0_rgba(255,90,44,0.35)]"
+              style={{
+                animationDelay: "540ms",
+                background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
+              }}
+            >
+              {t.lessonFlow.levelUp(newLevel)}
+            </span>
+          </div>
         )}
       </div>
 
