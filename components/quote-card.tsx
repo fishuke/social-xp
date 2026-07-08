@@ -31,8 +31,12 @@ export function QuoteCard({
       <div className="mt-6 flex items-center gap-3">
         <div
           aria-hidden
-          className="h-[50px] w-[38px] rounded-[6px] bg-gradient-to-b from-coral-top to-coral shadow-[0_3px_8px_rgba(255,90,44,0.35)]"
-        />
+          className="flex h-[50px] w-[38px] items-center justify-center rounded-[6px] bg-gradient-to-b from-coral-top to-coral shadow-[0_3px_8px_rgba(255,90,44,0.35)]"
+        >
+          <span className="font-display text-[22px] font-bold leading-none text-white">
+            {quote.author.trim().charAt(0).toUpperCase()}
+          </span>
+        </div>
         <div className="flex-1">
           <p className="font-body text-[15px] font-extrabold text-cocoa">{quote.author}</p>
           <p className="font-body text-[13px] font-bold text-sec2">{quote.authorNote}</p>
