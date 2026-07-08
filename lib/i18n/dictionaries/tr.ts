@@ -293,6 +293,7 @@ const tr: Dictionary = {
     lesson: (index: number) => `Ders ${index}`,
     ofSix: (n: number) => `6 sözden ${n} tanesi`,
     shareMessage: (text: string, author: string) => `“${text}” · ${author} · Social XP'de toplandı`,
+    dialogLabel: "Söz ayrıntısı",
   },
 
   coach: {
@@ -496,6 +497,7 @@ const tr: Dictionary = {
     shieldBody: "Serini kaçırdığın bir gün için korur",
     collect: "Topla",
     questChestLabel: "Görev sandığı",
+    dialogLabel: "Ödül sandığı",
   },
 
   quests: {

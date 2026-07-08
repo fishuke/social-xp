@@ -70,6 +70,9 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
 
       {open && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={t.quotes.dialogLabel}
           className="overlay-in fixed inset-0 z-50 flex flex-col justify-center px-6"
           style={{ background: "linear-gradient(170deg, #2E2018, #43301F)" }}
         >

@@ -292,6 +292,7 @@ const en = {
     lesson: (index: number) => `Lesson ${index}`,
     ofSix: (n: number) => `${n} of 6`,
     shareMessage: (text: string, author: string) => `“${text}” · ${author} · collected on Social XP`,
+    dialogLabel: "Quote detail",
   },
 
   coach: {
@@ -493,6 +494,7 @@ const en = {
     shieldBody: "Protects your streak for one missed day",
     collect: "Collect",
     questChestLabel: "Quest chest",
+    dialogLabel: "Reward chest",
   },
 
   quests: {

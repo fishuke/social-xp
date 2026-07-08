@@ -32,6 +32,9 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={t.chest.dialogLabel}
       className="overlay-in fixed inset-0 z-50 flex flex-col items-center justify-center px-8"
       style={{ background: "linear-gradient(170deg, rgba(36,26,18,0.96), rgba(67,48,31,0.96))" }}
       onClick={phase === "idle" ? tap : undefined}
