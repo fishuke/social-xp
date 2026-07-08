@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { getDaily, localParts } from "@/lib/game";
+import { getDaily, weeklyActivity } from "@/lib/game";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
@@ -44,10 +44,7 @@ export default async function StreakPage({
 
   const { n } = await searchParams;
   const streak = Math.max(1, Number(n) || user.streakCount || 1);
-  const daily = await getDaily(user);
-
-  const todayIndex = localParts(user.timezone).weekdayMondayIndex; // Monday = 0
-  const days = t.streak.days;
+  const [daily, week] = await Promise.all([getDaily(user), weeklyActivity(user)]);
 
   // Epic chest every 7 streak days
   const openedChests: string[] = JSON.parse(user.openedChests || "[]");
@@ -119,29 +116,30 @@ export default async function StreakPage({
       </p>
 
       <div className="mt-6 flex gap-2.5">
-        {days.map((d, i) => {
-          const isToday = i === todayIndex;
-          const daysAgo = todayIndex - i;
-          const done = daysAgo > 0 && daysAgo <= streak - 1;
-          return (
-            <span key={i} className="flex flex-col items-center gap-1.5">
-              <span
-                className="pop-in flex h-[34px] w-[34px] items-center justify-center rounded-full"
-                style={{
-                  animationDelay: `${350 + i * 60}ms`,
-                  ...(isToday
-                    ? { background: "#FFC24A", boxShadow: "0 0 0 4px rgba(255,194,74,0.25)" }
-                    : done
-                      ? { background: "#FF914D" }
-                      : { background: "rgba(255,255,255,0.14)" }),
-                }}
-              >
-                {isToday ? <FlameIcon size={18} color="#7A2E14" /> : done ? <CheckIcon size={16} /> : null}
-              </span>
-              <span className="font-body text-[11px] font-extrabold text-ondark/70">{d}</span>
+        {week.map((day, i) => (
+          <span key={day.date} className="flex flex-col items-center gap-1.5">
+            <span
+              className="pop-in flex h-[34px] w-[34px] items-center justify-center rounded-full"
+              style={{
+                animationDelay: `${350 + i * 60}ms`,
+                ...(day.isToday
+                  ? { background: "#FFC24A", boxShadow: "0 0 0 4px rgba(255,194,74,0.25)" }
+                  : day.active
+                    ? { background: "#FF914D" }
+                    : { background: "rgba(255,255,255,0.14)" }),
+              }}
+            >
+              {day.isToday ? (
+                <FlameIcon size={18} color="#7A2E14" />
+              ) : day.active ? (
+                <CheckIcon size={16} />
+              ) : null}
             </span>
-          );
-        })}
+            <span className="font-body text-[11px] font-extrabold text-ondark/70">
+              {t.streak.days[day.weekdayMondayIndex]}
+            </span>
+          </span>
+        ))}
       </div>
 
       <div className="pop-in mt-6 flex w-full gap-3" style={{ animationDelay: "550ms" }}>
