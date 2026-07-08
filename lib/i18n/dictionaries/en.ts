@@ -349,6 +349,8 @@ const en = {
   you: {
     totalXp: "Your total XP",
     totalXpValue: (xp: string) => `${xp} XP`,
+    level: (n: number) => `Level ${n}`,
+    levelProgress: (into: string, forLevel: string) => `${into} / ${forLevel} XP to next level`,
     dayStreak: (n: number) => `${n}-day streak`,
     streakAtRisk: (n: number) => `${n}-day streak · finish a lesson today to keep it`,
     challengesCount: (n: number) => `⚡ ${n} challenges`,

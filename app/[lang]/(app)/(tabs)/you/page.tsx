@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { effectiveStreak, getCourseProgress } from "@/lib/game";
+import { effectiveStreak, getCourseProgress, levelInfo } from "@/lib/game";
 import { getCourse } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -29,6 +29,8 @@ export default async function YouPage({
     getCourse(1, locale),
   ]);
   const streak = effectiveStreak(user);
+  const level = levelInfo(user.totalXP);
+  const fmt = (n: number) => n.toLocaleString(INTL_LOCALE[locale]);
 
   return (
     <div className="page-enter flex flex-col pb-6">
@@ -52,8 +54,22 @@ export default async function YouPage({
           {t.you.totalXp}
         </p>
         <p className="font-display text-[46px] font-semibold leading-[1.15]">
-          {t.you.totalXpValue(user.totalXP.toLocaleString(INTL_LOCALE[locale]))}
+          {t.you.totalXpValue(fmt(user.totalXP))}
         </p>
+        <div className="mx-auto mt-4 max-w-[300px]">
+          <div className="flex items-center justify-between font-display text-[13px] font-semibold">
+            <span>{t.you.level(level.level)}</span>
+            <span className="text-white/85">
+              {t.you.levelProgress(fmt(level.xpIntoLevel), fmt(level.xpForLevel))}
+            </span>
+          </div>
+          <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-white/25">
+            <div
+              className="h-full rounded-full bg-white transition-[width] duration-500"
+              style={{ width: `${level.percent}%` }}
+            />
+          </div>
+        </div>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
             <FlameIcon size={16} color="#FFC24A" />

@@ -351,6 +351,8 @@ const tr: Dictionary = {
   you: {
     totalXp: "Toplam XP'n",
     totalXpValue: (xp: string) => `${xp} XP`,
+    level: (n: number) => `Seviye ${n}`,
+    levelProgress: (into: string, forLevel: string) => `Sonraki seviyeye ${into} / ${forLevel} XP`,
     dayStreak: (n: number) => `${n} günlük seri`,
     streakAtRisk: (n: number) => `${n} günlük seri · bugün bir ders bitirerek koru`,
     challengesCount: (n: number) => `⚡ ${n} görev`,
