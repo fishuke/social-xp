@@ -374,6 +374,9 @@ const tr: Dictionary = {
     methodCardSub: "Hakemli davranış bilimine dayalı",
     settingsCardTitle: "Ayarlar",
     settingsCardSub: "Hesap, hatırlatıcılar, dil",
+    shareProgress: "İlerlememi paylaş",
+    shareMessage: (xp: string, streak: number, quotes: number) =>
+      `⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Social XP'de. Sosyal beceriler sadece tekrar meselesi.`,
   },
 
   settings: {

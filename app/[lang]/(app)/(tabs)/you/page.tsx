@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
+import { ShareProgressButton } from "./share-progress-button";
 
 export const dynamic = "force-dynamic";
 
@@ -35,10 +36,15 @@ export default async function YouPage({
         className="relative rounded-b-[30px] px-6 pb-7 pt-[58px] text-center text-white"
         style={{ background: "linear-gradient(160deg, #FF7A45, #FF5A2C)" }}
       >
+        <ShareProgressButton
+          xp={user.totalXP.toLocaleString(INTL_LOCALE[locale])}
+          streak={streak}
+          quotes={quoteCount}
+        />
         <Link
           href={withLocale(locale, "/settings")}
           aria-label={t.settings.title}
-          className="absolute right-5 top-[58px] rounded-full bg-white/16 p-2"
+          className="absolute right-5 top-[58px] rounded-full bg-white/16 p-2 transition-transform active:scale-90"
         >
           <GearIcon size={20} color="#fff" />
         </Link>

@@ -221,6 +221,20 @@ export function CloseIcon({ size, color = "currentColor", className }: IconProps
   );
 }
 
+export function ShareIcon({ size, color = "currentColor", className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M12 3.5v11M8 7l4-4 4 4M6 12v6.5a1.5 1.5 0 0 0 1.5 1.5h9a1.5 1.5 0 0 0 1.5-1.5V12"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
 export function ChatIcon({ size, color = "#fff", className }: IconProps) {
   return (
     <Svg size={size} className={className}>

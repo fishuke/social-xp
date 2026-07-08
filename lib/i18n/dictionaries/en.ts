@@ -372,6 +372,9 @@ const en = {
     methodCardSub: "Built on peer-reviewed behavioral science",
     settingsCardTitle: "Settings",
     settingsCardSub: "Account, reminders, language",
+    shareProgress: "Share progress",
+    shareMessage: (xp: string, streak: number, quotes: number) =>
+      `⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quotes on Social XP. Social skills are just reps.`,
   },
 
   settings: {
