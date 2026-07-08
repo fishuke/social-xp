@@ -151,7 +151,9 @@ export type CoachSubmitResult =
 
 export async function submitCoachSession(formData: FormData): Promise<CoachSubmitResult> {
   const user = await requireUser();
-  const e = getDictionary(coerceLocale(user.locale)).errors;
+  const localeRaw = formData.get("locale");
+  const locale = coerceLocale(typeof localeRaw === "string" ? localeRaw : user.locale);
+  const e = getDictionary(locale).errors;
 
   const audio = formData.get("audio");
   const duration = coachDurationSchema.safeParse(formData.get("durationSec"));
@@ -173,6 +175,7 @@ export async function submitCoachSession(formData: FormData): Promise<CoachSubmi
       audio: Buffer.from(await audio.arrayBuffer()),
       mimeType: audio.type || "audio/wav",
       durationSec: duration.data,
+      locale,
     });
     return { ok: true, ...result };
   } catch (error) {

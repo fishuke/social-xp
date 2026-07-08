@@ -10,7 +10,7 @@ import type { CoachPrompt } from "@/lib/coach";
 import { ConfettiBurst } from "@/components/confetti";
 import { CountUp } from "@/components/count-up";
 import { LocaleLink } from "@/components/locale-link";
-import { useT } from "@/components/i18n-provider";
+import { useT, useLocale } from "@/components/i18n-provider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { CheckIcon, LockIcon, MicIcon, XpSquareIcon } from "@/components/icons";
 import { ProgressBar } from "@/components/ui";
@@ -42,6 +42,7 @@ const IDLE_BARS = Array.from({ length: BAR_COUNT }, (_, i) => 0.24 + 0.5 * Math.
 
 export function CoachClient({ name, prompt, locked, isPremium, history }: Props) {
   const t = useT();
+  const locale = useLocale();
   const [phase, setPhase] = useState<Phase>("ready");
   const [seconds, setSeconds] = useState(0);
   const [bars, setBars] = useState<number[]>(IDLE_BARS);
@@ -152,6 +153,7 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
       const form = new FormData();
       form.append("audio", wav, "rep.wav");
       form.append("durationSec", String(elapsed));
+      form.append("locale", locale);
 
       const res = await submitCoachSession(form);
       if (res.ok) {

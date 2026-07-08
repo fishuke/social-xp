@@ -8,7 +8,7 @@ import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { XP } from "./content";
 import { dayString, getDaily, questState, type QuestState, type TzUser } from "./game";
-import { coerceLocale, type Locale } from "./i18n/config";
+import { type Locale } from "./i18n/config";
 
 const MODEL = "gemini-2.5-flash";
 const MODEL_FALLBACK = "gemini-2.5-flash-lite";
@@ -56,9 +56,14 @@ const PROMPTS_BY_LOCALE: Record<Locale, CoachPrompt[]> = {
   ],
 };
 
-/** One prompt per calendar day, rolling at the user's local midnight. */
-export function getDailyPrompt(user?: (TzUser & { locale?: string }) | null): CoachPrompt {
-  const prompts = PROMPTS_BY_LOCALE[coerceLocale(user?.locale)];
+/**
+ * One prompt per calendar day, rolling at the user's local midnight. `locale`
+ * is the locale being viewed (URL segment), so the prompt matches the chrome;
+ * the day index is locale-independent (lists are index-aligned) so switching
+ * language shows the same prompt idea, just translated.
+ */
+export function getDailyPrompt(user: TzUser | null | undefined, locale: Locale): CoachPrompt {
+  const prompts = PROMPTS_BY_LOCALE[locale];
   const date = dayString(new Date(), user?.timezone);
   let seed = 0;
   for (const c of date) seed = (seed * 31 + c.charCodeAt(0)) % 997;
@@ -135,9 +140,9 @@ const LANGUAGE_DIRECTIVE: Record<Locale, string> = {
 LANGUAGE: Write every text field you return (headline, summary, paceLabel, strengths, oneThing, tryNext) in natural, warm Turkish. Keep the transcript verbatim in whatever language the speaker actually used. Do not use em-dashes.`,
 };
 
-function coachInstructions(user: User, promptText: string, durationSec: number): string {
+function coachInstructions(user: User, promptText: string, durationSec: number, locale: Locale): string {
   const goal = user.goal ? ` Their goal in the app: ${user.goal.replaceAll("-", " ")}.` : "";
-  const language = LANGUAGE_DIRECTIVE[coerceLocale(user.locale)];
+  const language = LANGUAGE_DIRECTIVE[locale];
   return `You are the Social XP coach — a warm, upbeat speaking coach inside a social-confidence training app.${language}
 
 ${user.name} just recorded a ${durationSec}-second speaking rep. Today's prompt was: "${promptText}".${goal}
@@ -162,7 +167,7 @@ Rules: encouraging first, actionable always, never a stinging grade. Talk to ${u
 
 export async function analyzeRecording(
   user: User,
-  input: { audio: Buffer; mimeType: string; durationSec: number; promptText: string }
+  input: { audio: Buffer; mimeType: string; durationSec: number; promptText: string; locale: Locale }
 ): Promise<CoachAnalysis> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
@@ -175,7 +180,7 @@ export async function analyzeRecording(
         role: "user",
         parts: [
           { inlineData: { mimeType: input.mimeType, data: input.audio.toString("base64") } },
-          { text: coachInstructions(user, input.promptText, input.durationSec) },
+          { text: coachInstructions(user, input.promptText, input.durationSec, input.locale) },
         ],
       },
     ],
@@ -231,13 +236,13 @@ export type CoachSessionResult = {
 
 export async function completeCoachSession(
   user: User,
-  input: { audio: Buffer; mimeType: string; durationSec: number }
+  input: { audio: Buffer; mimeType: string; durationSec: number; locale: Locale }
 ): Promise<CoachSessionResult> {
   const date = dayString(new Date(), user.timezone);
   const sessionsBefore = await countSessionsToday(user);
   if (coachLocked(user, sessionsBefore)) throw new Error("Daily free session already used");
 
-  const promptText = getDailyPrompt(user).text;
+  const promptText = getDailyPrompt(user, input.locale).text;
   const analysis = await analyzeRecording(user, { ...input, promptText });
 
   const previous = await prisma.coachSession.findFirst({

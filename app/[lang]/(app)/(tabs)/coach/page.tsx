@@ -34,7 +34,7 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
   return (
     <CoachClient
       name={user.name}
-      prompt={getDailyPrompt(user)}
+      prompt={getDailyPrompt(user, locale)}
       locked={coachLocked(user, sessionsToday)}
       isPremium={user.isPremium}
       history={history}
