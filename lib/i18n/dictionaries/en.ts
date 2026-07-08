@@ -379,6 +379,10 @@ const en = {
     shareProgress: "Share progress",
     shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
       `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quotes on Social XP. Social skills are just reps.`,
+    thisWeek: "This week",
+    weekdayLetters: ["M", "T", "W", "T", "F", "S", "S"],
+    weekActivitySummary: (n: number) =>
+      n === 0 ? "No lessons yet this week" : `${n} of the last 7 days active`,
   },
 
   settings: {

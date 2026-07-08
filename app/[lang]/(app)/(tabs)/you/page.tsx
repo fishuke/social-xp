@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { effectiveStreak, getCourseProgress, levelInfo, streakAtRisk } from "@/lib/game";
+import { effectiveStreak, getCourseProgress, levelInfo, streakAtRisk, weeklyActivity } from "@/lib/game";
 import { getCourse } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -23,11 +23,13 @@ export default async function YouPage({
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
-  const [progress, quoteCount, course] = await Promise.all([
+  const [progress, quoteCount, course, week] = await Promise.all([
     getCourseProgress(user, locale),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
     getCourse(1, locale),
+    weeklyActivity(user),
   ]);
+  const activeDays = week.filter((d) => d.active).length;
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
@@ -94,6 +96,35 @@ export default async function YouPage({
           )}
         </div>
       </header>
+
+      <section className="px-5 pt-6">
+        <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
+          {t.you.thisWeek}
+        </p>
+        <div
+          className="mt-3 flex justify-between rounded-[22px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
+          aria-label={t.you.weekActivitySummary(activeDays)}
+        >
+          {week.map((day) => (
+            <div key={day.date} className="flex flex-col items-center gap-2">
+              <span className="font-display text-[12px] font-bold text-faint">
+                {t.you.weekdayLetters[day.weekdayMondayIndex]}
+              </span>
+              <span
+                className={`flex h-[30px] w-[30px] items-center justify-center rounded-full font-display text-[13px] font-semibold ${
+                  day.active ? "text-white" : "text-faint"
+                }`}
+                style={{
+                  background: day.active ? "linear-gradient(160deg, #FF7A45, #FF5A2C)" : "#F2EAE2",
+                  boxShadow: day.isToday ? "0 0 0 2px #FF5A2C" : undefined,
+                }}
+              >
+                {day.active ? <FlameIcon size={16} color="#FFC24A" /> : null}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="px-5 pt-6">
         <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">

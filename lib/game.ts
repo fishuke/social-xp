@@ -152,6 +152,39 @@ export function streakAtRisk(user: User): boolean {
   return effectiveStreak(user) > 0 && user.lastGoalMetDate !== dayString(new Date(), user.timezone);
 }
 
+// ---------- weekly activity ----------
+
+export type ActivityDay = {
+  date: string; // YYYY-MM-DD in the user's timezone
+  weekdayMondayIndex: number; // 0 = Monday
+  active: boolean; // at least one lesson completed that day
+  isToday: boolean;
+};
+
+/** The last 7 days (oldest first), each flagged with whether a lesson was completed. */
+export async function weeklyActivity(user: TzUser): Promise<ActivityDay[]> {
+  const tz = user.timezone;
+  const since = new Date(Date.now() - 7 * 86_400_000);
+  const rows = await prisma.lessonCompletion.findMany({
+    where: { userId: user.id, completedAt: { gte: since } },
+    select: { completedAt: true },
+  });
+  const activeDays = new Set(rows.map((r) => dayString(r.completedAt, tz)));
+  const today = dayString(new Date(), tz);
+  const days: ActivityDay[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const at = new Date(Date.now() - i * 86_400_000);
+    const date = dayString(at, tz);
+    days.push({
+      date,
+      weekdayMondayIndex: localParts(tz, at).weekdayMondayIndex,
+      active: activeDays.has(date),
+      isToday: date === today,
+    });
+  }
+  return days;
+}
+
 // ---------- levels (derived purely from totalXP; see lib/levels) ----------
 
 export { levelInfo, type LevelInfo } from "./levels";

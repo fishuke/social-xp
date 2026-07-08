@@ -381,6 +381,10 @@ const tr: Dictionary = {
     shareProgress: "İlerlememi paylaş",
     shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
       `🏆 Seviye ${level} · ⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Social XP'de. Sosyal beceriler sadece tekrar meselesi.`,
+    thisWeek: "Bu hafta",
+    weekdayLetters: ["P", "S", "Ç", "P", "C", "C", "P"],
+    weekActivitySummary: (n: number) =>
+      n === 0 ? "Bu hafta henüz ders yok" : `Son 7 günün ${n} günü aktif`,
   },
 
   settings: {
