@@ -44,3 +44,7 @@ next-env.d.ts
 prisma/dev.db
 prisma/dev.db-journal
 .env
+
+# Overnight improvement loop (local scratch, never committed)
+.claude/overnight/
+.claude/settings.local.json
