@@ -133,21 +133,32 @@ function ChestNode({
 }) {
   const t = useT();
   const openable = node.reached && !node.opened;
+  const locked = !node.reached && !node.opened;
   return (
     <div className="flex flex-col items-center gap-2">
       <button
         onClick={openable ? onOpen : undefined}
         disabled={!openable}
         className={`flex h-[56px] w-[56px] items-center justify-center rounded-full ${openable ? "wiggle" : ""}`}
-        style={{
-          background: node.opened ? "#58C08A" : "#FFC24A",
-          boxShadow: node.opened ? "0 5px 0 #3F9E6E" : "0 5px 0 #E0A52F",
-        }}
+        style={
+          node.opened
+            ? { background: "#58C08A", boxShadow: "0 5px 0 #3F9E6E" }
+            : locked
+              ? { background: "#EADFD5" }
+              : { background: "#FFC24A", boxShadow: "0 5px 0 #E0A52F" }
+        }
         aria-label={t.learn.rewardChestAria}
       >
-        {node.opened ? <CheckIcon size={28} /> : <ChestIcon size={28} color="#fff" />}
+        {node.opened ? (
+          <CheckIcon size={28} />
+        ) : (
+          <ChestIcon size={28} color={locked ? "#B8A99C" : "#fff"} />
+        )}
       </button>
-      <span className="font-body text-[12px] font-extrabold" style={{ color: "#C9A23B" }}>
+      <span
+        className="font-body text-[12px] font-extrabold"
+        style={{ color: locked ? "#B8A99C" : "#C9A23B" }}
+      >
         {t.learn.reward}
       </span>
     </div>
