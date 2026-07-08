@@ -359,6 +359,7 @@ const en = {
     shieldsCount: (n: number) => `🛡️ ${n} shield${n > 1 ? "s" : ""}`,
     roadTitle: (courseTitle?: string) => `The road · ${courseTitle ?? ""}`,
     lessonsOfTotal: (done: number, total: number) => `${done} of ${total} lessons`,
+    youLearned: "What you learned",
     verifiedSynced: "Verified · progress synced",
     progressSynced: "Progress synced to your account",
     changePassword: "Change password",

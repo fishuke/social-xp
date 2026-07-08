@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
-import { DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
+import { CheckIcon, DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
 import { ShareProgressButton } from "./share-progress-button";
 
 export const dynamic = "force-dynamic";
@@ -184,15 +184,29 @@ export default async function YouPage({
                     </span>
                   </span>
                 </div>
-                <div className="mt-3 h-[11px] overflow-hidden rounded-full bg-line">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${percent}%`,
-                      background: "linear-gradient(90deg, #FFC24A, #FF914D)",
-                    }}
-                  />
-                </div>
+                {p.complete ? (
+                  <div className="mt-3 rounded-[14px] bg-go-tint p-3">
+                    <p className="font-display text-[11px] font-bold uppercase tracking-[1.5px] text-go-text">
+                      {t.you.youLearned}
+                    </p>
+                    <p className="mt-1 flex items-start gap-2 font-body text-[13px] font-bold text-cocoa">
+                      <span className="mt-0.5 shrink-0">
+                        <CheckIcon size={15} color="#58C08A" />
+                      </span>
+                      {chapter.canDo}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-3 h-[11px] overflow-hidden rounded-full bg-line">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${percent}%`,
+                        background: "linear-gradient(90deg, #FFC24A, #FF914D)",
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}
