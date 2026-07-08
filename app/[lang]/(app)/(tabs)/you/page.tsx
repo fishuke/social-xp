@@ -15,7 +15,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CheckIcon, DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
-import { ProgressBar } from "@/components/ui";
+import { ProgressBar, StatChip } from "@/components/ui";
 import { ShareProgressButton } from "./share-progress-button";
 
 export const dynamic = "force-dynamic";
@@ -86,24 +86,19 @@ export default async function YouPage({
           />
         </div>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <span
+          <StatChip
             aria-label={atRisk ? t.you.streakAtRisk(streak) : t.you.dayStreak(streak)}
-            className={`flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold ${atRisk ? "text-white/70" : ""}`}
+            className={atRisk ? "text-white/70" : undefined}
+            icon={<FlameIcon size={16} color={atRisk ? "#FFD9C2" : "#FFC24A"} />}
           >
-            <FlameIcon size={16} color={atRisk ? "#FFD9C2" : "#FFC24A"} />
             {t.you.dayStreak(streak)}
-          </span>
-          <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
-            {t.you.challengesCount(user.repsCompleted)}
-          </span>
-          <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
-            <DiamondIcon size={16} color="#FFC24A" />
+          </StatChip>
+          <StatChip>{t.you.challengesCount(user.repsCompleted)}</StatChip>
+          <StatChip icon={<DiamondIcon size={16} color="#FFC24A" />}>
             {t.you.quotesCount(quoteCount)}
-          </span>
+          </StatChip>
           {user.streakShields > 0 && (
-            <span className="flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold">
-              {t.you.shieldsCount(user.streakShields)}
-            </span>
+            <StatChip>{t.you.shieldsCount(user.streakShields)}</StatChip>
           )}
         </div>
       </header>

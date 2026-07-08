@@ -64,3 +64,25 @@ export function StatPill({
     </span>
   );
 }
+
+export function StatChip({
+  icon,
+  children,
+  className,
+  "aria-label": ariaLabel,
+}: {
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  "aria-label"?: string;
+}) {
+  return (
+    <span
+      aria-label={ariaLabel}
+      className={`flex items-center gap-1.5 rounded-[12px] bg-white/16 px-3 py-2 font-display text-[14px] font-semibold ${className ?? ""}`}
+    >
+      {icon}
+      {children}
+    </span>
+  );
+}
