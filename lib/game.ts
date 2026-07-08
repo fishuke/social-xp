@@ -2,7 +2,7 @@ import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { XP, type QuizStep, type UnitData } from "./content";
 import { getLessonData, getQuoteData, getUnits } from "./catalog";
-import { coerceLocale } from "./i18n/config";
+import { coerceLocale, type Locale } from "./i18n/config";
 
 // ---------- dates (per-user IANA timezone; null falls back to server time) ----------
 
@@ -84,10 +84,12 @@ export type UnitProgress = {
 };
 
 // Progress over the units of the (single, for now) course.
-// LessonCompletion.chapterId stores the unit id.
-export async function getCourseProgress(user: User): Promise<UnitProgress[]> {
+// LessonCompletion.chapterId stores the unit id. `locale` is the locale being
+// viewed (the URL segment), so unit/lesson titles match the surrounding chrome;
+// it is not read from user.locale, which is only the stored default.
+export async function getCourseProgress(user: User, locale: Locale): Promise<UnitProgress[]> {
   const [units, rows] = await Promise.all([
-    getUnits(coerceLocale(user.locale)),
+    getUnits(locale),
     prisma.lessonCompletion.findMany({ where: { userId: user.id } }),
   ]);
   const byUnit = new Map<number, number[]>();
@@ -396,7 +398,8 @@ export async function openPathChest(user: User, unitId: number): Promise<ChestRe
   const opened = openedChestKeys(user);
   const key = `c${unitId}`;
   if (opened.includes(key)) return { ...NO_CHEST, totalXP: user.totalXP };
-  const progress = await getCourseProgress(user);
+  // Locale-independent: only lesson-completion state gates the chest.
+  const progress = await getCourseProgress(user, coerceLocale(user.locale));
   const p = progress.find((x) => x.unit.id === unitId);
   const reached = p ? [1, 2, 3].every((i) => p.completed.includes(i)) : false;
   if (!reached) return { ...NO_CHEST, totalXP: user.totalXP };

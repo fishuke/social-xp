@@ -76,6 +76,23 @@ function overlayUnit(unit: UnitRow): UnitData {
   };
 }
 
+export async function getCourse(
+  id: number,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<{ id: number; title: string; tagline: string } | null> {
+  const course = await prisma.course.findUnique({
+    where: { id },
+    include: { translations: { where: { locale } } },
+  });
+  if (!course) return null;
+  const t = course.translations[0];
+  return {
+    id: course.id,
+    title: t?.title ?? course.title,
+    tagline: t?.tagline ?? course.tagline,
+  };
+}
+
 export async function getUnits(locale: Locale = DEFAULT_LOCALE, courseId = 1): Promise<UnitData[]> {
   const units = await prisma.unit.findMany({
     where: { courseId },

@@ -29,7 +29,7 @@ export default async function LessonPage({
   ]);
   if (!unit || !lesson || !quote) redirect(withLocale(locale, "/learn"));
 
-  const progress = await getCourseProgress(user);
+  const progress = await getCourseProgress(user, locale);
   if (!isLessonUnlocked(progress, unitId, lessonIndex)) {
     const p = progress.find((x) => x.unit.id === unitId);
     redirect(withLocale(locale, p && !p.unlocked && !user.isPremium ? "/paywall" : "/learn"));

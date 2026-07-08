@@ -21,7 +21,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
   const [progress, daily, quoteCount] = await Promise.all([
-    getCourseProgress(user),
+    getCourseProgress(user, locale),
     getDaily(user),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
   ]);

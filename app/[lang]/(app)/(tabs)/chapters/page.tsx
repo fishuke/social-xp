@@ -22,7 +22,7 @@ export default async function UnitsPage({ params }: { params: Promise<{ lang: st
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
-  const progress = await getCourseProgress(user);
+  const progress = await getCourseProgress(user, locale);
   const pos = currentPosition(progress);
 
   // group units by level, preserving order

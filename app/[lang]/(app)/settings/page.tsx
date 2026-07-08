@@ -57,7 +57,7 @@ export default async function SettingsPage({
   return (
     <div className="page-enter flex flex-col pb-6">
       <div className="flex items-center gap-2 px-5 pt-[58px]">
-        <BackButton />
+        <BackButton to="/you" />
         <h1 className="font-display text-[20px] font-semibold text-cocoa">{t.settings.title}</h1>
       </div>
 

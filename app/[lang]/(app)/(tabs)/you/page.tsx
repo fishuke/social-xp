@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { effectiveStreak, getCourseProgress } from "@/lib/game";
+import { getCourse } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
@@ -22,9 +23,9 @@ export default async function YouPage({
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
   const [progress, quoteCount, course] = await Promise.all([
-    getCourseProgress(user),
+    getCourseProgress(user, locale),
     prisma.collectedQuote.count({ where: { userId: user.id } }),
-    prisma.course.findUnique({ where: { id: 1 } }),
+    getCourse(1, locale),
   ]);
   const streak = effectiveStreak(user);
 

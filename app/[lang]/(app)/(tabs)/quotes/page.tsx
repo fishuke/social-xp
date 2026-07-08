@@ -18,7 +18,7 @@ export default async function QuotesPage({ params }: { params: Promise<{ lang: s
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
-  const progress = await getCourseProgress(user);
+  const progress = await getCourseProgress(user, locale);
   const pos = currentPosition(progress);
   const unit = progress.find((p) => p.unit.id === pos.unitId)!.unit;
 
