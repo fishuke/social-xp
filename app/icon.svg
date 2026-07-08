@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Social XP">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF7A45" />
+      <stop offset="1" stop-color="#FF5A2C" />
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="13" fill="url(#g)" />
+  <g fill="#FFF6EE">
+    <rect x="8.3" y="19" width="4.4" height="10" rx="2.2" />
+    <rect x="15.1" y="14" width="4.4" height="20" rx="2.2" />
+    <rect x="21.9" y="9" width="4.4" height="30" rx="2.2" />
+    <rect x="28.7" y="14" width="4.4" height="20" rx="2.2" />
+    <rect x="35.5" y="19" width="4.4" height="10" rx="2.2" />
+  </g>
+</svg>
