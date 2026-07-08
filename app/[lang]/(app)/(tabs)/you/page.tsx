@@ -37,6 +37,12 @@ export default async function YouPage({
   ]);
   const quoteCount = quotes.total;
   const activeDays = week.filter((d) => d.active).length;
+  const totalLessons = progress.reduce((sum, p) => sum + p.unit.lessons.length, 0);
+  const doneLessons = progress.reduce(
+    (sum, p) => sum + Math.min(p.completed.length, p.unit.lessons.length),
+    0
+  );
+  const coursePercent = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
@@ -137,6 +143,25 @@ export default async function YouPage({
         <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
           {t.you.roadTitle(course?.title)}
         </p>
+        <div className="mt-3 rounded-[22px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]">
+          <div className="flex items-center justify-between">
+            <span className="font-display text-[14px] font-semibold text-cocoa">
+              {t.you.lessonsOfTotal(doneLessons, totalLessons)}
+            </span>
+            <span className="font-display text-[14px] font-semibold text-coral">
+              {t.you.courseComplete(coursePercent)}
+            </span>
+          </div>
+          <div className="mt-2.5 h-[11px] overflow-hidden rounded-full bg-line">
+            <div
+              className="h-full rounded-full transition-[width] duration-500"
+              style={{
+                width: `${coursePercent}%`,
+                background: "linear-gradient(90deg, #FFC24A, #FF914D)",
+              }}
+            />
+          </div>
+        </div>
         <div className="mt-3 flex flex-col gap-3">
           {progress.map((p) => {
             const chapter = p.unit;

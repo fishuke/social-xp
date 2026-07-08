@@ -362,6 +362,7 @@ const tr: Dictionary = {
     shieldsCount: (n: number) => `🛡️ ${n} kalkan`,
     roadTitle: (courseTitle?: string) => `Yol · ${courseTitle ?? ""}`,
     lessonsOfTotal: (done: number, total: number) => `${total} dersin ${done} tanesi`,
+    courseComplete: (percent: number) => `%${percent} tamamlandı`,
     youLearned: "Neler öğrendin",
     quotesFromChapter: (n: number) => `${n} söz toplandı`,
     verifiedSynced: "Doğrulandı · ilerleme eşitlendi",

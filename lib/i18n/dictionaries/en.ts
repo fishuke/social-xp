@@ -360,6 +360,7 @@ const en = {
     shieldsCount: (n: number) => `🛡️ ${n} shield${n > 1 ? "s" : ""}`,
     roadTitle: (courseTitle?: string) => `The road · ${courseTitle ?? ""}`,
     lessonsOfTotal: (done: number, total: number) => `${done} of ${total} lessons`,
+    courseComplete: (percent: number) => `${percent}% complete`,
     youLearned: "What you learned",
     quotesFromChapter: (n: number) => `${n} quote${n > 1 ? "s" : ""} collected`,
     verifiedSynced: "Verified · progress synced",
