@@ -1,0 +1,21 @@
+# Hourly ping for /api/cron/reminders. Lives here because Vercel Hobby only
+# allows daily crons; the route itself is protected by CRON_SECRET.
+# Requires the repo secret CRON_SECRET (gh secret set CRON_SECRET).
+# GitHub cron can drift 5-15 minutes; fine for reminders.
+
+name: reminders-cron
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call reminders endpoint
+        run: |
+          curl --fail-with-body -sS \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://social-xp.vercel.app/api/cron/reminders"
