@@ -7,7 +7,7 @@ import { coerceLocale, DEFAULT_LOCALE, type Locale } from "./i18n/config";
 
 type Mail = { to: string; subject: string; text: string };
 
-export async function sendMail(mail: Mail): Promise<void> {
+async function sendMail(mail: Mail): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.MAIL_FROM || "Social XP <onboarding@resend.dev>";
 

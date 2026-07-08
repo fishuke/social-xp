@@ -165,7 +165,7 @@ Return JSON:
 Rules: encouraging first, actionable always, never a stinging grade. Talk to ${user.name} directly ("you"). Normalize imperfection. Calibration: a nervous beginner lands 55-70; reserve 85+ for genuinely strong reps; never exceed 95. If the audio is silent or not speech, set all scores to 0, transcript to "", and say so gently in summary.`;
 }
 
-export async function analyzeRecording(
+async function analyzeRecording(
   user: User,
   input: { audio: Buffer; mimeType: string; durationSec: number; promptText: string; locale: Locale }
 ): Promise<CoachAnalysis> {

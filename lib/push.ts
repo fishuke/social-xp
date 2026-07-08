@@ -50,7 +50,7 @@ export async function deleteSubscription(endpoint: string): Promise<void> {
 }
 
 /** Streak-aware, never-shaming reminder copy. */
-export function reminderCopy(user: User): { title: string; body: string } {
+function reminderCopy(user: User): { title: string; body: string } {
   const streak = effectiveStreak(user);
   if (streak >= 1) {
     return {
@@ -65,7 +65,7 @@ export function reminderCopy(user: User): { title: string; body: string } {
 }
 
 /** Send one payload to every device the user has subscribed. Prunes dead endpoints. Returns count sent. */
-export async function sendToUser(userId: string, payload: NotificationPayload): Promise<number> {
+async function sendToUser(userId: string, payload: NotificationPayload): Promise<number> {
   ensureVapid();
   const subs = await prisma.pushSubscription.findMany({ where: { userId } });
   const body = JSON.stringify(payload);
