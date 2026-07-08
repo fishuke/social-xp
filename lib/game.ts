@@ -435,7 +435,7 @@ export type ChestResult = {
 
 const SHIELD_CAP = 2;
 
-function openedChestKeys(user: User): string[] {
+export function openedChestKeys(user: User): string[] {
   return JSON.parse(user.openedChests || "[]");
 }
 

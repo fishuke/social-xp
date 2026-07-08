@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { courseTotals, currentPosition, dailyLessonGoal, effectiveStreak, getCourseProgress, getDaily, levelInfo, questState, streakAtRisk } from "@/lib/game";
+import { courseTotals, currentPosition, dailyLessonGoal, effectiveStreak, getCourseProgress, getDaily, levelInfo, openedChestKeys, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
@@ -29,7 +29,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
   const unitProgress = progress.find((p) => p.unit.id === pos.unitId)!;
   const unit = unitProgress.unit;
   const doneCount = unitProgress.completed.length;
-  const openedChests: string[] = JSON.parse(user.openedChests || "[]");
+  const openedChests = openedChestKeys(user);
   const streak = effectiveStreak(user);
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);

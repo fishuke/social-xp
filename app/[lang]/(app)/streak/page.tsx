@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { courseTotals, getCourseProgress, getDaily, streakAtRisk, weeklyActivity } from "@/lib/game";
+import { courseTotals, getCourseProgress, getDaily, openedChestKeys, streakAtRisk, weeklyActivity } from "@/lib/game";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
@@ -53,7 +53,7 @@ export default async function StreakPage({
   const course = courseTotals(progress);
 
   // Epic chest every 7 streak days
-  const openedChests: string[] = JSON.parse(user.openedChests || "[]");
+  const openedChests = openedChestKeys(user);
   const milestone =
     user.streakCount > 0 &&
     user.streakCount % 7 === 0 &&
