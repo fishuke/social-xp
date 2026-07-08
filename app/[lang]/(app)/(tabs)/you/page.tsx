@@ -5,7 +5,7 @@ import { effectiveStreak, getCourseProgress, levelInfo } from "@/lib/game";
 import { getCourse } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
+import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
 import { ShareProgressButton } from "./share-progress-button";
@@ -30,7 +30,7 @@ export default async function YouPage({
   ]);
   const streak = effectiveStreak(user);
   const level = levelInfo(user.totalXP);
-  const fmt = (n: number) => n.toLocaleString(INTL_LOCALE[locale]);
+  const fmt = (n: number) => formatNumber(locale, n);
 
   return (
     <div className="page-enter flex flex-col pb-6">
@@ -40,7 +40,7 @@ export default async function YouPage({
       >
         <ShareProgressButton
           level={level.level}
-          xp={user.totalXP.toLocaleString(INTL_LOCALE[locale])}
+          xp={fmt(user.totalXP)}
           streak={streak}
           quotes={quoteCount}
         />

@@ -4,7 +4,7 @@ import { getSessionUser } from "@/lib/session";
 import { currentPosition, effectiveStreak, getCourseProgress, getDaily, questState, streakAtRisk } from "@/lib/game";
 import { prisma } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { coerceLocale, INTL_LOCALE } from "@/lib/i18n/config";
+import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { BookIcon, ChevronRightIcon, DiamondIcon, FlameIcon, XpSquareIcon } from "@/components/icons";
 import { StatPill, ProgressBar } from "@/components/ui";
@@ -79,7 +79,7 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
             aria-label={t.you.totalXp}
             className="transition-transform active:scale-95"
           >
-            <StatPill icon={<XpSquareIcon size={18} />} label={user.totalXP.toLocaleString(INTL_LOCALE[locale])} />
+            <StatPill icon={<XpSquareIcon size={18} />} label={formatNumber(locale, user.totalXP)} />
           </Link>
         </div>
       </header>
