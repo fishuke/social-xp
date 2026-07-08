@@ -395,6 +395,8 @@ const en = {
 
   settings: {
     title: "Settings",
+    paceTitle: "Daily goal",
+    paceSub: "How hard you want to push each day",
   },
 
   paywall: {

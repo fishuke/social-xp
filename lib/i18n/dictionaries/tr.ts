@@ -397,6 +397,8 @@ const tr: Dictionary = {
 
   settings: {
     title: "Ayarlar",
+    paceTitle: "Günlük hedef",
+    paceSub: "Her gün ne kadar zorlanmak istediğin",
   },
 
   paywall: {

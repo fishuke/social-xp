@@ -11,6 +11,7 @@ import { ReminderSetting } from "@/components/push-reminders";
 import { VerifyEmailBanner } from "@/components/verify-email-banner";
 import { ManageSubscriptionButton } from "@/components/manage-subscription";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { PaceSetting } from "@/components/pace-setting";
 
 export const dynamic = "force-dynamic";
 
@@ -127,6 +128,8 @@ export default async function SettingsPage({
             </div>
           </div>
         )}
+
+        <PaceSetting current={user.pace} />
 
         <ReminderSetting />
 

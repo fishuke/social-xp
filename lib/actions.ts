@@ -75,6 +75,20 @@ export async function submitOnboarding(input: OnboardingInput): Promise<void> {
   await createSessionUser({ goal, pace, timezone, locale });
 }
 
+/* ---------- daily pace / goal ---------- */
+
+const paceSchema = onboardingSchema.shape.pace;
+
+export type Pace = z.infer<typeof paceSchema>;
+
+// Lets the user change the daily goal they picked at onboarding (the pace copy
+// promises "you can change this anytime"). Drives dailyLessonGoal on the learn tab.
+export async function setPace(input: string): Promise<void> {
+  const user = await requireUser();
+  const pace = paceSchema.parse(input);
+  await prisma.user.update({ where: { id: user.id }, data: { pace } });
+}
+
 /* ---------- language ---------- */
 
 // Persist the chosen UI/content language on the user (if any) and in the
