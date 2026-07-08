@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content";
 import { XP } from "@/lib/content";
 import { claimLesson } from "@/lib/actions";
+import { levelInfo } from "@/lib/levels";
 import { haptic, sfx } from "@/lib/juice";
 import { shareText } from "@/lib/share";
 import { ChatIcon, CheckIcon, CloseIcon, DiamondIcon, Logo, XpSquareIcon } from "@/components/icons";
@@ -23,6 +24,7 @@ type Props = {
   lesson: LessonData;
   quote: QuoteData;
   collectedBefore: number;
+  totalXPBefore: number;
   xpTodayBefore: number;
   repDoneToday: boolean;
   alreadyCompleted: boolean;
@@ -460,6 +462,7 @@ function ChallengeScreen({
 
 function ClaimScreen({
   lesson,
+  totalXPBefore,
   xpTodayBefore,
   repDoneToday,
   alreadyCompleted,
@@ -478,6 +481,8 @@ function ClaimScreen({
   const t = useT();
   const claimXP = alreadyCompleted ? 0 : XP.lessonClaim + firstTries * XP.quizFirstTry;
   const xpAfter = xpTodayBefore + claimXP;
+  const newLevel = levelInfo(totalXPBefore + claimXP).level;
+  const leveledUp = newLevel > levelInfo(totalXPBefore).level;
   return (
     <>
       <ConfettiBurst height={340} />
@@ -517,6 +522,17 @@ function ClaimScreen({
             </span>
           )}
         </div>
+        {leveledUp && (
+          <span
+            className="pop-in mt-4 rounded-full px-4 py-2 font-display text-[15px] font-semibold text-white shadow-[0_3px_0_rgba(0,0,0,0.06)]"
+            style={{
+              animationDelay: "540ms",
+              background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
+            }}
+          >
+            {t.lessonFlow.levelUp(newLevel)}
+          </span>
+        )}
       </div>
 
       <div className="mt-6 rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]">

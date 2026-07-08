@@ -461,6 +461,7 @@ const tr: Dictionary = {
     checkpointBeaten: "Kontrol noktası geçildi! 🚩",
     lessonComplete: "Ders tamamlandı! 💪",
     confidenceBuilt: "Özgüven işte böyle inşa edilir.",
+    levelUp: (level: number) => `${level}. seviyeye ulaştın! 🎉`,
     xpChip: (xp: number) => `+${xp} XP`,
     quoteChip: "+1 söz",
     dailyQuests: "Günlük görevler",

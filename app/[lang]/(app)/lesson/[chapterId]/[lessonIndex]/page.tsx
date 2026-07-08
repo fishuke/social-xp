@@ -52,6 +52,7 @@ export default async function LessonPage({
       lesson={lesson}
       quote={quote}
       collectedBefore={collectedBefore}
+      totalXPBefore={user.totalXP}
       xpTodayBefore={daily.xpEarnedToday}
       repDoneToday={daily.repDoneToday}
       alreadyCompleted={alreadyCompleted}

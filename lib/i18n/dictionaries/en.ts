@@ -458,6 +458,7 @@ const en = {
     checkpointBeaten: "Checkpoint beaten! 🚩",
     lessonComplete: "Lesson complete! 💪",
     confidenceBuilt: "That's how confidence gets built.",
+    levelUp: (level: number) => `Level ${level} reached! 🎉`,
     xpChip: (xp: number) => `+${xp} XP`,
     quoteChip: "+1 quote",
     dailyQuests: "Daily quests",
