@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin";
 import { getUnits } from "@/lib/catalog";
 
@@ -6,7 +7,23 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminContent() {
   await requireAdmin();
-  const units = await getUnits();
+  const [units, completionGroups] = await Promise.all([
+    getUnits(),
+    prisma.lessonCompletion.groupBy({
+      by: ["chapterId", "lessonIndex", "feel"],
+      _count: { _all: true },
+    }),
+  ]);
+
+  // chapterId:lessonIndex -> {done, shaky}
+  const stats = new Map<string, { done: number; shaky: number }>();
+  for (const g of completionGroups) {
+    const key = `${g.chapterId}:${g.lessonIndex}`;
+    const row = stats.get(key) ?? { done: 0, shaky: 0 };
+    row.done += g._count._all;
+    if (g.feel === "shaky") row.shaky += g._count._all;
+    stats.set(key, row);
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -26,26 +43,43 @@ export default async function AdminContent() {
             <span className="font-body text-[12px] font-bold text-faint">{unit.canDo}</span>
           </div>
           <div>
-            {unit.lessons.map((lesson) => (
-              <Link
-                key={lesson.index}
-                href={`/admin/content/${unit.id}/${lesson.index}`}
-                className="flex items-center gap-3 border-b border-[#F1EDE7] px-4 py-2.5 last:border-0 hover:bg-[#FAF8F5]"
-              >
-                <span className="w-6 font-body text-[12px] font-bold text-faint">
-                  {lesson.index}
-                </span>
-                <span className="flex-1 font-body text-[14px] font-bold text-cocoa">
-                  {lesson.title}
-                </span>
-                {lesson.isCheckpoint && (
-                  <span className="rounded-full bg-tint-chest px-2 py-0.5 font-body text-[11px] font-bold text-amber-dark">
-                    checkpoint
+            {unit.lessons.map((lesson) => {
+              const s = stats.get(`${unit.id}:${lesson.index}`);
+              const shakyPct = s && s.done > 0 ? Math.round((s.shaky / s.done) * 100) : 0;
+              return (
+                <Link
+                  key={lesson.index}
+                  href={`/admin/content/${unit.id}/${lesson.index}`}
+                  className="flex items-center gap-3 border-b border-[#F1EDE7] px-4 py-2.5 last:border-0 hover:bg-[#FAF8F5]"
+                >
+                  <span className="w-6 font-body text-[12px] font-bold text-faint">
+                    {lesson.index}
                   </span>
-                )}
-                <span className="font-body text-[12px] font-bold text-coral">Edit →</span>
-              </Link>
-            ))}
+                  <span className="flex-1 font-body text-[14px] font-bold text-cocoa">
+                    {lesson.title}
+                  </span>
+                  {lesson.isCheckpoint && (
+                    <span className="rounded-full bg-tint-chest px-2 py-0.5 font-body text-[11px] font-bold text-amber-dark">
+                      checkpoint
+                    </span>
+                  )}
+                  <span className="font-body text-[12px] font-bold text-faint">
+                    {s ? `${s.done} done` : "0 done"}
+                  </span>
+                  {s && s.done > 0 && (
+                    <span
+                      className={`rounded-full px-2 py-0.5 font-body text-[11px] font-bold ${
+                        shakyPct >= 30 ? "bg-[#FDE8E4] text-[#C03A1B]" : "bg-[#F1EDE7] text-sec2"
+                      }`}
+                      title="share of completions marked shaky"
+                    >
+                      {shakyPct}% shaky
+                    </span>
+                  )}
+                  <span className="font-body text-[12px] font-bold text-coral">Edit →</span>
+                </Link>
+              );
+            })}
           </div>
         </section>
       ))}
