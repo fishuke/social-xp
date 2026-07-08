@@ -15,6 +15,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CheckIcon, DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
+import { ProgressBar } from "@/components/ui";
 import { ShareProgressButton } from "./share-progress-button";
 
 export const dynamic = "force-dynamic";
@@ -76,12 +77,13 @@ export default async function YouPage({
               {t.you.levelProgress(fmt(level.xpIntoLevel), fmt(level.xpForLevel))}
             </span>
           </div>
-          <div className="mt-2 h-[9px] overflow-hidden rounded-full bg-white/25">
-            <div
-              className="h-full rounded-full bg-white transition-[width] duration-500"
-              style={{ width: `${level.percent}%` }}
-            />
-          </div>
+          <ProgressBar
+            percent={level.percent}
+            height={9}
+            track="rgba(255,255,255,0.25)"
+            fill="#fff"
+            className="mt-2"
+          />
         </div>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           <span
@@ -148,15 +150,12 @@ export default async function YouPage({
               {t.you.courseComplete(coursePercent)}
             </span>
           </div>
-          <div className="mt-2.5 h-[11px] overflow-hidden rounded-full bg-line">
-            <div
-              className="h-full rounded-full transition-[width] duration-500"
-              style={{
-                width: `${coursePercent}%`,
-                background: "linear-gradient(90deg, #FFC24A, #FF914D)",
-              }}
-            />
-          </div>
+          <ProgressBar
+            percent={coursePercent}
+            height={11}
+            fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+            className="mt-2.5"
+          />
         </div>
         <div className="mt-3 flex flex-col gap-3">
           {progress.map((p) => {
@@ -231,15 +230,12 @@ export default async function YouPage({
                     )}
                   </div>
                 ) : (
-                  <div className="mt-3 h-[11px] overflow-hidden rounded-full bg-line">
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${percent}%`,
-                        background: "linear-gradient(90deg, #FFC24A, #FF914D)",
-                      }}
-                    />
-                  </div>
+                  <ProgressBar
+                    percent={percent}
+                    height={11}
+                    fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+                    className="mt-3"
+                  />
                 )}
               </div>
             );
