@@ -116,7 +116,7 @@ export function LessonFlow(props: Props) {
           {Array.from({ length: totalScreens }, (_, s) => (
             <span
               key={s}
-              className="h-[8px] flex-1 rounded-full"
+              className="h-[8px] flex-1 rounded-full transition-colors duration-300"
               style={{
                 background:
                   s <= screen
