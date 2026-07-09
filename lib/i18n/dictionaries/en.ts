@@ -379,6 +379,8 @@ const en = {
     emailVerifiedBanner: "Email verified. You're all set ✅",
     createAccountTitle: "Create an account",
     createAccountSub: "Keep your streak & XP safe across devices",
+    upgradeTitle: "Unlock Social XP+",
+    upgradeSub: "All chapters, unlimited coach reps, streak repair",
     plusName: "Social XP+",
     subTrial: (date?: string) => `Free trial${date ? ` · first charge ${date}` : ""}`,
     subActive: (plan: "monthly" | "yearly", date?: string) =>

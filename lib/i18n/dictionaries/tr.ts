@@ -381,6 +381,8 @@ const tr: Dictionary = {
     emailVerifiedBanner: "E-posta doğrulandı. Hazırsın ✅",
     createAccountTitle: "Hesap oluştur",
     createAccountSub: "Serini ve XP'ni tüm cihazlarında güvende tut",
+    upgradeTitle: "Social XP+ kilidini aç",
+    upgradeSub: "Tüm bölümler, sınırsız koç tekrarı, seri onarımı",
     plusName: "Social XP+",
     subTrial: (date?: string) => `Ücretsiz deneme${date ? ` · ilk ödeme ${date}` : ""}`,
     subActive: (plan: "monthly" | "yearly", date?: string) =>

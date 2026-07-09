@@ -133,6 +133,24 @@ export default async function SettingsPage({
           </div>
         )}
 
+        {!subscription && !user.isPremium && (
+          <Link
+            href={withLocale(locale, "/paywall")}
+            className="mt-5 flex items-center gap-3 rounded-[18px] bg-gradient-to-br from-coral-top to-coral p-4 shadow-[0_2px_0_rgba(0,0,0,0.08)] transition-transform active:scale-[0.98]"
+          >
+            <span className="text-[22px]">⭐️</span>
+            <span className="flex-1">
+              <span className="block font-display text-[15px] font-semibold text-white">
+                {t.you.upgradeTitle}
+              </span>
+              <span className="block font-body text-[12px] font-bold text-white/80">
+                {t.you.upgradeSub}
+              </span>
+            </span>
+            <span className="font-display text-[18px] text-white">→</span>
+          </Link>
+        )}
+
         <PaceSetting current={user.pace} />
 
         <SoundSetting />
