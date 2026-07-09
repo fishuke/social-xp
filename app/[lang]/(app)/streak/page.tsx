@@ -51,6 +51,7 @@ export default async function StreakPage({
     getCourseProgress(user, locale),
   ]);
   const course = courseTotals(progress);
+  const activeDays = week.filter((d) => d.active).length;
 
   // Epic chest every 7 streak days
   const openedChests = openedChestKeys(user);
@@ -137,7 +138,11 @@ export default async function StreakPage({
         {t.streak.body(streak)}
       </p>
 
-      <div className="mt-6 flex gap-2.5">
+      <p className="mt-6 font-display text-[12px] font-semibold text-ondark/70">
+        {t.you.weekActiveCount(activeDays)}
+      </p>
+
+      <div className="mt-3 flex gap-2.5">
         {week.map((day, i) => (
           <span key={day.date} className="flex flex-col items-center gap-1.5">
             <span
