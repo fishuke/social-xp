@@ -365,8 +365,8 @@ const en = {
     levelProgress: (into: string, forLevel: string) => `${into} / ${forLevel} XP to next level`,
     dayStreak: (n: number) => `${n}-day streak`,
     streakAtRisk: (n: number) => `${n}-day streak · finish a lesson today to keep it`,
-    challengesCount: (n: number) => `⚡ ${n} challenges`,
-    quotesCount: (n: number) => `${n} quotes`,
+    challengesCount: (n: number) => `⚡ ${n} challenge${n === 1 ? "" : "s"}`,
+    quotesCount: (n: number) => `${n} quote${n === 1 ? "" : "s"}`,
     shieldsCount: (n: number) => `🛡️ ${n} shield${n > 1 ? "s" : ""}`,
     bestStreakCount: (n: number) => `🏆 ${n}-day best`,
     roadTitle: (courseTitle?: string) => `The road · ${courseTitle ?? ""}`,
@@ -398,7 +398,7 @@ const en = {
     settingsCardSub: "Account, reminders, language",
     shareProgress: "Share progress",
     shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
-      `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quotes on Social XP. Social skills are just reps.`,
+      `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quote${quotes === 1 ? "" : "s"} on Social XP. Social skills are just reps.`,
     thisWeek: "This week",
     weekdayLetters: ["M", "T", "W", "T", "F", "S", "S"],
     weekActivitySummary: (n: number) =>
