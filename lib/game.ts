@@ -195,6 +195,32 @@ export async function weeklyActivity(user: TzUser): Promise<ActivityDay[]> {
   return days;
 }
 
+// Calendar day after `day` (both YYYY-MM-DD), computed on the UTC-anchored
+// string so it is independent of the user's timezone and DST.
+function nextDayString(day: string): string {
+  return new Date(new Date(`${day}T00:00:00Z`).getTime() + 86_400_000)
+    .toISOString()
+    .slice(0, 10);
+}
+
+/** Longest run of consecutive local days with at least one lesson completion. */
+export async function bestStreak(user: TzUser): Promise<number> {
+  const tz = user.timezone;
+  const rows = await prisma.lessonCompletion.findMany({
+    where: { userId: user.id },
+    select: { completedAt: true },
+  });
+  if (rows.length === 0) return 0;
+  const days = [...new Set(rows.map((r) => dayString(r.completedAt, tz)))].sort();
+  let best = 1;
+  let run = 1;
+  for (let i = 1; i < days.length; i++) {
+    run = nextDayString(days[i - 1]) === days[i] ? run + 1 : 1;
+    if (run > best) best = run;
+  }
+  return best;
+}
+
 export type CollectedQuotes = {
   total: number;
   byUnit: Map<number, number>; // unitId -> quotes collected from that unit

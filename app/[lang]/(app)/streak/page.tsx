@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSessionUser } from "@/lib/session";
-import { courseTotals, getCourseProgress, getDaily, openedChestKeys, streakAtRisk, weeklyActivity } from "@/lib/game";
+import { bestStreak, courseTotals, getCourseProgress, getDaily, openedChestKeys, streakAtRisk, weeklyActivity } from "@/lib/game";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { coerceLocale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
@@ -45,13 +45,15 @@ export default async function StreakPage({
 
   const { n } = await searchParams;
   const streak = Math.max(1, Number(n) || user.streakCount || 1);
-  const [daily, week, progress] = await Promise.all([
+  const [daily, week, progress, bestRun] = await Promise.all([
     getDaily(user),
     weeklyActivity(user),
     getCourseProgress(user, locale),
+    bestStreak(user),
   ]);
   const course = courseTotals(progress);
   const activeDays = week.filter((d) => d.active).length;
+  const best = Math.max(bestRun, streak, user.streakCount);
 
   // Epic chest every 7 streak days
   const openedChests = openedChestKeys(user);
@@ -187,6 +189,10 @@ export default async function StreakPage({
                 ? t.streak.dayToChest
                 : t.streak.daysToChest}
           </p>
+        </div>
+        <div className="flex-1 rounded-[18px] bg-white/12 p-4">
+          <p className="font-display text-[28px] font-semibold text-amber">{best}</p>
+          <p className="font-body text-[13px] font-bold text-ondark">{t.streak.bestStreak}</p>
         </div>
       </div>
 

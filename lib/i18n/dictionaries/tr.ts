@@ -338,6 +338,7 @@ const tr: Dictionary = {
       `${n} gün üst üste ortaya çıktın. Bu şans değil. Bu, oluşmaya başlayan bir alışkanlık.`,
     days: ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"],
     xpToday: "Bugünkü XP",
+    bestStreak: "en uzun seri",
     chestDay: "sandık günü!",
     dayToChest: "gün sonra sandık",
     daysToChest: "gün sonra sandık",

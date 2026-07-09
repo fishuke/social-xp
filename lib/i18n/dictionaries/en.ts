@@ -337,6 +337,7 @@ const en = {
       `You showed up ${n} ${n === 1 ? "day" : "days straight"}. That's not luck. That's a habit forming.`,
     days: ["M", "T", "W", "T", "F", "S", "S"],
     xpToday: "XP today",
+    bestStreak: "best streak",
     chestDay: "chest day!",
     dayToChest: "day to a chest",
     daysToChest: "days to a chest",
