@@ -409,6 +409,8 @@ const en = {
     title: "Settings",
     paceTitle: "Daily goal",
     paceSub: "How hard you want to push each day",
+    soundTitle: "Sound & haptics",
+    soundSub: "Chimes and buzzes on quizzes and rewards",
   },
 
   paywall: {

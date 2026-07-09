@@ -5,6 +5,49 @@
 
 let ctx: AudioContext | null = null;
 
+// User preference for sound + haptic feedback, persisted in localStorage so it
+// survives reloads. Read lazily and cached; defaults on when never set.
+const PREF_KEY = "sxp:feedback";
+let enabled: boolean | null = null;
+const listeners = new Set<() => void>();
+
+function feedbackOn(): boolean {
+  if (enabled !== null) return enabled;
+  try {
+    enabled = localStorage.getItem(PREF_KEY) !== "off";
+  } catch {
+    enabled = true;
+  }
+  return enabled;
+}
+
+/** Whether sound + haptic feedback is currently enabled (client value). */
+export function isFeedbackEnabled(): boolean {
+  return feedbackOn();
+}
+
+/** Server snapshot for useSyncExternalStore: default on, no localStorage. */
+export function feedbackServerSnapshot(): boolean {
+  return true;
+}
+
+/** Subscribe to feedback-preference changes (for useSyncExternalStore). */
+export function subscribeFeedback(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+/** Turn sound + haptic feedback on or off; persists across reloads. */
+export function setFeedbackEnabled(on: boolean) {
+  enabled = on;
+  try {
+    localStorage.setItem(PREF_KEY, on ? "on" : "off");
+  } catch {
+    // storage unavailable - keep the in-memory value
+  }
+  listeners.forEach((cb) => cb());
+}
+
 function audio(): AudioContext {
   if (!ctx) ctx = new AudioContext();
   if (ctx.state === "suspended") void ctx.resume();
@@ -28,6 +71,7 @@ function note(freq: number, at: number, dur = 0.14, type: OscillatorType = "sine
 }
 
 export function sfx(kind: "correct" | "wrong" | "reward" | "claim") {
+  if (!feedbackOn()) return;
   try {
     switch (kind) {
       case "correct": // quick happy third
@@ -55,6 +99,7 @@ export function sfx(kind: "correct" | "wrong" | "reward" | "claim") {
 }
 
 export function haptic(pattern: number | number[] = 18) {
+  if (!feedbackOn()) return;
   try {
     navigator.vibrate?.(pattern);
   } catch {

@@ -12,6 +12,7 @@ import { VerifyEmailBanner } from "@/components/verify-email-banner";
 import { ManageSubscriptionButton } from "@/components/manage-subscription";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { PaceSetting } from "@/components/pace-setting";
+import { SoundSetting } from "@/components/sound-setting";
 
 export const dynamic = "force-dynamic";
 
@@ -130,6 +131,8 @@ export default async function SettingsPage({
         )}
 
         <PaceSetting current={user.pace} />
+
+        <SoundSetting />
 
         <ReminderSetting />
 

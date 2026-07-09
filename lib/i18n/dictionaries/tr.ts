@@ -411,6 +411,8 @@ const tr: Dictionary = {
     title: "Ayarlar",
     paceTitle: "Günlük hedef",
     paceSub: "Her gün ne kadar zorlanmak istediğin",
+    soundTitle: "Ses ve titreşim",
+    soundSub: "Testlerde ve ödüllerde çınlama ve titreşim",
   },
 
   paywall: {
