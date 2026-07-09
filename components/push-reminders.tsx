@@ -131,7 +131,7 @@ export function ReminderSetting() {
             disabled={busy}
             aria-pressed={on}
             className="relative h-[30px] w-[52px] rounded-full transition-colors disabled:opacity-60"
-            style={{ background: on ? "#FF5A2C" : "#EADFD5" }}
+            style={{ background: on ? "var(--color-coral)" : "var(--color-line)" }}
           >
             <span
               className="absolute top-[3px] h-[24px] w-[24px] rounded-full bg-white shadow transition-all"
