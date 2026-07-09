@@ -16,7 +16,7 @@ export function ConfettiBurst({ height = 300 }: { height?: number }) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 z-10 overflow-hidden"
+      className="confetti-burst pointer-events-none absolute inset-x-0 top-0 z-10 overflow-hidden"
       style={{ height }}
     >
       {PARTICLES.map((p, i) => (

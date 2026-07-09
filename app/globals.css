@@ -330,4 +330,8 @@ body {
   .bar-grow {
     animation: none;
   }
+  /* confetti particles carry an inline animation, so the class guards above miss them; hide the burst outright */
+  .confetti-burst {
+    display: none;
+  }
 }
