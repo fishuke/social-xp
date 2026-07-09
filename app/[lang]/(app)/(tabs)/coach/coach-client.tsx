@@ -245,8 +245,18 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
         </div>
       ) : (
         <div className="flex h-[150px] flex-col items-center justify-between pb-1">
-          <p className="font-display text-[26px] font-semibold tabular-nums text-white">
+          <p
+            className={`font-display text-[26px] font-semibold tabular-nums ${
+              recording && seconds >= MAX_SEC - 10 ? "text-amber" : "text-white"
+            }`}
+          >
             {formatTime(seconds)}
+            {recording && (
+              <span className="font-body text-[16px] font-bold text-ondark/45">
+                {" "}
+                / {formatTime(MAX_SEC)}
+              </span>
+            )}
           </p>
           <button
             type="button"
