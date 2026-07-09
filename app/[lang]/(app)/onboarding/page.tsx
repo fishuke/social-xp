@@ -77,7 +77,7 @@ export default function Onboarding() {
               <button
                 key={g.id}
                 onClick={() => setGoal(g.id as OnboardingInput["goal"])}
-                className="flex items-center justify-between rounded-[18px] border-2 px-5 py-[18px] text-left font-display text-[18px] font-medium transition-colors"
+                className="flex items-center justify-between rounded-[18px] border-2 px-5 py-[18px] text-left font-display text-[18px] font-medium transition active:scale-[0.98]"
                 style={{
                   borderColor: selected ? "#FF5A2C" : "#EADFD5",
                   background: selected ? "#FFEDE4" : "#fff",
@@ -120,7 +120,7 @@ export default function Onboarding() {
             <button
               key={p.id}
               onClick={() => setPace(p.id as OnboardingInput["pace"])}
-              className="flex items-center gap-4 rounded-[18px] border-2 px-5 py-4 text-left"
+              className="flex items-center gap-4 rounded-[18px] border-2 px-5 py-4 text-left transition active:scale-[0.98]"
               style={{
                 borderColor: selected ? "#FF5A2C" : "#EADFD5",
                 background: selected ? "#FFF0E9" : "#fff",
