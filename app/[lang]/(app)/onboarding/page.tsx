@@ -79,15 +79,15 @@ export default function Onboarding() {
                 onClick={() => setGoal(g.id as OnboardingInput["goal"])}
                 className="flex items-center justify-between rounded-[18px] border-2 px-5 py-[18px] text-left font-display text-[18px] font-medium transition active:scale-[0.98]"
                 style={{
-                  borderColor: selected ? "#FF5A2C" : "#EADFD5",
-                  background: selected ? "#FFEDE4" : "#fff",
-                  color: "#2E2018",
+                  borderColor: selected ? "var(--color-coral)" : "var(--color-line)",
+                  background: selected ? "var(--color-tint-select)" : "#fff",
+                  color: "var(--color-cocoa)",
                 }}
               >
                 {g.label}
                 <span
                   className="flex h-[26px] w-[26px] items-center justify-center rounded-full border-2"
-                  style={{ borderColor: selected ? "#FF5A2C" : "#EADFD5" }}
+                  style={{ borderColor: selected ? "var(--color-coral)" : "var(--color-line)" }}
                 >
                   {selected && <span className="h-[13px] w-[13px] rounded-full bg-coral" />}
                 </span>
@@ -122,8 +122,8 @@ export default function Onboarding() {
               onClick={() => setPace(p.id as OnboardingInput["pace"])}
               className="flex items-center gap-4 rounded-[18px] border-2 px-5 py-4 text-left transition active:scale-[0.98]"
               style={{
-                borderColor: selected ? "#FF5A2C" : "#EADFD5",
-                background: selected ? "#FFF0E9" : "#fff",
+                borderColor: selected ? "var(--color-coral)" : "var(--color-line)",
+                background: selected ? "var(--color-tint-coral)" : "#fff",
               }}
             >
               <span className="text-[28px]">{p.emoji}</span>
