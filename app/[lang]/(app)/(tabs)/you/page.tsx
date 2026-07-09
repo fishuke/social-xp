@@ -16,6 +16,8 @@ import { coerceLocale, formatNumber } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CheckIcon, DiamondIcon, FlameIcon, GearIcon, LockIcon } from "@/components/icons";
 import { ProgressBar, StatChip } from "@/components/ui";
+import { Milestones } from "@/components/milestones";
+import { achievements } from "@/lib/achievements";
 import { ShareProgressButton } from "./share-progress-button";
 
 export const dynamic = "force-dynamic";
@@ -44,6 +46,12 @@ export default async function YouPage({
   const atRisk = streakAtRisk(user);
   const level = levelInfo(user.totalXP);
   const fmt = (n: number) => formatNumber(locale, n);
+  const milestones = achievements({
+    lessonsDone: doneLessons,
+    level: level.level,
+    quotes: quoteCount,
+    reps: user.repsCompleted,
+  });
 
   return (
     <div className="page-enter flex flex-col pb-6">
@@ -131,6 +139,16 @@ export default async function YouPage({
           ))}
         </div>
       </section>
+
+      <Milestones
+        items={milestones}
+        labels={{
+          title: t.you.milestonesTitle,
+          earnedLabel: t.you.milestoneEarned,
+          names: t.you.milestones,
+          progress: t.you.milestoneProgress,
+        }}
+      />
 
       <section className="px-5 pt-6">
         <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">

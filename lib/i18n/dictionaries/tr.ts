@@ -393,6 +393,16 @@ const tr: Dictionary = {
     weekdayLetters: ["P", "S", "Ç", "P", "C", "C", "P"],
     weekActivitySummary: (n: number) =>
       n === 0 ? "Bu hafta henüz ders yok" : `Son 7 günün ${n} günü aktif`,
+    milestonesTitle: "Kilometre taşları",
+    milestoneEarned: "Kazanıldı",
+    milestoneProgress: (current: number, target: number) => `${current} / ${target}`,
+    milestones: {
+      firstLesson: { name: "İlk adımlar", hint: "İlk dersini bitir" },
+      risingStar: { name: "Yükselen yıldız", hint: "Seviye 5'e ulaş" },
+      bookworm: { name: "Kitap kurdu", hint: "10 ders bitir" },
+      quoteCollector: { name: "Söz koleksiyoncusu", hint: "10 söz topla" },
+      challenger: { name: "Meydan okuyan", hint: "10 görev tamamla" },
+    },
   },
 
   settings: {

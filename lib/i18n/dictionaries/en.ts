@@ -391,6 +391,16 @@ const en = {
     weekdayLetters: ["M", "T", "W", "T", "F", "S", "S"],
     weekActivitySummary: (n: number) =>
       n === 0 ? "No lessons yet this week" : `${n} of the last 7 days active`,
+    milestonesTitle: "Milestones",
+    milestoneEarned: "Earned",
+    milestoneProgress: (current: number, target: number) => `${current} / ${target}`,
+    milestones: {
+      firstLesson: { name: "First steps", hint: "Finish your first lesson" },
+      risingStar: { name: "Rising star", hint: "Reach Level 5" },
+      bookworm: { name: "Bookworm", hint: "Finish 10 lessons" },
+      quoteCollector: { name: "Quote collector", hint: "Collect 10 quotes" },
+      challenger: { name: "Challenger", hint: "Complete 10 challenges" },
+    },
   },
 
   settings: {
