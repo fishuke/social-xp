@@ -187,6 +187,9 @@ export default async function YouPage({
             const chapter = p.unit;
             const active = p.unlocked && !p.complete;
             const percent = (p.completed.length / chapter.lessons.length) * 100;
+            const nextLesson = active
+              ? chapter.lessons.find((l) => !p.completed.includes(l.index))
+              : undefined;
 
             if (!p.unlocked) {
               return (
@@ -210,12 +213,8 @@ export default async function YouPage({
               );
             }
 
-            return (
-              <div
-                key={chapter.number}
-                className="rounded-[22px] bg-white p-4"
-                style={active ? { border: "2px solid var(--color-coral)" } : undefined}
-              >
+            const cardBody = (
+              <>
                 <div className="flex items-center gap-4">
                   <span
                     className="flex h-[46px] w-[46px] items-center justify-center rounded-[14px] font-display text-[20px] font-semibold text-white"
@@ -235,6 +234,11 @@ export default async function YouPage({
                       {t.you.lessonsOfTotal(p.completed.length, chapter.lessons.length)}
                     </span>
                   </span>
+                  {nextLesson && (
+                    <span className="shrink-0 font-display text-[13px] font-semibold text-coral">
+                      {t.you.resume}
+                    </span>
+                  )}
                 </div>
                 {p.complete ? (
                   <div className="mt-3 rounded-[14px] bg-go-tint p-3">
@@ -262,6 +266,25 @@ export default async function YouPage({
                     className="mt-3"
                   />
                 )}
+              </>
+            );
+
+            if (nextLesson) {
+              return (
+                <Link
+                  key={chapter.number}
+                  href={withLocale(locale, `/lesson/${chapter.id}/${nextLesson.index}`)}
+                  className="block rounded-[22px] bg-white p-4 transition-transform active:scale-[0.98]"
+                  style={{ border: "2px solid var(--color-coral)" }}
+                >
+                  {cardBody}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={chapter.number} className="rounded-[22px] bg-white p-4">
+                {cardBody}
               </div>
             );
           })}

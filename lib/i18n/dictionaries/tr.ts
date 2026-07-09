@@ -369,6 +369,7 @@ const tr: Dictionary = {
     shieldsCount: (n: number) => `🛡️ ${n} kalkan`,
     bestStreakCount: (n: number) => `🏆 en uzun ${n} gün`,
     roadTitle: (courseTitle?: string) => `Yol · ${courseTitle ?? ""}`,
+    resume: "Devam et →",
     lessonsOfTotal: (done: number, total: number) => `${total} dersin ${done} tanesi`,
     courseComplete: (percent: number) => `%${percent} tamamlandı`,
     youLearned: "Neler öğrendin",

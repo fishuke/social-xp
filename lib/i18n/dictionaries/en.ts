@@ -367,6 +367,7 @@ const en = {
     shieldsCount: (n: number) => `🛡️ ${n} shield${n > 1 ? "s" : ""}`,
     bestStreakCount: (n: number) => `🏆 ${n}-day best`,
     roadTitle: (courseTitle?: string) => `The road · ${courseTitle ?? ""}`,
+    resume: "Resume →",
     lessonsOfTotal: (done: number, total: number) => `${done} of ${total} lessons`,
     courseComplete: (percent: number) => `${percent}% complete`,
     youLearned: "What you learned",
