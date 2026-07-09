@@ -364,6 +364,7 @@ const tr: Dictionary = {
     challengesCount: (n: number) => `⚡ ${n} görev`,
     quotesCount: (n: number) => `${n} söz`,
     shieldsCount: (n: number) => `🛡️ ${n} kalkan`,
+    bestStreakCount: (n: number) => `🏆 en uzun ${n} gün`,
     roadTitle: (courseTitle?: string) => `Yol · ${courseTitle ?? ""}`,
     lessonsOfTotal: (done: number, total: number) => `${total} dersin ${done} tanesi`,
     courseComplete: (percent: number) => `%${percent} tamamlandı`,

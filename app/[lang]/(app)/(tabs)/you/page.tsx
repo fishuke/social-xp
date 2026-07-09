@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import {
+  bestStreak,
   collectedQuotes,
   courseTotals,
   effectiveStreak,
@@ -33,11 +34,12 @@ export default async function YouPage({
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
 
-  const [progress, quotes, course, week] = await Promise.all([
+  const [progress, quotes, course, week, best] = await Promise.all([
     getCourseProgress(user, locale),
     collectedQuotes(user),
     getCourse(1, locale),
     weeklyActivity(user),
+    bestStreak(user),
   ]);
   const quoteCount = quotes.total;
   const activeDays = week.filter((d) => d.active).length;
@@ -108,6 +110,7 @@ export default async function YouPage({
           {user.streakShields > 0 && (
             <StatChip>{t.you.shieldsCount(user.streakShields)}</StatChip>
           )}
+          {best > streak && <StatChip>{t.you.bestStreakCount(best)}</StatChip>}
         </div>
       </header>
 
