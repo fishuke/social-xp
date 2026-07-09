@@ -37,8 +37,8 @@ export function PaceSetting({ current }: { current: string }) {
               aria-pressed={active}
               className="flex items-center gap-3 rounded-[14px] border-2 px-4 py-3 text-left transition-colors"
               style={{
-                borderColor: active ? "#FF5A2C" : "#EADFD5",
-                background: active ? "#FFEDE4" : "#fff",
+                borderColor: active ? "var(--color-coral)" : "var(--color-line)",
+                background: active ? "var(--color-tint-select)" : "#fff",
               }}
             >
               <span className="text-[22px]">{p.emoji}</span>
