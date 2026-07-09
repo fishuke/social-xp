@@ -22,6 +22,7 @@ export type CoachHistoryItem = {
   when: string;
   summary?: string;
   oneThing?: string;
+  scores?: { confidence: number; clarity: number; energy: number; pace: number };
 };
 
 type Props = {
@@ -521,7 +522,15 @@ function HistoryList({
 // a user can re-read the feedback from a past rep; older rows without it stay flat.
 function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean; t: Dictionary }) {
   const [open, setOpen] = useState(false);
-  const hasDetail = Boolean(item.summary || item.oneThing);
+  const scoreRows = item.scores
+    ? [
+        { label: t.coach.metricConfidence, value: item.scores.confidence },
+        { label: t.coach.metricClarity, value: item.scores.clarity },
+        { label: t.coach.metricEnergy, value: item.scores.energy },
+        { label: t.coach.metricPace, value: item.scores.pace, off: item.scores.pace < 75 },
+      ]
+    : [];
+  const hasDetail = Boolean(item.summary || item.oneThing || scoreRows.length > 0);
   const scoreBg = item.overall >= 75 ? "#58C08A" : item.overall >= 50 ? "#FFB020" : "#FF914D";
   const shell = dark
     ? "rounded-[16px] bg-white/10"
@@ -573,6 +582,28 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
             <p className={`font-body text-[13px] font-bold leading-[1.5] ${dark ? "text-ondark/75" : "text-sec2"}`}>
               {item.summary}
             </p>
+          )}
+          {scoreRows.length > 0 && (
+            <div className={`flex flex-col gap-1.5 ${item.summary ? "mt-3" : ""}`}>
+              {scoreRows.map((m) => (
+                <div key={m.label}>
+                  <div className="mb-1 flex items-baseline justify-between">
+                    <span className={`font-body text-[12px] font-extrabold ${dark ? "text-white/85" : "text-ink"}`}>
+                      {m.label}
+                    </span>
+                    <span className={`font-body text-[12px] font-extrabold ${dark ? "text-ondark/60" : "text-sec2"}`}>
+                      {m.value}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    percent={m.value}
+                    height={7}
+                    fill={m.off ? "#FFB020" : "#58C08A"}
+                    track={dark ? "rgba(255,255,255,0.14)" : "#EADFD5"}
+                  />
+                </div>
+              ))}
+            </div>
           )}
           {item.oneThing && (
             <>

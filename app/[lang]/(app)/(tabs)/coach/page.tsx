@@ -20,7 +20,17 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
       take: 5,
-      select: { id: true, promptText: true, overall: true, createdAt: true, feedback: true },
+      select: {
+        id: true,
+        promptText: true,
+        overall: true,
+        createdAt: true,
+        feedback: true,
+        confidence: true,
+        clarity: true,
+        energy: true,
+        pace: true,
+      },
     }),
   ]);
 
@@ -36,6 +46,12 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       when: formatDate(locale, s.createdAt, { month: "short", day: "numeric" }),
       summary: typeof fb.summary === "string" ? fb.summary : undefined,
       oneThing: typeof fb.oneThing === "string" ? fb.oneThing : undefined,
+      scores: {
+        confidence: s.confidence,
+        clarity: s.clarity,
+        energy: s.energy,
+        pace: s.pace,
+      },
     };
   });
 
