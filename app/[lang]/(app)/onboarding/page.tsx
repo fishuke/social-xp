@@ -14,6 +14,7 @@ export default function Onboarding() {
   const t = useT();
   const locale = useLocale();
   const [step, setStep] = useState(0);
+  const [name, setName] = useState("");
   const [goal, setGoal] = useState<OnboardingInput["goal"]>("ease-nerves");
   const [pace, setPace] = useState<OnboardingInput["pace"]>("steady");
   const [saving, setSaving] = useState(false);
@@ -22,7 +23,7 @@ export default function Onboarding() {
     setSaving(true);
     // Device timezone makes streaks and reminders reset at the user's midnight.
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
-    await submitOnboarding({ goal, pace, timezone, locale });
+    await submitOnboarding({ name: name.trim() || undefined, goal, pace, timezone, locale });
     router.replace(withLocale(locale, "/learn"));
   }
 
@@ -64,7 +65,40 @@ export default function Onboarding() {
   if (step === 1) {
     return (
       <div className="flex flex-1 flex-col px-6 pb-8 pt-[58px]">
-        <ProgressBar percent={40} />
+        <ProgressBar percent={25} />
+        <h2 className="mt-8 font-display text-[30px] font-semibold leading-[1.15] text-cocoa">
+          {t.onboarding.nameTitle}
+        </h2>
+        <p className="mt-2 font-body text-[15px] font-bold text-sec2">
+          {t.onboarding.nameSubtitle}
+        </p>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setStep(2);
+          }}
+          autoFocus
+          autoComplete="given-name"
+          maxLength={40}
+          aria-label={t.onboarding.namePlaceholder}
+          placeholder={t.onboarding.namePlaceholder}
+          className="mt-6 w-full rounded-[18px] border-2 border-line bg-white px-5 py-[18px] font-display text-[18px] text-cocoa outline-none focus:border-coral"
+        />
+        <div className="mt-auto pt-6">
+          <button className="btn btn-coral" onClick={() => setStep(2)}>
+            {t.common.continue}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 2) {
+    return (
+      <div className="flex flex-1 flex-col px-6 pb-8 pt-[58px]">
+        <ProgressBar percent={50} />
         <h2 className="mt-8 font-display text-[30px] font-semibold leading-[1.15] text-cocoa">
           {t.onboarding.goalTitle}
         </h2>
@@ -100,7 +134,7 @@ export default function Onboarding() {
           })}
         </div>
         <div className="mt-auto pt-6">
-          <button className="btn btn-coral" onClick={() => setStep(2)}>
+          <button className="btn btn-coral" onClick={() => setStep(3)}>
             {t.common.continue}
           </button>
         </div>

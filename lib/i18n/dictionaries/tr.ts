@@ -39,6 +39,9 @@ const tr: Dictionary = {
     scienceLink: "🧠 Davranış bilimine dayanıyor →",
     startTraining: "Antrenmana başla",
     haveAccount: "Zaten bir hesabım var",
+    nameTitle: "Öncelikle, sana nasıl hitap edelim?",
+    nameSubtitle: "Koçun bunu sohbeti kişisel tutmak için kullanır. Sadece bir ad yeterli.",
+    namePlaceholder: "Adın",
     goalTitle: "Seni buraya ne getirdi?",
     goalSubtitle: "Şu an senin için en önemli olanı seç. Sonra değiştirebilirsin.",
     goals: [

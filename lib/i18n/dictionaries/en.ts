@@ -38,6 +38,9 @@ const en = {
     scienceLink: "🧠 Built on behavioral science →",
     startTraining: "Start training",
     haveAccount: "I already have an account",
+    nameTitle: "First up, what should we call you?",
+    nameSubtitle: "Your coach uses this to keep it personal. A first name is perfect.",
+    namePlaceholder: "Your name",
     goalTitle: "What brings you here?",
     goalSubtitle: "Pick the one that matters most right now. You can change it later.",
     goals: [

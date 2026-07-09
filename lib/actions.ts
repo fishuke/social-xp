@@ -62,6 +62,7 @@ const timezoneSchema = z
   .optional();
 
 const onboardingSchema = z.object({
+  name: z.string().trim().min(1).max(40).optional(),
   goal: z.enum(["ease-nerves", "confidence", "listener", "easy-conversation", "approval"]),
   pace: z.enum(["chill", "steady", "beast"]),
   timezone: timezoneSchema,
@@ -71,8 +72,8 @@ const onboardingSchema = z.object({
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
 
 export async function submitOnboarding(input: OnboardingInput): Promise<void> {
-  const { goal, pace, timezone, locale } = onboardingSchema.parse(input);
-  await createSessionUser({ goal, pace, timezone, locale });
+  const { name, goal, pace, timezone, locale } = onboardingSchema.parse(input);
+  await createSessionUser({ name, goal, pace, timezone, locale });
 }
 
 /* ---------- daily pace / goal ---------- */
