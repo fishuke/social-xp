@@ -101,7 +101,7 @@ export default async function SettingsPage({
         ) : (
           <Link
             href={withLocale(locale, "/register")}
-            className="flex items-center gap-3 rounded-[18px] border-2 border-coral bg-tint-coral p-4"
+            className="flex items-center gap-3 rounded-[18px] border-2 border-coral bg-tint-coral p-4 transition-transform active:scale-[0.98]"
           >
             <span className="text-[22px]">💾</span>
             <span className="flex-1">
@@ -143,7 +143,7 @@ export default async function SettingsPage({
 
         <Link
           href={withLocale(locale, "/method")}
-          className="mt-5 flex items-center gap-3 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
+          className="mt-5 flex items-center gap-3 rounded-[18px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)] transition-transform active:scale-[0.98]"
         >
           <span className="text-[24px]">🧠</span>
           <span className="flex-1">
