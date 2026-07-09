@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import type { QuoteData } from "@/lib/content";
 import { shareText } from "@/lib/share";
 import { useT } from "@/components/i18n-provider";
@@ -17,8 +18,22 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
   const t = useT();
   const [open, setOpen] = useState<QuoteSlot | null>(null);
   const collectedCount = slots.filter((s) => s.collected).length;
+  // Portal target so the overlay maps to the viewport and stacks above the tab
+  // bar; server-render nothing so client hydration matches before it opens.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const share = (quote: QuoteData) => shareText(t.quotes.shareMessage(quote.text, quote.author));
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <>
@@ -68,13 +83,14 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
         })}
       </div>
 
-      {open && (
+      {open && mounted && createPortal(
         <div
           role="dialog"
           aria-modal="true"
           aria-label={t.quotes.dialogLabel}
           className="overlay-in fixed inset-0 z-50 flex flex-col justify-center px-6"
           style={{ background: "linear-gradient(170deg, #2E2018, #43301F)" }}
+          onClick={(e) => e.target === e.currentTarget && setOpen(null)}
         >
           <button
             onClick={() => setOpen(null)}
@@ -94,7 +110,8 @@ export function QuotesGrid({ slots }: { slots: QuoteSlot[] }) {
               {t.common.done}
             </button>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
