@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import type { ChestResult } from "@/lib/game";
 import { haptic, sfx } from "@/lib/juice";
 import { BigChest } from "./big-chest";
@@ -18,6 +19,15 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
     epic: t.chest.tierEpic,
   } as const;
   const [phase, setPhase] = useState<"idle" | "opening" | "revealed">("idle");
+  // Portal to <body> so `fixed inset-0` maps to the viewport and stacks above
+  // the tab bar. Rendered inline, a transformed ancestor traps the fixed
+  // overlay to the scrollable content box (it stretches past the screen).
+  // Server-render nothing, so client hydration matches before the portal opens.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   function tap() {
     if (phase !== "idle") return;
@@ -30,7 +40,9 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
     }, 950);
   }
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -88,6 +100,7 @@ export function ChestOverlay({ result, onDone }: { result: ChestResult; onDone: 
           </button>
         </div>
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }
