@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
 import { XP, type QuizStep, type UnitData } from "./content";
 import { getLessonData, getQuoteData, getUnits } from "./catalog";
@@ -67,11 +68,22 @@ function yesterdayString(timeZone?: string | null): string {
 
 export async function getDaily(user: TzUser) {
   const date = dayString(new Date(), user.timezone);
-  return prisma.dailyState.upsert({
-    where: { userId_date: { userId: user.id, date } },
-    create: { userId: user.id, date },
-    update: {},
-  });
+  const where = { userId_date: { userId: user.id, date } };
+  try {
+    return await prisma.dailyState.upsert({
+      where,
+      create: { userId: user.id, date },
+      update: {},
+    });
+  } catch (err) {
+    // Concurrent callers can both race the create (upsert is SELECT-then-INSERT,
+    // not atomic). The loser hits the unique constraint; the row now exists, so
+    // just read it back.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      return prisma.dailyState.findUniqueOrThrow({ where });
+    }
+    throw err;
+  }
 }
 
 // ---------- progress derivation ----------
