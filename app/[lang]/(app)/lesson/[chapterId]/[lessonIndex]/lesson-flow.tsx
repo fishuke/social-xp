@@ -362,6 +362,16 @@ function QuoteScreen({
   const t = useT();
   const collected = Math.min(collectedBefore + 1, 6);
 
+  // Unlocking a quote is a reward beat like the chest/level-up, so give it its
+  // own sound + haptic, timed to the card popping in.
+  useEffect(() => {
+    const id = setTimeout(() => {
+      sfx("reward");
+      haptic([20, 30, 40]);
+    }, 120);
+    return () => clearTimeout(id);
+  }, []);
+
   const share = () => shareText(t.quotes.shareMessage(quote.text, quote.author));
 
   return (
