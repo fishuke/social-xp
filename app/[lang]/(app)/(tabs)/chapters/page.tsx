@@ -82,9 +82,18 @@ export default async function UnitsPage({ params }: { params: Promise<{ lang: st
                       >
                         {unit.title}
                       </span>
-                      <span className="block font-body text-[13px] font-bold text-faint">
-                        {unit.tagline}
-                      </span>
+                      {complete ? (
+                        <span className="flex items-start gap-1.5 font-body text-[13px] font-bold text-go-text">
+                          <span className="mt-0.5 shrink-0">
+                            <CheckIcon size={13} color="var(--color-go)" />
+                          </span>
+                          {unit.canDo}
+                        </span>
+                      ) : (
+                        <span className="block font-body text-[13px] font-bold text-faint">
+                          {unit.tagline}
+                        </span>
+                      )}
                     </span>
                     {!unlocked && <LockIcon size={22} />}
                   </Link>
