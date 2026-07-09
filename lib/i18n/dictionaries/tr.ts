@@ -399,6 +399,7 @@ const tr: Dictionary = {
     weekActiveCount: (n: number) => `${n} / 7 aktif`,
     milestonesTitle: "Kilometre taşları",
     milestoneCount: (earned: number, total: number) => `${total} kilometre taşından ${earned} tanesi`,
+    milestoneAllEarned: "Hepsi kazanıldı!",
     milestoneEarned: "Kazanıldı",
     milestoneNext: "Sıradaki",
     milestoneProgress: (current: number, target: number) => `${current} / ${target}`,

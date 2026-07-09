@@ -154,6 +154,7 @@ export default async function YouPage({
         labels={{
           title: t.you.milestonesTitle,
           count: t.you.milestoneCount,
+          allEarnedLabel: t.you.milestoneAllEarned,
           earnedLabel: t.you.milestoneEarned,
           nextLabel: t.you.milestoneNext,
           names: t.you.milestones,

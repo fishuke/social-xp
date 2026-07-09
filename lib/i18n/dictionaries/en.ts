@@ -397,6 +397,7 @@ const en = {
     weekActiveCount: (n: number) => `${n} / 7 active`,
     milestonesTitle: "Milestones",
     milestoneCount: (earned: number, total: number) => `${earned} of ${total} earned`,
+    milestoneAllEarned: "All earned!",
     milestoneEarned: "Earned",
     milestoneNext: "Next up",
     milestoneProgress: (current: number, target: number) => `${current} / ${target}`,

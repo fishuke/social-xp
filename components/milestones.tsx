@@ -14,6 +14,7 @@ const ICONS: Record<AchievementId, (props: { size: number; color?: string }) => 
 export type MilestoneLabels = {
   title: string;
   count: (earned: number, total: number) => string;
+  allEarnedLabel: string;
   earnedLabel: string;
   nextLabel: string;
   names: Record<AchievementId, { name: string; hint: string }>;
@@ -35,6 +36,7 @@ function nextMilestoneId(items: Achievement[]): AchievementId | null {
 /** Milestone badges on the You tab: earned ones lit, the next one spotlit, the rest dimmed. */
 export function Milestones({ items, labels }: { items: Achievement[]; labels: MilestoneLabels }) {
   const earnedCount = items.filter((item) => item.earned).length;
+  const allEarned = earnedCount === items.length;
   const nextId = nextMilestoneId(items);
   return (
     <section className="px-5 pt-6">
@@ -42,8 +44,8 @@ export function Milestones({ items, labels }: { items: Achievement[]; labels: Mi
         <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
           {labels.title}
         </p>
-        <p className="font-display text-[12px] font-semibold text-faint">
-          {labels.count(earnedCount, items.length)}
+        <p className={`font-display text-[12px] font-semibold ${allEarned ? "text-go" : "text-faint"}`}>
+          {allEarned ? labels.allEarnedLabel : labels.count(earnedCount, items.length)}
         </p>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-3">
