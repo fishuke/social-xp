@@ -12,7 +12,7 @@ import { CountUp } from "@/components/count-up";
 import { LocaleLink } from "@/components/locale-link";
 import { useT, useLocale } from "@/components/i18n-provider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { CheckIcon, LockIcon, MicIcon, XpSquareIcon } from "@/components/icons";
+import { CheckIcon, ChevronRightIcon, LockIcon, MicIcon, XpSquareIcon } from "@/components/icons";
 import { ProgressBar } from "@/components/ui";
 
 export type CoachHistoryItem = {
@@ -20,6 +20,8 @@ export type CoachHistoryItem = {
   promptText: string;
   overall: number;
   when: string;
+  summary?: string;
+  oneThing?: string;
 };
 
 type Props = {
@@ -498,34 +500,85 @@ function HistoryList({
       </p>
       <div className="mt-2 flex flex-col gap-2">
         {items.map((item) => (
-          <div
-            key={item.id}
-            className={
-              dark
-                ? "flex items-center gap-3 rounded-[16px] bg-white/10 p-3"
-                : "flex items-center gap-3 rounded-[16px] bg-white p-3 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
-            }
-          >
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-semibold text-white"
-              style={{ background: item.overall >= 75 ? "#58C08A" : item.overall >= 50 ? "#FFB020" : "#FF914D" }}
-            >
-              {item.overall}
-            </span>
-            <span
-              className={`min-w-0 flex-1 truncate font-body text-[14px] font-bold ${dark ? "text-white" : "text-ink"}`}
-            >
-              {item.promptText}
-            </span>
-            <span
-              className={`shrink-0 font-body text-[12px] font-bold ${dark ? "text-ondark/60" : "text-faint"}`}
-            >
-              {item.when}
-            </span>
-          </div>
+          <HistoryRow key={item.id} item={item} dark={dark} t={t} />
         ))}
       </div>
     </section>
+  );
+}
+
+// A recent rep. Rows with stored coaching (summary / one thing) expand on tap so
+// a user can re-read the feedback from a past rep; older rows without it stay flat.
+function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean; t: Dictionary }) {
+  const [open, setOpen] = useState(false);
+  const hasDetail = Boolean(item.summary || item.oneThing);
+  const scoreBg = item.overall >= 75 ? "#58C08A" : item.overall >= 50 ? "#FFB020" : "#FF914D";
+  const shell = dark
+    ? "rounded-[16px] bg-white/10"
+    : "rounded-[16px] bg-white shadow-[0_2px_0_rgba(0,0,0,0.04)]";
+
+  const head = (
+    <>
+      <span
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-semibold text-white"
+        style={{ background: scoreBg }}
+      >
+        {item.overall}
+      </span>
+      <span
+        className={`min-w-0 flex-1 truncate font-body text-[14px] font-bold ${dark ? "text-white" : "text-ink"}`}
+      >
+        {item.promptText}
+      </span>
+      <span className={`shrink-0 font-body text-[12px] font-bold ${dark ? "text-ondark/60" : "text-faint"}`}>
+        {item.when}
+      </span>
+      {hasDetail && (
+        <ChevronRightIcon
+          size={16}
+          color={dark ? "rgba(255,255,255,0.6)" : "#B8A99C"}
+          className={`shrink-0 transition-transform duration-200 ${open ? "rotate-90" : ""}`}
+        />
+      )}
+    </>
+  );
+
+  if (!hasDetail) {
+    return <div className={`flex items-center gap-3 p-3 ${shell}`}>{head}</div>;
+  }
+
+  return (
+    <div className={shell}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 p-3 text-left transition-transform active:scale-[0.99]"
+      >
+        {head}
+      </button>
+      {open && (
+        <div className={`border-t px-3 pb-3 pt-3 ${dark ? "border-white/10" : "border-line"}`}>
+          {item.summary && (
+            <p className={`font-body text-[13px] font-bold leading-[1.5] ${dark ? "text-ondark/75" : "text-sec2"}`}>
+              {item.summary}
+            </p>
+          )}
+          {item.oneThing && (
+            <>
+              <p
+                className={`mt-3 font-body text-[11px] font-extrabold uppercase tracking-[1.5px] ${dark ? "text-amber" : "text-[#C9554A]"}`}
+              >
+                {t.coach.oneThingTitle}
+              </p>
+              <p className={`mt-1 font-body text-[13px] font-bold leading-[1.5] ${dark ? "text-white" : "text-ink"}`}>
+                {item.oneThing}
+              </p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 

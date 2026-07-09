@@ -20,16 +20,24 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
       take: 5,
-      select: { id: true, promptText: true, overall: true, createdAt: true },
+      select: { id: true, promptText: true, overall: true, createdAt: true, feedback: true },
     }),
   ]);
 
-  const history: CoachHistoryItem[] = recent.map((s) => ({
-    id: s.id,
-    promptText: s.promptText,
-    overall: s.overall,
-    when: formatDate(locale, s.createdAt, { month: "short", day: "numeric" }),
-  }));
+  const history: CoachHistoryItem[] = recent.map((s) => {
+    const fb = (s.feedback && typeof s.feedback === "object" ? s.feedback : {}) as Record<
+      string,
+      unknown
+    >;
+    return {
+      id: s.id,
+      promptText: s.promptText,
+      overall: s.overall,
+      when: formatDate(locale, s.createdAt, { month: "short", day: "numeric" }),
+      summary: typeof fb.summary === "string" ? fb.summary : undefined,
+      oneThing: typeof fb.oneThing === "string" ? fb.oneThing : undefined,
+    };
+  });
 
   return (
     <CoachClient
