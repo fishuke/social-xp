@@ -270,6 +270,10 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
       {error && (
         <p className="mt-3 max-w-[300px] font-body text-[13px] font-bold text-amber">{error}</p>
       )}
+
+      {phase === "ready" && (
+        <HistoryList items={history} className="mt-8 w-full max-w-[360px] text-left" dark t={t} />
+      )}
     </div>
   );
 }
@@ -476,23 +480,31 @@ function GatedScreen({ history, t }: { history: CoachHistoryItem[]; t: Dictionar
 function HistoryList({
   items,
   className,
+  dark,
   t,
 }: {
   items: CoachHistoryItem[];
   className?: string;
+  dark?: boolean;
   t: Dictionary;
 }) {
   if (items.length === 0) return null;
   return (
     <section className={className}>
-      <p className="font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-sec2">
+      <p
+        className={`font-body text-[12px] font-extrabold uppercase tracking-[1.5px] ${dark ? "text-ondark/60" : "text-sec2"}`}
+      >
         {t.coach.recentReps}
       </p>
       <div className="mt-2 flex flex-col gap-2">
         {items.map((item) => (
           <div
             key={item.id}
-            className="flex items-center gap-3 rounded-[16px] bg-white p-3 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
+            className={
+              dark
+                ? "flex items-center gap-3 rounded-[16px] bg-white/10 p-3"
+                : "flex items-center gap-3 rounded-[16px] bg-white p-3 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
+            }
           >
             <span
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-semibold text-white"
@@ -500,10 +512,16 @@ function HistoryList({
             >
               {item.overall}
             </span>
-            <span className="min-w-0 flex-1 truncate font-body text-[14px] font-bold text-ink">
+            <span
+              className={`min-w-0 flex-1 truncate font-body text-[14px] font-bold ${dark ? "text-white" : "text-ink"}`}
+            >
               {item.promptText}
             </span>
-            <span className="shrink-0 font-body text-[12px] font-bold text-faint">{item.when}</span>
+            <span
+              className={`shrink-0 font-body text-[12px] font-bold ${dark ? "text-ondark/60" : "text-faint"}`}
+            >
+              {item.when}
+            </span>
           </div>
         ))}
       </div>
