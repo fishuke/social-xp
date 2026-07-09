@@ -101,15 +101,15 @@ export function LessonFlow(props: Props) {
       className="relative flex flex-1 flex-col overflow-hidden px-6 pb-8 pt-[58px]"
       style={{
         background: dark
-          ? "linear-gradient(170deg, #2E2018, #43301F)"
+          ? "linear-gradient(170deg, var(--color-cocoa), var(--color-dark3))"
           : phase === "claim"
-            ? "linear-gradient(180deg, #FFF1D6, #FFF6EE 40%)"
-            : "#FFF6EE",
+            ? "linear-gradient(180deg, var(--color-tint-claim), var(--color-cream) 40%)"
+            : "var(--color-cream)",
       }}
     >
       {/* shared chrome: close + segmented progress */}
       <div className="flex items-center gap-3">
-        <button onClick={close} aria-label={t.common.close} style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}>
+        <button onClick={close} aria-label={t.common.close} style={{ color: dark ? "var(--color-ondark)" : "var(--color-sec2)" }}>
           <CloseIcon size={24} />
         </button>
         <div className="flex flex-1 gap-1">
@@ -121,11 +121,11 @@ export function LessonFlow(props: Props) {
                 background:
                   s <= screen
                     ? dark
-                      ? "#FFC24A"
-                      : "#FF5A2C"
+                      ? "var(--color-amber)"
+                      : "var(--color-coral)"
                     : dark
                       ? "rgba(255,255,255,0.18)"
-                      : "#EADFD5",
+                      : "var(--color-line)",
               }}
             />
           ))}
@@ -134,7 +134,7 @@ export function LessonFlow(props: Props) {
 
       <p
         className="mt-5 font-body text-[13px] font-extrabold uppercase tracking-[1px]"
-        style={{ color: dark ? "#F4D8C2" : "#7A6A5C" }}
+        style={{ color: dark ? "var(--color-ondark)" : "var(--color-sec2)" }}
       >
         {kicker} · {lesson.title}
       </p>
@@ -294,8 +294,8 @@ function QuizScreen({
           className="inline-block rounded-[18px] rounded-bl-[6px] border-2 px-4 py-3 font-body text-[17px] font-bold"
           style={
             inner
-              ? { borderColor: "#E6D4C4", background: "#FFF9EC", color: "#7A5A3E", fontStyle: "italic" }
-              : { borderColor: "#F0E4D8", background: "#fff", color: "#544537" }
+              ? { borderColor: "var(--color-connector)", background: "var(--color-tint-rare)", color: "#7A5A3E", fontStyle: "italic" }
+              : { borderColor: "var(--color-line2)", background: "#fff", color: "var(--color-ink)" }
           }
         >
           “{step.theySay}”
@@ -313,9 +313,9 @@ function QuizScreen({
               onClick={() => pick(i)}
               className={`flex items-center gap-3 rounded-[18px] border-2 bg-white px-4 py-4 text-left font-body text-[16px] font-bold transition-colors ${showWrong && shaking ? "quiz-shake" : showCorrect ? "pop-in" : ""}`}
               style={{
-                borderColor: showCorrect ? "#58C08A" : showWrong ? "#FF5A2C" : "#EADFD5",
-                background: showCorrect ? "#EAF8F0" : "#fff",
-                color: showCorrect ? "#2E5A44" : resolved ? "#B8A99C" : "#544537",
+                borderColor: showCorrect ? "var(--color-go)" : showWrong ? "var(--color-coral)" : "var(--color-line)",
+                background: showCorrect ? "var(--color-go-tint)" : "#fff",
+                color: showCorrect ? "var(--color-go-text)" : resolved ? "var(--color-faint)" : "var(--color-ink)",
               }}
             >
               <span className="flex-1">“{option}”</span>
@@ -398,7 +398,7 @@ function QuoteScreen({
               key={i}
               className="pop-in h-2.5 w-2.5 rounded-full"
               style={{
-                background: i < collected ? "#FFC24A" : "rgba(255,255,255,0.22)",
+                background: i < collected ? "var(--color-amber)" : "rgba(255,255,255,0.22)",
                 animationDelay: `${240 + i * 70}ms`,
               }}
             />
@@ -443,7 +443,7 @@ function ChallengeScreen({
         <div
           className="rounded-[26px] p-6 text-white"
           style={{
-            background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
+            background: "linear-gradient(160deg, var(--color-coral-top), var(--color-coral))",
             boxShadow: "0 12px 26px rgba(255,90,44,0.32)",
           }}
         >
@@ -575,7 +575,7 @@ function ClaimScreen({
               className="pop-in relative rounded-full px-5 py-2.5 font-display text-[16px] font-semibold text-white shadow-[0_3px_0_rgba(255,90,44,0.35)]"
               style={{
                 animationDelay: "540ms",
-                background: "linear-gradient(160deg, #FF7A45, #FF5A2C)",
+                background: "linear-gradient(160deg, var(--color-coral-top), var(--color-coral))",
               }}
             >
               {t.lessonFlow.levelUp(newLevel)}
@@ -587,7 +587,7 @@ function ClaimScreen({
             className="pop-in mt-4 rounded-full px-5 py-2.5 font-display text-[16px] font-semibold text-white shadow-[0_3px_0_rgba(224,165,47,0.35)]"
             style={{
               animationDelay: leveledUp ? "620ms" : "540ms",
-              background: "linear-gradient(160deg, #FFC24A, #E0A52F)",
+              background: "linear-gradient(160deg, var(--color-amber), var(--color-amber-dark2))",
             }}
           >
             {t.lessonFlow.milestoneUnlocked(t.you.milestones[unlockedMilestone.id].name)}
