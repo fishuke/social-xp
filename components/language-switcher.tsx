@@ -43,9 +43,9 @@ export function LanguageSwitcher() {
                 aria-pressed={active}
                 className="flex-1 rounded-[14px] border-2 py-2.5 font-display text-[14px] font-semibold transition-colors"
                 style={{
-                  borderColor: active ? "#FF5A2C" : "#EADFD5",
-                  background: active ? "#FFEDE4" : "#fff",
-                  color: active ? "#FF5A2C" : "#7A6A5D",
+                  borderColor: active ? "var(--color-coral)" : "var(--color-line)",
+                  background: active ? "var(--color-tint-select)" : "#fff",
+                  color: active ? "var(--color-coral)" : "#7A6A5D",
                 }}
               >
                 {LABELS[l]}
