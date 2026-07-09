@@ -328,6 +328,9 @@ const en = {
     gatedBody:
       "Nice work showing up. A fresh prompt lands tomorrow, or go unlimited and rep as much as you want.",
     getPlus: "Get Social XP+",
+    shareResult: "Share my rep",
+    shareMessage: (grade: string, score: number) =>
+      `🎤 ${grade} speaking rep, scored ${score}/100 on Social XP. Social skills are just reps.`,
   },
 
   streak: {

@@ -329,6 +329,9 @@ const tr: Dictionary = {
     gatedBody:
       "Ortaya çıktığın için helal olsun. Yarın yeni bir konu geliyor, ya da sınırsıza geçip istediğin kadar tekrar yap.",
     getPlus: "Social XP+ edin",
+    shareResult: "Tekrarımı paylaş",
+    shareMessage: (grade: string, score: number) =>
+      `🎤 ${grade} konuşma tekrarı, Social XP'de ${score}/100 puan. Sosyal beceriler sadece tekrardan ibaret.`,
   },
 
   streak: {

@@ -12,8 +12,16 @@ import { CountUp } from "@/components/count-up";
 import { LocaleLink } from "@/components/locale-link";
 import { useT, useLocale } from "@/components/i18n-provider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { CheckIcon, ChevronRightIcon, LockIcon, MicIcon, XpSquareIcon } from "@/components/icons";
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  LockIcon,
+  MicIcon,
+  ShareIcon,
+  XpSquareIcon,
+} from "@/components/icons";
 import { ProgressBar } from "@/components/ui";
+import { shareText } from "@/lib/share";
 
 export type CoachHistoryItem = {
   id: string;
@@ -322,13 +330,21 @@ function FeedbackScreen({
       {result.xpAwarded > 0 && <ConfettiBurst />}
 
       <header
-        className="px-5 pb-7 pt-[58px]"
+        className="relative px-5 pb-7 pt-[58px]"
         style={{ background: "linear-gradient(135deg, #FF7A45, #FF5A2C)" }}
       >
+        <button
+          type="button"
+          aria-label={t.coach.shareResult}
+          onClick={() => shareText(t.coach.shareMessage(gradeWord, a.overall))}
+          className="absolute right-5 top-[58px] rounded-full bg-white/16 p-2 transition-transform active:scale-90"
+        >
+          <ShareIcon size={20} color="#fff" />
+        </button>
         <p className="font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-white/80">
           {t.coach.repHeader(formatTime(result.durationSec))}
         </p>
-        <h1 className="mt-1 font-display text-[26px] font-semibold leading-[1.2] text-white">
+        <h1 className="mt-1 max-w-[280px] font-display text-[26px] font-semibold leading-[1.2] text-white">
           {a.headline}
         </h1>
       </header>
