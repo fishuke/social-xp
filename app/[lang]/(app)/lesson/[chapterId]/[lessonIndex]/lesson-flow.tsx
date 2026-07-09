@@ -6,6 +6,7 @@ import type { ConceptStep, LessonData, QuizStep, QuoteData } from "@/lib/content
 import { XP } from "@/lib/content";
 import { claimLesson } from "@/lib/actions";
 import { levelInfo } from "@/lib/levels";
+import { achievements } from "@/lib/achievements";
 import { haptic, sfx } from "@/lib/juice";
 import { shareText } from "@/lib/share";
 import { ChatIcon, CheckIcon, CloseIcon, DiamondIcon, Logo, XpSquareIcon } from "@/components/icons";
@@ -28,6 +29,9 @@ type Props = {
   xpTodayBefore: number;
   repDoneToday: boolean;
   alreadyCompleted: boolean;
+  lessonsDoneBefore: number;
+  quotesTotalBefore: number;
+  repsCompleted: number;
 };
 
 const CIRCLED = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
@@ -466,6 +470,9 @@ function ClaimScreen({
   xpTodayBefore,
   repDoneToday,
   alreadyCompleted,
+  lessonsDoneBefore,
+  quotesTotalBefore,
+  repsCompleted,
   firstTries,
   feel,
   setFeel,
@@ -483,6 +490,24 @@ function ClaimScreen({
   const xpAfter = xpTodayBefore + claimXP;
   const newLevel = levelInfo(totalXPBefore + claimXP).level;
   const leveledUp = newLevel > levelInfo(totalXPBefore).level;
+
+  // A first-time claim advances lesson + quote counters; surface any milestone it just earned.
+  const gained = alreadyCompleted ? 0 : 1;
+  const earnedBefore = achievements({
+    lessonsDone: lessonsDoneBefore,
+    level: levelInfo(totalXPBefore).level,
+    quotes: quotesTotalBefore,
+    reps: repsCompleted,
+  });
+  const earnedAfter = achievements({
+    lessonsDone: lessonsDoneBefore + gained,
+    level: newLevel,
+    quotes: quotesTotalBefore + gained,
+    reps: repsCompleted,
+  });
+  const unlockedMilestone = earnedAfter.find(
+    (a) => a.earned && !earnedBefore.find((b) => b.id === a.id)?.earned,
+  );
 
   // A level-up deserves its own reward beat, timed to the pill appearing.
   useEffect(() => {
@@ -546,6 +571,17 @@ function ClaimScreen({
               {t.lessonFlow.levelUp(newLevel)}
             </span>
           </div>
+        )}
+        {unlockedMilestone && (
+          <span
+            className="pop-in mt-4 rounded-full px-5 py-2.5 font-display text-[16px] font-semibold text-white shadow-[0_3px_0_rgba(224,165,47,0.35)]"
+            style={{
+              animationDelay: leveledUp ? "620ms" : "540ms",
+              background: "linear-gradient(160deg, #FFC24A, #E0A52F)",
+            }}
+          >
+            {t.lessonFlow.milestoneUnlocked(t.you.milestones[unlockedMilestone.id].name)}
+          </span>
         )}
       </div>
 

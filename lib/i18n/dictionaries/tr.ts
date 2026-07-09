@@ -494,6 +494,7 @@ const tr: Dictionary = {
     lessonComplete: "Ders tamamlandı! 💪",
     confidenceBuilt: "Özgüven işte böyle inşa edilir.",
     levelUp: (level: number) => `${level}. seviyeye ulaştın! 🎉`,
+    milestoneUnlocked: (name: string) => `Kilometre taşı açıldı: ${name} 🏆`,
     xpChip: (xp: number) => `+${xp} XP`,
     quoteChip: "+1 söz",
     dailyQuests: "Günlük görevler",

@@ -491,6 +491,7 @@ const en = {
     lessonComplete: "Lesson complete! 💪",
     confidenceBuilt: "That's how confidence gets built.",
     levelUp: (level: number) => `Level ${level} reached! 🎉`,
+    milestoneUnlocked: (name: string) => `Milestone unlocked: ${name} 🏆`,
     xpChip: (xp: number) => `+${xp} XP`,
     quoteChip: "+1 quote",
     dailyQuests: "Daily quests",

@@ -39,12 +39,14 @@ export default async function LessonPage({
     .find((x) => x.unit.id === unitId)!
     .completed.includes(lessonIndex);
 
-  const [daily, collectedBefore] = await Promise.all([
+  const [daily, collectedBefore, quotesTotalBefore] = await Promise.all([
     getDaily(user),
     prisma.collectedQuote.count({
       where: { userId: user.id, quoteId: { startsWith: `u${unitId}-` } },
     }),
+    prisma.collectedQuote.count({ where: { userId: user.id } }),
   ]);
+  const lessonsDoneBefore = progress.reduce((sum, p) => sum + p.completed.length, 0);
 
   return (
     <LessonFlow
@@ -56,6 +58,9 @@ export default async function LessonPage({
       xpTodayBefore={daily.xpEarnedToday}
       repDoneToday={daily.repDoneToday}
       alreadyCompleted={alreadyCompleted}
+      lessonsDoneBefore={lessonsDoneBefore}
+      quotesTotalBefore={quotesTotalBefore}
+      repsCompleted={user.repsCompleted}
     />
   );
 }
