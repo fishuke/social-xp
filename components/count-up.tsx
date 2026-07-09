@@ -7,6 +7,13 @@ export function CountUp({ to, duration = 700 }: { to: number; duration?: number 
 
   useEffect(() => {
     let raf: number;
+    // Respect reduced-motion: skip the roll-up and show the final value at once.
+    const reduced =
+      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      raf = requestAnimationFrame(() => setValue(to));
+      return () => cancelAnimationFrame(raf);
+    }
     const start = performance.now();
     const tick = (t: number) => {
       const p = Math.min(1, (t - start) / duration);
