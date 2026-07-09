@@ -85,13 +85,19 @@ export function QuestsCard({
           onClick={() => chest.open({ type: "quest" })}
           disabled={chest.busy || !chestReady}
           className={`flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[14px] ${chest.busy ? "chest-pending" : chestReady ? "wiggle" : ""}`}
-          style={{ background: quests.chestOpened ? "#EAF8F0" : chestReady ? "#FFF3D6" : "#EADFD5" }}
+          style={{
+            background: quests.chestOpened
+              ? "var(--color-go-tint)"
+              : chestReady
+                ? "var(--color-tint-chest)"
+                : "var(--color-line)",
+          }}
           aria-label={t.chest.questChestLabel}
         >
           {quests.chestOpened ? (
-            <CheckIcon size={26} color="#58C08A" />
+            <CheckIcon size={26} color="var(--color-go)" />
           ) : (
-            <ChestIcon size={30} color={chestReady ? undefined : "#B8A99C"} />
+            <ChestIcon size={30} color={chestReady ? undefined : "var(--color-faint)"} />
           )}
         </button>
       </div>
