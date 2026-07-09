@@ -53,6 +53,7 @@ export default async function YouPage({
     level: level.level,
     quotes: quoteCount,
     reps: user.repsCompleted,
+    bestStreak: best,
   });
 
   return (

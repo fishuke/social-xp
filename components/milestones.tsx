@@ -1,5 +1,5 @@
 import type { Achievement, AchievementId } from "@/lib/achievements";
-import { BookIcon, DiamondIcon, FlagIcon, MicIcon, PersonIcon } from "@/components/icons";
+import { BookIcon, DiamondIcon, FlagIcon, FlameIcon, MicIcon, PersonIcon } from "@/components/icons";
 import { ProgressBar } from "@/components/ui";
 
 const ICONS: Record<AchievementId, (props: { size: number; color?: string }) => React.ReactNode> = {
@@ -8,6 +8,7 @@ const ICONS: Record<AchievementId, (props: { size: number; color?: string }) => 
   bookworm: BookIcon,
   quoteCollector: DiamondIcon,
   challenger: MicIcon,
+  streakMaster: FlameIcon,
 };
 
 export type MilestoneLabels = {

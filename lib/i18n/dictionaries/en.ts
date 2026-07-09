@@ -406,6 +406,7 @@ const en = {
       bookworm: { name: "Bookworm", hint: "Finish 10 lessons" },
       quoteCollector: { name: "Quote collector", hint: "Collect 10 quotes" },
       challenger: { name: "Challenger", hint: "Complete 10 challenges" },
+      streakMaster: { name: "Streak master", hint: "Reach a 7-day streak" },
     },
   },
 

@@ -408,6 +408,7 @@ const tr: Dictionary = {
       bookworm: { name: "Kitap kurdu", hint: "10 ders bitir" },
       quoteCollector: { name: "Söz koleksiyoncusu", hint: "10 söz topla" },
       challenger: { name: "Meydan okuyan", hint: "10 görev tamamla" },
+      streakMaster: { name: "Seri ustası", hint: "7 günlük seriye ulaş" },
     },
   },
 
