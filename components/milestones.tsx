@@ -12,6 +12,7 @@ const ICONS: Record<AchievementId, (props: { size: number; color?: string }) => 
 
 export type MilestoneLabels = {
   title: string;
+  count: (earned: number, total: number) => string;
   earnedLabel: string;
   names: Record<AchievementId, { name: string; hint: string }>;
   progress: (current: number, target: number) => string;
@@ -19,11 +20,17 @@ export type MilestoneLabels = {
 
 /** Milestone badges on the You tab: earned ones lit, locked ones dimmed with progress. */
 export function Milestones({ items, labels }: { items: Achievement[]; labels: MilestoneLabels }) {
+  const earnedCount = items.filter((item) => item.earned).length;
   return (
     <section className="px-5 pt-6">
-      <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
-        {labels.title}
-      </p>
+      <div className="flex items-baseline justify-between">
+        <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
+          {labels.title}
+        </p>
+        <p className="font-display text-[12px] font-semibold text-faint">
+          {labels.count(earnedCount, items.length)}
+        </p>
+      </div>
       <div className="mt-3 grid grid-cols-2 gap-3">
         {items.map((item) => {
           const Icon = ICONS[item.id];

@@ -392,6 +392,7 @@ const en = {
     weekActivitySummary: (n: number) =>
       n === 0 ? "No lessons yet this week" : `${n} of the last 7 days active`,
     milestonesTitle: "Milestones",
+    milestoneCount: (earned: number, total: number) => `${earned} of ${total} earned`,
     milestoneEarned: "Earned",
     milestoneProgress: (current: number, target: number) => `${current} / ${target}`,
     milestones: {
