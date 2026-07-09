@@ -561,6 +561,12 @@ const en = {
     coachTooShort: "That was under 5 seconds. Give it a little more room.",
     coachGeneric: "Something went wrong analyzing that one. Try again.",
   },
+  notFound: {
+    code: "404",
+    title: "This page took a rain check.",
+    body: "We couldn't find what you were looking for. Let's get you back to your reps.",
+    backToLearning: "Back to learning",
+  },
 };
 
 export default en;

@@ -564,6 +564,12 @@ const tr: Dictionary = {
     coachTooShort: "Bu 5 saniyenin altındaydı. Ona biraz daha yer aç.",
     coachGeneric: "Onu analiz ederken bir şeyler ters gitti. Tekrar dene.",
   },
+  notFound: {
+    code: "404",
+    title: "Bu sayfa bugünlük yok.",
+    body: "Aradığın şeyi bulamadık. Hadi seni tekrarlarına geri götürelim.",
+    backToLearning: "Öğrenmeye dön",
+  },
 };
 
 export default tr;
