@@ -43,14 +43,16 @@ export function QuestsCard({
   }
 
   return (
-    <section className="relative rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]">
+    <section
+      className={`relative rounded-[18px] border-2 p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)] transition-colors ${allComplete ? "border-go-border bg-go-tint" : "border-transparent bg-white"}`}
+    >
       {chest.reward && <ChestOverlay result={chest.reward} onDone={chest.collect} />}
       <div className="mb-3 flex items-center justify-between">
         <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-sec2">
           {t.quests.dailyQuests}
         </p>
         {allComplete ? (
-          <p className="font-display text-[13px] font-semibold text-[#58C08A]">{t.quests.allDone}</p>
+          <p className="font-display text-[13px] font-semibold text-go">{t.quests.allDone}</p>
         ) : (
           <p className="font-display text-[13px] font-semibold text-faint">{t.quests.progress(questsDone, 3)}</p>
         )}
