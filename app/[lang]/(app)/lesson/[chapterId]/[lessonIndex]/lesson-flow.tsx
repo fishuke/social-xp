@@ -549,7 +549,10 @@ function ClaimScreen({
         )}
       </div>
 
-      <div className="mt-6 rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]">
+      <div
+        className="pop-in mt-6 rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]"
+        style={{ animationDelay: "480ms" }}
+      >
         <p className="mb-3 font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-sec2">
           {t.lessonFlow.dailyQuests}
         </p>
@@ -560,7 +563,7 @@ function ClaimScreen({
         </div>
       </div>
 
-      <div className="mt-5 text-center">
+      <div className="pop-in mt-5 text-center" style={{ animationDelay: "600ms" }}>
         <p className="font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-faint">
           {t.lessonFlow.howdItFeel}
         </p>
