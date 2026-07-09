@@ -115,6 +115,12 @@ body {
   font-weight: 500;
   padding: 12px 20px;
 }
+/* ghost buttons have no hard shadow to depress, so press reads as a subtle scale-in */
+.btn-ghost:active,
+.btn-ghost-dark:active {
+  transform: scale(0.96);
+  opacity: 0.75;
+}
 .btn:disabled {
   opacity: 0.45;
   pointer-events: none;
