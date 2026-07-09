@@ -168,6 +168,10 @@ export function LessonFlow(props: Props) {
           <ChallengeScreen
             lesson={lesson}
             onCommit={() => {
+              // Committing to the real-world rep is a positive decision; give it the
+              // same confirming beat the quiz-correct / mood-picker taps get.
+              sfx("correct");
+              haptic([20, 40]);
               setRepCommitted(true);
               next();
             }}
