@@ -104,7 +104,9 @@ export default async function YouPage({
           >
             {t.you.dayStreak(streak)}
           </StatChip>
-          <StatChip>{t.you.challengesCount(user.repsCompleted)}</StatChip>
+          {user.repsCompleted > 0 && (
+            <StatChip>{t.you.challengesCount(user.repsCompleted)}</StatChip>
+          )}
           <StatChip icon={<DiamondIcon size={16} color="var(--color-amber)" />}>
             {t.you.quotesCount(quoteCount)}
           </StatChip>
