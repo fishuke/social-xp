@@ -617,7 +617,10 @@ function ClaimScreen({
           {t.lessonFlow.feels.map((f) => (
             <button
               key={f.id}
-              onClick={() => setFeel(f.id as "crushed" | "got-it" | "shaky")}
+              onClick={() => {
+                if (feel !== f.id) haptic();
+                setFeel(f.id as "crushed" | "got-it" | "shaky");
+              }}
               className="rounded-[16px] border-2 px-3.5 py-2 font-body text-[13px] font-extrabold text-ink transition active:scale-[0.94]"
               style={{
                 borderColor: feel === f.id ? "#FF5A2C" : "#EADFD5",

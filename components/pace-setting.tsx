@@ -7,6 +7,7 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { setPace } from "@/lib/actions";
+import { haptic } from "@/lib/juice";
 import { useT } from "./i18n-provider";
 
 export function PaceSetting({ current }: { current: string }) {
@@ -16,6 +17,7 @@ export function PaceSetting({ current }: { current: string }) {
 
   function choose(next: string) {
     if (next === current || pending) return;
+    haptic();
     startTransition(async () => {
       await setPace(next);
       router.refresh();

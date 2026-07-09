@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { submitOnboarding, type OnboardingInput } from "@/lib/actions";
 import { Logo } from "@/components/icons";
+import { haptic } from "@/lib/juice";
 import { ProgressBar } from "@/components/ui";
 import { useT, useLocale } from "@/components/i18n-provider";
 import { withLocale } from "@/lib/i18n/routing";
@@ -76,7 +77,10 @@ export default function Onboarding() {
             return (
               <button
                 key={g.id}
-                onClick={() => setGoal(g.id as OnboardingInput["goal"])}
+                onClick={() => {
+                  if (goal !== g.id) haptic();
+                  setGoal(g.id as OnboardingInput["goal"]);
+                }}
                 className="flex items-center justify-between rounded-[18px] border-2 px-5 py-[18px] text-left font-display text-[18px] font-medium transition active:scale-[0.98]"
                 style={{
                   borderColor: selected ? "var(--color-coral)" : "var(--color-line)",
@@ -119,7 +123,10 @@ export default function Onboarding() {
           return (
             <button
               key={p.id}
-              onClick={() => setPace(p.id as OnboardingInput["pace"])}
+              onClick={() => {
+                if (pace !== p.id) haptic();
+                setPace(p.id as OnboardingInput["pace"]);
+              }}
               className="flex items-center gap-4 rounded-[18px] border-2 px-5 py-4 text-left transition active:scale-[0.98]"
               style={{
                 borderColor: selected ? "var(--color-coral)" : "var(--color-line)",
