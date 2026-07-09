@@ -29,6 +29,7 @@ export type CoachHistoryItem = {
   overall: number;
   when: string;
   summary?: string;
+  strengths?: string[];
   oneThing?: string;
   scores?: { confidence: number; clarity: number; energy: number; pace: number };
 };
@@ -546,7 +547,10 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
         { label: t.coach.metricPace, value: item.scores.pace, off: item.scores.pace < 75 },
       ]
     : [];
-  const hasDetail = Boolean(item.summary || item.oneThing || scoreRows.length > 0);
+  const strengths = item.strengths ?? [];
+  const hasDetail = Boolean(
+    item.summary || item.oneThing || scoreRows.length > 0 || strengths.length > 0,
+  );
   const scoreBg = item.overall >= 75 ? "#58C08A" : item.overall >= 50 ? "#FFB020" : "#FF914D";
   const shell = dark
     ? "rounded-[16px] bg-white/10"
@@ -599,8 +603,31 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
               {item.summary}
             </p>
           )}
+          {strengths.length > 0 && (
+            <>
+              <p
+                className={`${item.summary ? "mt-3 " : ""}font-body text-[11px] font-extrabold uppercase tracking-[1.5px] ${dark ? "text-go" : "text-go-text"}`}
+              >
+                {t.coach.whatWorked}
+              </p>
+              <ul className="mt-1.5 flex flex-col gap-1.5">
+                {strengths.map((s, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-go">
+                      <CheckIcon size={12} />
+                    </span>
+                    <span
+                      className={`font-body text-[13px] font-bold leading-[1.45] ${dark ? "text-white" : "text-ink"}`}
+                    >
+                      {s}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
           {scoreRows.length > 0 && (
-            <div className={`flex flex-col gap-1.5 ${item.summary ? "mt-3" : ""}`}>
+            <div className={`flex flex-col gap-1.5 ${item.summary || strengths.length > 0 ? "mt-3" : ""}`}>
               {scoreRows.map((m) => (
                 <div key={m.label}>
                   <div className="mb-1 flex items-baseline justify-between">

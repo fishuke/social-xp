@@ -45,6 +45,9 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       overall: s.overall,
       when: formatDate(locale, s.createdAt, { month: "short", day: "numeric" }),
       summary: typeof fb.summary === "string" ? fb.summary : undefined,
+      strengths: Array.isArray(fb.strengths)
+        ? fb.strengths.filter((s): s is string => typeof s === "string")
+        : undefined,
       oneThing: typeof fb.oneThing === "string" ? fb.oneThing : undefined,
       scores: {
         confidence: s.confidence,
