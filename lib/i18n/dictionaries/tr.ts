@@ -393,6 +393,7 @@ const tr: Dictionary = {
     weekdayLetters: ["P", "S", "Ç", "P", "C", "C", "P"],
     weekActivitySummary: (n: number) =>
       n === 0 ? "Bu hafta henüz ders yok" : `Son 7 günün ${n} günü aktif`,
+    weekActiveCount: (n: number) => `${n} / 7 aktif`,
     milestonesTitle: "Kilometre taşları",
     milestoneCount: (earned: number, total: number) => `${total} kilometre taşından ${earned} tanesi`,
     milestoneEarned: "Kazanıldı",

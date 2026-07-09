@@ -112,9 +112,14 @@ export default async function YouPage({
       </header>
 
       <section className="px-5 pt-6">
-        <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
-          {t.you.thisWeek}
-        </p>
+        <div className="flex items-baseline justify-between">
+          <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-sec2">
+            {t.you.thisWeek}
+          </p>
+          <p className="font-display text-[12px] font-semibold text-faint">
+            {t.you.weekActiveCount(activeDays)}
+          </p>
+        </div>
         <div
           className="mt-3 flex justify-between rounded-[22px] bg-white p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)]"
           aria-label={t.you.weekActivitySummary(activeDays)}

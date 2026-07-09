@@ -391,6 +391,7 @@ const en = {
     weekdayLetters: ["M", "T", "W", "T", "F", "S", "S"],
     weekActivitySummary: (n: number) =>
       n === 0 ? "No lessons yet this week" : `${n} of the last 7 days active`,
+    weekActiveCount: (n: number) => `${n} / 7 active`,
     milestonesTitle: "Milestones",
     milestoneCount: (earned: number, total: number) => `${earned} of ${total} earned`,
     milestoneEarned: "Earned",
