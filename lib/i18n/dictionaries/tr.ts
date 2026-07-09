@@ -396,6 +396,7 @@ const tr: Dictionary = {
     milestonesTitle: "Kilometre taşları",
     milestoneCount: (earned: number, total: number) => `${total} kilometre taşından ${earned} tanesi`,
     milestoneEarned: "Kazanıldı",
+    milestoneNext: "Sıradaki",
     milestoneProgress: (current: number, target: number) => `${current} / ${target}`,
     milestones: {
       firstLesson: { name: "İlk adımlar", hint: "İlk dersini bitir" },

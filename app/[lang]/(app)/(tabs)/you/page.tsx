@@ -146,6 +146,7 @@ export default async function YouPage({
           title: t.you.milestonesTitle,
           count: t.you.milestoneCount,
           earnedLabel: t.you.milestoneEarned,
+          nextLabel: t.you.milestoneNext,
           names: t.you.milestones,
           progress: t.you.milestoneProgress,
         }}

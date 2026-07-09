@@ -14,13 +14,27 @@ export type MilestoneLabels = {
   title: string;
   count: (earned: number, total: number) => string;
   earnedLabel: string;
+  nextLabel: string;
   names: Record<AchievementId, { name: string; hint: string }>;
   progress: (current: number, target: number) => string;
 };
 
-/** Milestone badges on the You tab: earned ones lit, locked ones dimmed with progress. */
+/** The locked milestone closest to being earned (highest progress ratio, then nearest target). */
+function nextMilestoneId(items: Achievement[]): AchievementId | null {
+  const locked = items.filter((item) => !item.earned);
+  if (locked.length === 0) return null;
+  return locked.reduce((best, item) => {
+    const ratio = item.current / item.target;
+    const bestRatio = best.current / best.target;
+    if (ratio !== bestRatio) return ratio > bestRatio ? item : best;
+    return item.target < best.target ? item : best;
+  }).id;
+}
+
+/** Milestone badges on the You tab: earned ones lit, the next one spotlit, the rest dimmed. */
 export function Milestones({ items, labels }: { items: Achievement[]; labels: MilestoneLabels }) {
   const earnedCount = items.filter((item) => item.earned).length;
+  const nextId = nextMilestoneId(items);
   return (
     <section className="px-5 pt-6">
       <div className="flex items-baseline justify-between">
@@ -36,13 +50,23 @@ export function Milestones({ items, labels }: { items: Achievement[]; labels: Mi
           const Icon = ICONS[item.id];
           const { name, hint } = labels.names[item.id];
           const percent = (item.current / item.target) * 100;
+          const isNext = item.id === nextId;
           return (
             <div
               key={item.id}
               className={`rounded-[18px] p-4 shadow-[0_2px_0_rgba(0,0,0,0.04)] ${
-                item.earned ? "bg-white" : "bg-white opacity-70"
+                item.earned
+                  ? "bg-white"
+                  : isNext
+                    ? "bg-white ring-2 ring-coral"
+                    : "bg-white opacity-70"
               }`}
             >
+              {isNext && (
+                <p className="mb-1.5 font-display text-[11px] font-semibold uppercase tracking-[1.5px] text-coral">
+                  {labels.nextLabel}
+                </p>
+              )}
               <span
                 className="flex h-[42px] w-[42px] items-center justify-center rounded-[13px]"
                 style={{

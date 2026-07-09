@@ -394,6 +394,7 @@ const en = {
     milestonesTitle: "Milestones",
     milestoneCount: (earned: number, total: number) => `${earned} of ${total} earned`,
     milestoneEarned: "Earned",
+    milestoneNext: "Next up",
     milestoneProgress: (current: number, target: number) => `${current} / ${target}`,
     milestones: {
       firstLesson: { name: "First steps", hint: "Finish your first lesson" },
