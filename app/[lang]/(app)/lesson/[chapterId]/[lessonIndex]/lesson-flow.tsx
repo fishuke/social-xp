@@ -623,8 +623,8 @@ function ClaimScreen({
               }}
               className="rounded-[16px] border-2 px-3.5 py-2 font-body text-[13px] font-extrabold text-ink transition active:scale-[0.94]"
               style={{
-                borderColor: feel === f.id ? "#FF5A2C" : "#EADFD5",
-                background: feel === f.id ? "#FFF0E9" : "#fff",
+                borderColor: feel === f.id ? "var(--color-coral)" : "var(--color-line)",
+                background: feel === f.id ? "var(--color-tint-coral)" : "#fff",
               }}
             >
               <span className="mr-1 text-[17px]">{f.emoji}</span>
