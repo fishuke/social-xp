@@ -369,6 +369,7 @@ const en = {
     verifiedSynced: "Verified · progress synced",
     progressSynced: "Progress synced to your account",
     changePassword: "Change password",
+    memberSince: (date: string) => `Member since ${date}`,
     signOut: "Sign out",
     emailVerifiedBanner: "Email verified. You're all set ✅",
     createAccountTitle: "Create an account",

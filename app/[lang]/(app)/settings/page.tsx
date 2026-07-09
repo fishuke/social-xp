@@ -80,7 +80,10 @@ export default async function SettingsPage({
                 </span>
                 <SignOutButton />
               </div>
-              <div className="mt-3 border-t border-line pt-3">
+              <div className="mt-3 flex items-center justify-between gap-3 border-t border-line pt-3">
+                <span className="font-body text-[12px] font-bold text-sec2">
+                  {t.you.memberSince(formatDate(locale, user.createdAt, { month: "long", year: "numeric" }))}
+                </span>
                 <Link href={withLocale(locale, "/account/password")} className="font-display text-[13px] font-semibold text-coral">
                   {t.you.changePassword}
                 </Link>

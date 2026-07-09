@@ -371,6 +371,7 @@ const tr: Dictionary = {
     verifiedSynced: "Doğrulandı · ilerleme eşitlendi",
     progressSynced: "İlerleme hesabına eşitlendi",
     changePassword: "Şifre değiştir",
+    memberSince: (date: string) => `Üyelik başlangıcı ${date}`,
     signOut: "Çıkış yap",
     emailVerifiedBanner: "E-posta doğrulandı. Hazırsın ✅",
     createAccountTitle: "Hesap oluştur",
