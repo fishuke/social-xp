@@ -145,7 +145,9 @@ export default async function LearnPage({ params }: { params: Promise<{ lang: st
         </span>
       </Link>
 
-      <section className="rounded-[18px] bg-white p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)]">
+      <section
+        className={`rounded-[18px] border-2 p-4 shadow-[0_3px_0_rgba(0,0,0,0.04)] transition-colors ${goalMet ? "border-go-border bg-go-tint" : "border-transparent bg-white"}`}
+      >
         <div className="mb-2.5 flex items-center justify-between">
           <p className="font-display text-[13px] font-semibold uppercase tracking-[1.5px] text-sec2">
             {t.learn.dailyGoalLabel}
