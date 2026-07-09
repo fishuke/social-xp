@@ -21,7 +21,7 @@ export function TabBar() {
         {TABS.map(({ href, label, Icon }) => {
           const active =
             pathname.startsWith(href) || (href === "/learn" && pathname.startsWith("/chapters"));
-          const color = active ? "#FF5A2C" : "#B8A99C";
+          const color = active ? "var(--color-coral)" : "var(--color-faint)";
           return (
             <LocaleLink
               key={href}
