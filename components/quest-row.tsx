@@ -16,17 +16,14 @@ export function QuestRow({
   return (
     <div className="flex items-center gap-3">
       <span
-        className="flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full border-2"
-        style={{
-          borderColor: done ? "#58C08A" : "#EADFD5",
-          background: done ? "#58C08A" : "transparent",
-        }}
+        className={`flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-full border-2 ${
+          done ? "border-go bg-go" : "border-line bg-transparent"
+        }`}
       >
         {done && <CheckIcon size={10} />}
       </span>
       <span
-        className="flex-1 font-body text-[13px] font-extrabold"
-        style={{ color: done ? "#2E5A44" : "#544537" }}
+        className={`flex-1 font-body text-[13px] font-extrabold ${done ? "text-go-text" : "text-ink"}`}
       >
         {label}
         {showProgress && (
