@@ -18,6 +18,9 @@ export default async function LessonPage({
   const locale = coerceLocale(lang);
   const unitId = Number(u);
   const lessonIndex = Number(l);
+  // Non-numeric segments (e.g. /lesson/unit-1/999) make Prisma throw on an Int
+  // column before the not-found guard below runs; bail to /learn instead.
+  if (Number.isNaN(unitId) || Number.isNaN(lessonIndex)) redirect(withLocale(locale, "/learn"));
 
   const user = await getSessionUser();
   if (!user) redirect(withLocale(locale, "/onboarding"));
