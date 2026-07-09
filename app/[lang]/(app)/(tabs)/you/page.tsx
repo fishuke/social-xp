@@ -60,7 +60,7 @@ export default async function YouPage({
     <div className="page-enter flex flex-col pb-6">
       <header
         className="relative rounded-b-[30px] px-6 pb-7 pt-[58px] text-center text-white"
-        style={{ background: "linear-gradient(160deg, #FF7A45, #FF5A2C)" }}
+        style={{ background: "linear-gradient(160deg, var(--color-coral-top), var(--color-coral))" }}
       >
         <ShareProgressButton
           level={level.level}
@@ -100,12 +100,12 @@ export default async function YouPage({
           <StatChip
             aria-label={atRisk ? t.you.streakAtRisk(streak) : t.you.dayStreak(streak)}
             className={atRisk ? "text-white/70" : undefined}
-            icon={<FlameIcon size={16} color={atRisk ? "#FFD9C2" : "#FFC24A"} />}
+            icon={<FlameIcon size={16} color={atRisk ? "#FFD9C2" : "var(--color-amber)"} />}
           >
             {t.you.dayStreak(streak)}
           </StatChip>
           <StatChip>{t.you.challengesCount(user.repsCompleted)}</StatChip>
-          <StatChip icon={<DiamondIcon size={16} color="#FFC24A" />}>
+          <StatChip icon={<DiamondIcon size={16} color="var(--color-amber)" />}>
             {t.you.quotesCount(quoteCount)}
           </StatChip>
           {user.streakShields > 0 && (
@@ -138,11 +138,11 @@ export default async function YouPage({
                   day.active ? "text-white" : "text-faint"
                 }`}
                 style={{
-                  background: day.active ? "linear-gradient(160deg, #FF7A45, #FF5A2C)" : "#F2EAE2",
-                  boxShadow: day.isToday ? "0 0 0 2px #FF5A2C" : undefined,
+                  background: day.active ? "linear-gradient(160deg, var(--color-coral-top), var(--color-coral))" : "#F2EAE2",
+                  boxShadow: day.isToday ? "0 0 0 2px var(--color-coral)" : undefined,
                 }}
               >
-                {day.active ? <FlameIcon size={16} color="#FFC24A" /> : null}
+                {day.active ? <FlameIcon size={16} color="var(--color-amber)" /> : null}
               </span>
             </div>
           ))}
@@ -177,7 +177,7 @@ export default async function YouPage({
           <ProgressBar
             percent={coursePercent}
             height={11}
-            fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+            fill="linear-gradient(90deg, var(--color-amber), var(--color-ember))"
             className="mt-2.5"
           />
         </div>
@@ -213,15 +213,15 @@ export default async function YouPage({
               <div
                 key={chapter.number}
                 className="rounded-[22px] bg-white p-4"
-                style={active ? { border: "2px solid #FF5A2C" } : undefined}
+                style={active ? { border: "2px solid var(--color-coral)" } : undefined}
               >
                 <div className="flex items-center gap-4">
                   <span
                     className="flex h-[46px] w-[46px] items-center justify-center rounded-[14px] font-display text-[20px] font-semibold text-white"
                     style={{
                       background: p.complete
-                        ? "#58C08A"
-                        : "linear-gradient(160deg, #FF7A45, #FF5A2C)",
+                        ? "var(--color-go)"
+                        : "linear-gradient(160deg, var(--color-coral-top), var(--color-coral))",
                     }}
                   >
                     {chapter.number}
@@ -242,13 +242,13 @@ export default async function YouPage({
                     </p>
                     <p className="mt-1 flex items-start gap-2 font-body text-[13px] font-bold text-cocoa">
                       <span className="mt-0.5 shrink-0">
-                        <CheckIcon size={15} color="#58C08A" />
+                        <CheckIcon size={15} color="var(--color-go)" />
                       </span>
                       {chapter.canDo}
                     </p>
                     {(quotes.byUnit.get(chapter.id) ?? 0) > 0 && (
                       <p className="mt-2 flex items-center gap-1.5 font-body text-[12px] font-bold text-go-text">
-                        <DiamondIcon size={13} color="#58C08A" />
+                        <DiamondIcon size={13} color="var(--color-go)" />
                         {t.you.quotesFromChapter(quotes.byUnit.get(chapter.id) ?? 0)}
                       </p>
                     )}
@@ -257,7 +257,7 @@ export default async function YouPage({
                   <ProgressBar
                     percent={percent}
                     height={11}
-                    fill="linear-gradient(90deg, #FFC24A, #FF914D)"
+                    fill="linear-gradient(90deg, var(--color-amber), var(--color-ember))"
                     className="mt-3"
                   />
                 )}
