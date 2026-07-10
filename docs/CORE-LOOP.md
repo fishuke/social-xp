@@ -60,9 +60,12 @@ in real life; marking it done (`markChallengeDone`) pays the biggest XP in the
 economy. This is the actual product (see [PRODUCT-PLAN.md](PRODUCT-PLAN.md));
 the lesson exists to set it up.
 
-**Coach rep.** Optional speaking practice: record up to 60s against a daily
-prompt, Gemini scores it (`lib/coach.ts`). Free tier 1/day, premium unlimited,
-XP for the first 3 per day.
+**Coach rep.** Speaking practice against the daily scenario: a character
+says a line (`lib/coach-scenarios.ts`, same scenario worldwide per local
+day, Wordle-style), the user answers out loud for up to 60s, Gemini scores
+delivery plus scenario fit (`lib/coach.ts`). Free tier 1/day, premium
+unlimited, XP for the first 3 per day. The coach-first repositioning
+(docs/exec-plans/coach-first.md) is making this rep the center of the app.
 
 **Trigger.** An hourly Vercel cron (`/api/cron/reminders`) sends web push at
 each user's local reminder hour with streak-aware copy. One nudge per day;

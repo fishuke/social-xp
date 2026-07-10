@@ -15,7 +15,7 @@ export default function Onboarding() {
   const locale = useLocale();
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
-  const [goal, setGoal] = useState<OnboardingInput["goal"]>("ease-nerves");
+  const [goal, setGoal] = useState<OnboardingInput["goal"]>("interviews");
   const [pace, setPace] = useState<OnboardingInput["pace"]>("steady");
   const [saving, setSaving] = useState(false);
 
@@ -24,7 +24,7 @@ export default function Onboarding() {
     // Device timezone makes streaks and reminders reset at the user's midnight.
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
     await submitOnboarding({ name: name.trim() || undefined, goal, pace, timezone, locale });
-    router.replace(withLocale(locale, "/learn"));
+    router.replace(withLocale(locale, "/coach"));
   }
 
   if (step === 0) {

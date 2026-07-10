@@ -63,7 +63,9 @@ const timezoneSchema = z
 
 const onboardingSchema = z.object({
   name: z.string().trim().min(1).max(40).optional(),
-  goal: z.enum(["ease-nerves", "confidence", "listener", "easy-conversation", "approval"]),
+  // The situation the user dreads; picks their scenario pack. Older accounts
+  // may still carry pre-2026-07 goal values ("ease-nerves", ...) in the DB.
+  goal: z.enum(["interviews", "dating", "speaking-up", "boundaries", "small-talk"]),
   pace: z.enum(["chill", "steady", "beast"]),
   timezone: timezoneSchema,
   locale: z.enum(LOCALES).optional(),

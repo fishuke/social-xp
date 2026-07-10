@@ -222,10 +222,13 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
       <p className="mt-7 font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-faint">
         {t.coach.todaysPrompt}
       </p>
-      <h1 className="mt-2 font-display text-[30px] font-semibold leading-[1.15] text-white">
-        {prompt.text}
+      <p className="mt-3 max-w-[320px] font-body text-[14px] font-bold leading-[1.5] text-ondark/70">
+        {prompt.setup}
+      </p>
+      <h1 className="mt-3 max-w-[340px] font-display text-[26px] font-semibold leading-[1.2] text-white">
+        “{prompt.text}”
       </h1>
-      <p className="mt-2 font-body text-[15px] font-bold text-ondark/75">{prompt.sub}</p>
+      <p className="mt-3 font-body text-[15px] font-bold text-ondark/75">{prompt.sub}</p>
 
       <div className="flex min-h-[120px] flex-1 items-center gap-[4px]">
         {bars.map((h, i) => (

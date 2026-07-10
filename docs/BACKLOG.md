@@ -14,6 +14,15 @@ Status: ⬜ todo · 🔨 in progress · ✅ shipped
 
 ## Now: launch
 
+### 🔨 Coach-first repositioning
+Exec plan: [exec-plans/coach-first.md](exec-plans/coach-first.md). Alpha
+feedback says the coach is the product: scenario reps (pick your dread, a
+character talks, you answer out loud), a Wordle-style daily scenario for
+everyone, live multi-turn roleplay as the premium wow. Coach becomes the home
+tab; lessons stay as the supporting skill tree. Model decision (2026-07-10):
+stay on Gemini (GPT-Live has no API yet; Gemini Live is cheaper and already
+integrated).
+
 ### ⬜ Domain + production launch (blocks payments)
 Prereq: pick the new name first ([NAMING.md](NAMING.md); front-runner Enheart,
 enheart.app). Buy the domain and point the Vercel deploy at it. Blocks
@@ -118,8 +127,8 @@ Compliments, Digital Basics, Graceful Exits. Author in `prisma/seed.ts`
 - Expert board review of lessons, then update `/method` copy from "building"
   to "reviewed by"
 - Reminder copy upgrade: deadline-aware ("Your 3-day streak has 6 hours left")
-- Coach: session history page, streak integration, roleplay mode (a la
-  Speeko Convos / Yoodli)
+- Coach: full session history page (roleplay + streak integration moved to
+  the coach-first exec plan)
 
 ## Shipped
 
