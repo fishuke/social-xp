@@ -15,6 +15,7 @@ with pointers, not an encyclopedia. The depth lives here.
 | [PRODUCT-PLAN.md](PRODUCT-PLAN.md) | What we are building, for whom, how it makes money, launch phases, metrics |
 | [CORE-LOOP.md](CORE-LOOP.md) | How the engagement loop works: XP economy, streaks, quests, chests, and the design intent behind them |
 | [BACKLOG.md](BACKLOG.md) | What to build next, ordered by value (Now / Next / Later / Shipped) |
+| [NAMING.md](NAMING.md) | Rename decision: candidates, verified domains, brand/domain strategy |
 | [CURRICULUM.md](CURRICULUM.md) | Content roadmap: A1 to C2 units with can-do statements and shipped status |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System map: layers, dependency direction, routes, data model, integrations |
 | [GOLDEN-RULES.md](GOLDEN-RULES.md) | Hard constraints every change must respect |

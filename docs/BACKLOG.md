@@ -15,7 +15,9 @@ Status: ⬜ todo · 🔨 in progress · ✅ shipped
 ## Now: launch
 
 ### ⬜ Domain + production launch (blocks payments)
-Buy a real domain and point the Vercel deploy at it. Blocks everything below:
+Prereq: pick the new name first ([NAMING.md](NAMING.md); front-runner Enheart,
+enheart.app). Buy the domain and point the Vercel deploy at it. Blocks
+everything below:
 Lemon Squeezy store approval wants a live site with real product pages, Resend
 needs a verified sending domain (`MAIL_FROM`), and the PWA/store wrappers need
 a stable HTTPS origin.
