@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; }
+  a{ color:#FF5A2C; text-decoration:none; }
+  a:hover{ color:#D8431B; }
+  @keyframes floaty{ 0%{transform:translateY(0);} 50%{transform:translateY(-6px);} 100%{transform:translateY(0);} }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#E9E2D9;font-family:'Nunito',system-ui,sans-serif;color:#2E2018;padding:56px 56px 90px;">
+
+  <!-- ======================= COVER ======================= -->
+  <div style="max-width:1200px;margin:0 auto 18px;display:flex;align-items:flex-end;gap:28px;">
+    <div style="width:96px;height:96px;flex-shrink:0;">
+      <dc-import name="Logo" style="width:96px;height:96px;" hint-size="96px,96px"></dc-import>
+    </div>
+    <div>
+      <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#FF5A2C;">Social XP · Roleplay redesign v4</div>
+      <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:52px;line-height:1.02;margin:6px 0 8px;letter-spacing:-1px;">A date, not a dashboard.</h1>
+      <p style="margin:0;font-size:19px;max-width:760px;color:#6E5F54;line-height:1.5;">Yoodli and Speeko frame roleplay as a recorded call with an analytics panel — corporate, cold, watched. Ours should feel like the actual moment: a dim bar, someone across the table, your phone in your hand. The convo IS the interface. Reactions replace metrics; the coach whispers, it never lectures.</p>
+    </div>
+  </div>
+
+  <!-- design moves strip -->
+  <div style="max-width:1200px;margin:0 auto 64px;display:flex;flex-wrap:wrap;gap:14px;">
+    <div style="background:#2E2018;color:#FFF6EE;border-radius:22px;padding:20px 24px;flex:1;min-width:640px;box-shadow:0 2px 0 rgba(0,0,0,0.04);">
+      <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#C9B7A6;margin-bottom:14px;">What changed vs. the formal apps</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;flex:1;min-width:150px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FF914D;">Date-night dark mode</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">the room sets the scene, not a video frame</div></div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;flex:1;min-width:150px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FFC24A;">Reactions, not analytics</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">"she's cracking up" beats "7 weak words, 2%"</div></div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;flex:1;min-width:150px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#58C08A;">One vibe bar</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">a single live read of how it's going</div></div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;flex:1;min-width:150px;"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#FF7A2E;">Coach whispers</div><div style="font-size:12px;color:#C9B7A6;font-weight:700;">one nudge at a time, dismissible</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= SCREENS ======================= -->
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:6px;">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;background:#FF5A2C;padding:5px 12px;border-radius:9px;">04·v4</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:30px;margin:0;letter-spacing:-0.5px;">The roleplay — First Date with Elif</h2>
+    </div>
+    <p style="margin:0 0 28px;color:#6E5F54;font-size:16px;max-width:700px;">Four states of the same scene: her turn, your turn, a coach whisper mid-convo, and the scene closing out. Voice-native throughout — the bubbles are the live transcript, appearing as you both speak.</p>
+  </div>
+
+  <div style="max-width:1760px;margin:0 auto 30px;display:flex;flex-wrap:wrap;gap:48px;">
+
+    <!-- ============ SCREEN 1: HER TURN ============ -->
+    <figure data-screen-label="Roleplay v4 · her turn" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Her turn · she's talking</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#241412 0%,#2E1A12 55%,#3A2114 100%);display:flex;flex-direction:column;">
+
+          <!-- scene header -->
+          <div style="padding:56px 20px 12px;display:flex;align-items:center;gap:12px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#F4D8C2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div style="position:relative;width:44px;height:44px;flex-shrink:0;">
+              <div style="width:44px;height:44px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 0 2px #FF914D;">👩🏽</div>
+              <div style="position:absolute;right:-2px;bottom:-2px;width:14px;height:14px;border-radius:99px;background:#58C08A;border:2.5px solid #2E1A12;"></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#FFF6EE;">Elif</div>
+              <div style="font-size:12px;color:#FF914D;font-weight:800;">talking… 🍸 wine bar, 9pm</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:99px;padding:7px 13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#F4D8C2;">1:12</div>
+          </div>
+
+          <!-- vibe bar -->
+          <div style="padding:2px 20px 14px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:15px;">😬</span>
+            <div style="flex:1;height:9px;border-radius:99px;background:rgba(255,255,255,0.1);overflow:hidden;position:relative;">
+              <div style="width:64%;height:100%;border-radius:99px;background:linear-gradient(90deg,#FF914D,#FFC24A);"></div>
+            </div>
+            <span style="font-size:15px;">😍</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;color:#FFC24A;background:rgba(255,194,74,0.12);border-radius:99px;padding:4px 10px;white-space:nowrap;flex-shrink:0;">vibe: warming up</span>
+          </div>
+
+          <!-- transcript -->
+          <div style="flex:1;overflow:hidden;padding:8px 18px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;">
+            <div style="align-self:flex-end;max-width:82%;background:#FF5A2C;color:#fff;border-radius:22px 22px 6px 22px;padding:13px 16px;opacity:0.55;">
+              <div style="font-size:15px;line-height:1.45;">Honestly? Your bookshelf. Three copies of the same book — genius or menace, I had to find out.</div>
+            </div>
+            <div style="align-self:flex-end;display:flex;align-items:center;gap:6px;margin-top:-6px;">
+              <span style="background:rgba(255,255,255,0.1);border-radius:99px;padding:4px 10px;font-size:12px;font-weight:800;color:#F4D8C2;">she reacted 😂</span>
+            </div>
+            <div style="align-self:flex-start;max-width:82%;background:#FFF6EE;border-radius:22px 22px 22px 6px;padding:14px 16px;box-shadow:0 3px 0 rgba(0,0,0,0.25);">
+              <div style="font-size:16px;line-height:1.5;color:#2E2018;">Okay that's a good line, I'll give you that. But you dodged my question — why'd you actually show up tonight? <span style="color:#B9906E;">Most people just keep texting…</span></div>
+            </div>
+            <div style="align-self:flex-start;display:flex;align-items:center;gap:7px;padding:2px 4px;">
+              <div style="display:flex;align-items:center;gap:3px;height:16px;">
+                <span style="width:4px;height:8px;border-radius:99px;background:#FF914D;"></span>
+                <span style="width:4px;height:14px;border-radius:99px;background:#FFC24A;"></span>
+                <span style="width:4px;height:10px;border-radius:99px;background:#FF914D;"></span>
+                <span style="width:4px;height:16px;border-radius:99px;background:#FFC24A;"></span>
+                <span style="width:4px;height:7px;border-radius:99px;background:#FF914D;"></span>
+              </div>
+              <span style="font-size:12px;font-weight:800;color:rgba(255,246,238,0.5);">Elif's voice · live captions</span>
+            </div>
+          </div>
+
+          <!-- your move bar -->
+          <div style="padding:14px 20px 34px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;color:#FFC24A;">YOUR MOVE 👀 — don't leave her hanging</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:22px;width:100%;">
+              <div style="width:48px;height:48px;border-radius:99px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:20px;">⌨️</div>
+              <div style="width:76px;height:76px;border-radius:99px;background:#FF5A2C;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 #D8431B, 0 0 40px rgba(255,90,44,0.35);">
+                <svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="#fff"></path><path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"></path></svg>
+              </div>
+              <div style="width:48px;height:48px;border-radius:99px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:18px;">🚪</div>
+            </div>
+            <div style="display:flex;gap:24px;font-size:11px;font-weight:800;color:rgba(255,246,238,0.45);"><span>type it</span><span>tap to talk</span><span>dip out</span></div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- ============ SCREEN 2: YOU'RE TALKING ============ -->
+    <figure data-screen-label="Roleplay v4 · you're talking" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Your turn · she reacts live</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#241412 0%,#2E1A12 55%,#3A2114 100%);display:flex;flex-direction:column;">
+
+          <div style="padding:56px 20px 12px;display:flex;align-items:center;gap:12px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#F4D8C2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div style="position:relative;width:44px;height:44px;flex-shrink:0;">
+              <div style="width:44px;height:44px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:24px;">👩🏽</div>
+              <div style="position:absolute;right:-6px;bottom:-8px;font-size:20px;animation:floaty 2s ease-in-out infinite;">🤭</div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#FFF6EE;">Elif</div>
+              <div style="font-size:12px;color:#58C08A;font-weight:800;">leaning in 👂 she's into this</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:99px;padding:7px 13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#F4D8C2;">1:24</div>
+          </div>
+
+          <div style="padding:2px 20px 14px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:15px;">😬</span>
+            <div style="flex:1;height:9px;border-radius:99px;background:rgba(255,255,255,0.1);overflow:hidden;">
+              <div style="width:78%;height:100%;border-radius:99px;background:linear-gradient(90deg,#FFC24A,#58C08A);"></div>
+            </div>
+            <span style="font-size:15px;">😍</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;color:#58C08A;background:rgba(88,192,138,0.14);border-radius:99px;padding:4px 10px;white-space:nowrap;flex-shrink:0;">vibe: it's working ✨</span>
+          </div>
+
+          <div style="flex:1;overflow:hidden;padding:8px 18px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;">
+            <div style="align-self:flex-start;max-width:82%;background:#FFF6EE;border-radius:22px 22px 22px 6px;padding:13px 16px;opacity:0.55;">
+              <div style="font-size:15px;line-height:1.45;color:#2E2018;">But you dodged my question — why'd you actually show up tonight?</div>
+            </div>
+            <div style="align-self:flex-end;max-width:84%;background:#FF5A2C;color:#fff;border-radius:22px 22px 6px 22px;padding:14px 16px;box-shadow:0 3px 0 rgba(216,67,27,0.6);">
+              <div style="font-size:16px;line-height:1.5;">Fair, I did dodge it. Texting's a highlight reel — I wanted the director's cut. So far? <span style="opacity:0.7;">no regre—</span><span style="display:inline-block;width:9px;height:18px;background:rgba(255,255,255,0.85);border-radius:2px;vertical-align:text-bottom;margin-left:2px;"></span></div>
+            </div>
+            <div style="align-self:flex-end;display:flex;align-items:center;gap:6px;">
+              <span style="background:rgba(255,255,255,0.1);border-radius:99px;padding:4px 10px;font-size:12px;font-weight:800;color:#F4D8C2;">live · she just laughed 😂</span>
+            </div>
+          </div>
+
+          <!-- speaking bar -->
+          <div style="padding:14px 20px 34px;display:flex;flex-direction:column;align-items:center;gap:14px;">
+            <div style="display:flex;align-items:center;gap:4px;height:46px;">
+              <div style="width:5px;height:16px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:30px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:44px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="width:5px;height:24px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:40px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:46px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="width:5px;height:20px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:36px;border-radius:99px;background:#FF914D;"></div>
+              <div style="width:5px;height:26px;border-radius:99px;background:#FFC24A;"></div>
+              <div style="width:5px;height:42px;border-radius:99px;background:#FF5A2C;"></div>
+              <div style="width:5px;height:18px;border-radius:99px;background:#FF914D;"></div>
+            </div>
+            <div style="width:76px;height:76px;border-radius:99px;background:rgba(255,90,44,0.18);border:3px solid #FF5A2C;display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(255,90,44,0.3);">
+              <div style="width:28px;height:28px;border-radius:9px;background:#FF5A2C;"></div>
+            </div>
+            <div style="font-size:13px;color:rgba(255,246,238,0.55);font-weight:800;">tap when you're done — she'll jump in if you ramble</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- ============ SCREEN 3: COACH WHISPER ============ -->
+    <figure data-screen-label="Roleplay v4 · coach whisper" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Coach whisper · one nudge, not a report</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#241412 0%,#2E1A12 55%,#3A2114 100%);display:flex;flex-direction:column;">
+
+          <div style="padding:56px 20px 12px;display:flex;align-items:center;gap:12px;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#F4D8C2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div style="position:relative;width:44px;height:44px;flex-shrink:0;">
+              <div style="width:44px;height:44px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:24px;">👩🏽</div>
+              <div style="position:absolute;right:-6px;bottom:-8px;font-size:20px;">🫤</div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#FFF6EE;">Elif</div>
+              <div style="font-size:12px;color:#C9B7A6;font-weight:800;">checking her phone… 📉</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:99px;padding:7px 13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#F4D8C2;">2:03</div>
+          </div>
+
+          <div style="padding:2px 20px 14px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:15px;">😬</span>
+            <div style="flex:1;height:9px;border-radius:99px;background:rgba(255,255,255,0.1);overflow:hidden;">
+              <div style="width:44%;height:100%;border-radius:99px;background:linear-gradient(90deg,#FF5A2C,#FF914D);"></div>
+            </div>
+            <span style="font-size:15px;">😍</span>
+            <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;color:#FF914D;background:rgba(255,145,77,0.14);border-radius:99px;padding:4px 10px;white-space:nowrap;flex-shrink:0;">vibe: dipping 📉</span>
+          </div>
+
+          <div style="flex:1;overflow:hidden;padding:8px 18px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;">
+            <div style="align-self:flex-end;max-width:84%;background:#FF5A2C;color:#fff;border-radius:22px 22px 6px 22px;padding:13px 16px;opacity:0.8;">
+              <div style="font-size:15px;line-height:1.5;">…and that's basically why I switched teams, the second manager was worse, and then in 2023 I— yeah anyway it's a long story, um—</div>
+            </div>
+            <div style="align-self:flex-start;max-width:82%;background:#FFF6EE;border-radius:22px 22px 22px 6px;padding:13px 16px;box-shadow:0 3px 0 rgba(0,0,0,0.25);">
+              <div style="font-size:16px;line-height:1.5;color:#2E2018;">Mm. Sounds intense. <span style="color:#B9906E;">*sips drink*</span></div>
+            </div>
+
+            <!-- coach whisper card -->
+            <div style="margin-top:8px;background:#2E2018;border:2px solid #FFC24A;border-radius:20px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+              <div style="width:40px;height:40px;border-radius:99px;background:#FFC24A;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🦉</div>
+              <div style="flex:1;">
+                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;color:#FFC24A;margin-bottom:4px;">COACH · in your ear</div>
+                <div style="font-size:15px;line-height:1.45;color:#FFF6EE;font-weight:700;">You've been talking about work for 40 seconds 💀 flip it — ask what SHE's been obsessed with lately.</div>
+                <div style="display:flex;gap:8px;margin-top:10px;">
+                  <span style="background:#FFC24A;color:#2E2018;border-radius:99px;padding:6px 14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;">bet, got it</span>
+                  <span style="background:rgba(255,255,255,0.08);color:#C9B7A6;border-radius:99px;padding:6px 14px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:13px;">I got this</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:14px 20px 34px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;color:#FF914D;">SAVE IT — your move</div>
+            <div style="width:76px;height:76px;border-radius:99px;background:#FF5A2C;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 #D8431B, 0 0 40px rgba(255,90,44,0.35);">
+              <svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="#fff"></path><path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"></path></svg>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+    <!-- ============ SCREEN 4: SCENE ENDS ============ -->
+    <figure data-screen-label="Roleplay v4 · scene ends" style="margin:0;display:flex;flex-direction:column;gap:14px;width:402px;">
+      <figcaption style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:#6E5F54;">Scene ends · straight into the debrief</figcaption>
+      <x-import component="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px" dark="true">
+        <div style="height:100%;background:linear-gradient(180deg,#241412 0%,#2E1A12 55%,#3A2114 100%);display:flex;flex-direction:column;padding:60px 26px 40px;text-align:center;">
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;color:#FFC24A;">SCENE · THE FIRST DATE</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;">
+            <div style="position:relative;width:130px;height:130px;">
+              <div style="width:130px;height:130px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 0 0 3px #FFC24A, 0 0 60px rgba(255,194,74,0.25);">👩🏽</div>
+              <div style="position:absolute;right:-8px;top:-4px;font-size:34px;animation:floaty 2.4s ease-in-out infinite;">🥰</div>
+            </div>
+            <h2 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:32px;line-height:1.12;color:#fff;margin:0;max-width:320px;">She asked to split dessert.</h2>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:rgba(255,255,255,0.7);max-width:300px;">That's a second-date signal. You held the convo for 3:40 — your longest yet.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+              <span style="background:rgba(88,192,138,0.16);border-radius:99px;padding:8px 14px;font-size:13px;font-weight:800;color:#58C08A;">😂 made her laugh ×3</span>
+              <span style="background:rgba(255,194,74,0.14);border-radius:99px;padding:8px 14px;font-size:13px;font-weight:800;color:#FFC24A;">👂 asked back ×2</span>
+              <span style="background:rgba(255,145,77,0.14);border-radius:99px;padding:8px 14px;font-size:13px;font-weight:800;color:#FF914D;">💀 one 40-sec monologue</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="padding:19px;border-radius:20px;background:#FF5A2C;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;box-shadow:0 6px 0 #D8431B;">See how it went →</div>
+            <div style="font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;color:rgba(255,255,255,0.55);">Run it back</div>
+          </div>
+        </div>
+      </x-import>
+    </figure>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
