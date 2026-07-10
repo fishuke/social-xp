@@ -8,6 +8,8 @@
 // full-duplex engine (NVIDIA PersonaPlex, EN only) is the planned second
 // transport; see docs/BACKLOG.md.
 
+import { GoogleGenAI, Modality } from "@google/genai";
+import type { User } from "@prisma/client";
 import { RUBRICS, type CoachScenario } from "./coach-scenarios";
 import { type Locale } from "./i18n/config";
 
@@ -59,4 +61,63 @@ HARD RULES:
 - React like a real person: warm up when they engage you well, let flat or evasive replies land awkwardly. Do not grade, teach, or give feedback. You are the scene, not the coach.
 - Messages wrapped in [control]...[/control] are stage directions from the app, not ${userName} speaking. Follow them naturally and never acknowledge them.
 - When a stage direction tells you to wrap up, bring the scene to a natural, warm close within one or two replies and say goodbye in character.`;
+}
+
+/* ---------- ephemeral token mint ---------- */
+
+const LANGUAGE_CODE: Record<Locale, string> = { en: "en-US", tr: "tr-TR" };
+
+export type LiveTokenGrant = {
+  token: string;
+  model: string;
+  maxSeconds: number;
+};
+
+/**
+ * Mints a single-use ephemeral token the browser uses to open the Live
+ * WebSocket directly with Gemini. Persona, model, voice, and transcription
+ * are pinned server-side via liveConnectConstraints, so the client cannot
+ * change the character or turn the session into a general assistant.
+ *
+ * `choice` exists because the model id lives inside the locked constraints:
+ * falling back to the second model requires a fresh mint.
+ */
+export async function mintLiveToken(
+  user: Pick<User, "name">,
+  scenario: CoachScenario,
+  locale: Locale,
+  choice: "primary" | "fallback"
+): Promise<LiveTokenGrant> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
+
+  const model = choice === "primary" ? LIVE_MODEL : LIVE_MODEL_FALLBACK;
+  // Ephemeral tokens are v1alpha only; both the mint and the browser client
+  // must pass apiVersion v1alpha.
+  const ai = new GoogleGenAI({ apiKey, httpOptions: { apiVersion: "v1alpha" } });
+  const now = Date.now();
+
+  const token = await ai.authTokens.create({
+    config: {
+      uses: 1,
+      expireTime: new Date(now + 10 * 60_000).toISOString(),
+      newSessionExpireTime: new Date(now + 2 * 60_000).toISOString(),
+      liveConnectConstraints: {
+        model,
+        config: {
+          systemInstruction: buildCharacterPrompt(scenario, locale, user.name),
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: scenario.voice } },
+            languageCode: LANGUAGE_CODE[locale],
+          },
+          inputAudioTranscription: {},
+          outputAudioTranscription: {},
+        },
+      },
+    },
+  });
+
+  if (!token.name) throw new Error("Token mint returned no token name");
+  return { token: token.name, model, maxSeconds: LIVE_MAX_SECONDS };
 }

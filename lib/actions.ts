@@ -34,6 +34,8 @@ import {
   countSessionsToday,
   type CoachSessionResult,
 } from "./coach";
+import { mintLiveToken } from "./coach-live";
+import { scenarioById } from "./coach-scenarios";
 
 async function requireUser(): Promise<User> {
   const user = await getSessionUser();
@@ -198,6 +200,51 @@ export async function submitCoachSession(formData: FormData): Promise<CoachSubmi
   } catch (error) {
     console.error("Coach analysis failed:", error);
     return { ok: false, code: "analysis", error: e.coachAnalysisFailed };
+  }
+}
+
+/* ---------- AI coach: live roleplay ---------- */
+
+// Mints are billable and open a real-time socket, so they get their own
+// hourly budget per user (bounds alpha cost even with unlimited sessions).
+const LIVE_MINTS_PER_HOUR = 20;
+
+const startLiveSchema = z.object({
+  scenarioId: z.string().min(1).max(64),
+  locale: z.enum(LOCALES),
+  // The model id is locked inside the token, so a fallback retry needs a
+  // fresh mint against the second model.
+  model: z.enum(["primary", "fallback"]).default("primary"),
+});
+
+export type StartLiveInput = z.input<typeof startLiveSchema>;
+
+export type StartLiveResult =
+  | { ok: true; token: string; model: string; maxSeconds: number }
+  | { ok: false; code: "config" | "scenario" | "rate" | "mint"; error: string };
+
+export async function startLiveSession(input: StartLiveInput): Promise<StartLiveResult> {
+  const user = await requireUser();
+  const { scenarioId, locale, model } = startLiveSchema.parse(input);
+  const e = getDictionary(locale).errors;
+
+  if (!process.env.GEMINI_API_KEY) {
+    return { ok: false, code: "config", error: e.coachNotSetUp };
+  }
+  const scenario = scenarioById(scenarioId);
+  if (!scenario) {
+    return { ok: false, code: "scenario", error: e.invalidInput };
+  }
+  if (!(await rateLimit(`live:${user.id}`, LIVE_MINTS_PER_HOUR, 3600))) {
+    return { ok: false, code: "rate", error: e.liveRateLimited };
+  }
+
+  try {
+    const grant = await mintLiveToken(user, scenario, locale, model);
+    return { ok: true, ...grant };
+  } catch (error) {
+    console.error("Live token mint failed:", error);
+    return { ok: false, code: "mint", error: e.liveConnectFailed };
   }
 }
 
