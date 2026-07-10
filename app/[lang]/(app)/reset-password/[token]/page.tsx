@@ -33,7 +33,7 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
     const result = await resetPassword({ token, password });
     if (result.ok) {
       // resetPassword signs the user in, straight back to training
-      router.replace(withLocale(locale, "/learn"));
+      router.replace(withLocale(locale, "/coach"));
       router.refresh();
     } else {
       setError(result.error);

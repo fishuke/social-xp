@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Social XP",
     short_name: "Social XP",
     description: "Social skills are just reps. 3 minutes a day.",
-    start_url: "/learn",
+    start_url: "/coach",
     scope: "/",
     display: "standalone",
     orientation: "portrait",

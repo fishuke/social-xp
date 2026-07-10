@@ -32,7 +32,7 @@ export default async function LandingPage({ params }: { params: Promise<{ lang: 
   const t = getDictionary(locale);
 
   const user = await getSessionUser();
-  if (user) redirect(withLocale(locale, "/learn"));
+  if (user) redirect(withLocale(locale, "/coach"));
 
   return (
     <>

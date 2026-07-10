@@ -29,7 +29,7 @@ export default function PaywallPage() {
       window.location.assign(result.url); // provider's hosted checkout
       return;
     }
-    router.replace(withLocale(locale, "/learn")); // dev fallback - already premium
+    router.replace(withLocale(locale, "/coach")); // dev fallback - already premium
   }
 
   return (

@@ -32,7 +32,7 @@ export default async function CheckoutSuccessPage({
       <p className="mt-2 font-body text-[15px] font-bold text-sec2">
         {user.isPremium ? t.paywall.successBodyPremium : t.paywall.successBodyPending}
       </p>
-      <Link href={withLocale(locale, "/learn")} className="btn btn-coral mt-8 w-full">
+      <Link href={withLocale(locale, "/coach")} className="btn btn-coral mt-8 w-full">
         {t.paywall.successCta}
       </Link>
     </div>

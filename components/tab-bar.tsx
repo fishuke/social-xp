@@ -10,9 +10,9 @@ export function TabBar() {
   const pathname = stripLocale(usePathname());
   const t = useT();
   const TABS = [
+    { href: "/coach", label: t.nav.coach, Icon: MicIcon },
     { href: "/learn", label: t.nav.learn, Icon: HomeIcon },
     { href: "/quotes", label: t.nav.quotes, Icon: DiamondIcon },
-    { href: "/coach", label: t.nav.coach, Icon: MicIcon },
     { href: "/you", label: t.nav.you, Icon: PersonIcon },
   ] as const;
   return (

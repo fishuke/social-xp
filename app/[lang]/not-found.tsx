@@ -22,7 +22,7 @@ export default function NotFound() {
       <p className="mt-3 max-w-[280px] text-[16px] leading-relaxed text-sec">
         {t.notFound.body}
       </p>
-      <LocaleLink href="/learn" className="btn btn-coral mt-8 rounded-[16px]">
+      <LocaleLink href="/coach" className="btn btn-coral mt-8 rounded-[16px]">
         {t.notFound.backToLearning}
       </LocaleLink>
     </div>

@@ -30,7 +30,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       ? await loginAccount({ email, password })
       : await registerAccount({ email, password });
     if (result.ok) {
-      router.replace(withLocale(locale, "/learn"));
+      router.replace(withLocale(locale, "/coach"));
       router.refresh();
     } else {
       setError(result.error);
@@ -103,7 +103,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
               setBusy(true);
               const result = await loginAccount({ email: "demo@social.xp", password: "password123" });
               if (result.ok) {
-                router.replace(withLocale(locale, "/learn"));
+                router.replace(withLocale(locale, "/coach"));
                 router.refresh();
               } else {
                 setError(result.error);
