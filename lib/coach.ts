@@ -15,7 +15,7 @@ import { type Locale } from "./i18n/config";
 const MODEL = "gemini-2.5-flash";
 const MODEL_FALLBACK = "gemini-2.5-flash-lite";
 export const FREE_SESSIONS_PER_DAY = 1;
-const XP_SESSIONS_PER_DAY = 3; // reps that earn XP each day (anti-farming)
+export const XP_SESSIONS_PER_DAY = 3; // reps that earn XP each day (anti-farming)
 
 /* ---------- daily scenario ---------- */
 
@@ -258,6 +258,30 @@ export async function completeCoachSession(
     },
   });
 
+  const award = await awardCoachSessionXp(user, date, xpAwarded);
+
+  return {
+    analysis,
+    durationSec: input.durationSec,
+    xpAwarded,
+    totalXP: award.totalXP,
+    overallDelta: previous ? analysis.overall - previous.overall : null,
+    sessionsToday: sessionsBefore + 1,
+    quests: award.quests,
+  };
+}
+
+/**
+ * Applies a coach rep's XP to the user and today's DailyState. Shared by the
+ * solo rep (above) and the live roleplay (lib/coach-live.ts) so both paths
+ * write totalXP and xpEarnedToday the same way. xpAwarded of 0 still ensures
+ * the daily row and returns fresh quest state.
+ */
+export async function awardCoachSessionXp(
+  user: User,
+  date: string,
+  xpAwarded: number
+): Promise<{ totalXP: number; quests: QuestState }> {
   const fresh = xpAwarded
     ? await prisma.user.update({ where: { id: user.id }, data: { totalXP: { increment: xpAwarded } } })
     : user;
@@ -270,13 +294,5 @@ export async function completeCoachSession(
       })
     : await getDaily(user);
 
-  return {
-    analysis,
-    durationSec: input.durationSec,
-    xpAwarded,
-    totalXP: fresh.totalXP,
-    overallDelta: previous ? analysis.overall - previous.overall : null,
-    sessionsToday: sessionsBefore + 1,
-    quests: questState(daily),
-  };
+  return { totalXP: fresh.totalXP, quests: questState(daily) };
 }

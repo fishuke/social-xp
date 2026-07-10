@@ -34,7 +34,12 @@ import {
   countSessionsToday,
   type CoachSessionResult,
 } from "./coach";
-import { mintLiveToken } from "./coach-live";
+import {
+  completeLiveSession,
+  LIVE_MIN_USER_TURNS,
+  mintLiveToken,
+  type LiveSessionResult,
+} from "./coach-live";
 import { scenarioById } from "./coach-scenarios";
 
 async function requireUser(): Promise<User> {
@@ -245,6 +250,59 @@ export async function startLiveSession(input: StartLiveInput): Promise<StartLive
   } catch (error) {
     console.error("Live token mint failed:", error);
     return { ok: false, code: "mint", error: e.liveConnectFailed };
+  }
+}
+
+const liveTurnSchema = z.object({
+  role: z.enum(["ai", "you"]),
+  text: z.string().min(1).max(2000),
+});
+
+const submitLiveSchema = z.object({
+  scenarioId: z.string().min(1).max(64),
+  locale: z.enum(LOCALES),
+  durationSec: z.number().int().min(10).max(270),
+  dialog: z.array(liveTurnSchema).min(2).max(80),
+});
+
+export type SubmitLiveInput = z.infer<typeof submitLiveSchema>;
+
+export type SubmitLiveResult =
+  | ({ ok: true } & LiveSessionResult)
+  | { ok: false; code: "input" | "config" | "analysis"; error: string };
+
+export async function submitLiveSession(input: SubmitLiveInput): Promise<SubmitLiveResult> {
+  const user = await requireUser();
+  const localeGuess = coerceLocale(
+    typeof input === "object" && input && "locale" in input ? String(input.locale) : user.locale
+  );
+  const e = getDictionary(localeGuess).errors;
+
+  const parsed = submitLiveSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, code: "input", error: e.invalidInput };
+  }
+  const { scenarioId, locale, durationSec, dialog } = parsed.data;
+
+  const userTurns = dialog.filter((turn) => turn.role === "you").length;
+  if (userTurns < LIVE_MIN_USER_TURNS) {
+    return { ok: false, code: "input", error: e.liveTooShort };
+  }
+  if (!process.env.GEMINI_API_KEY) {
+    return { ok: false, code: "config", error: e.coachNotSetUp };
+  }
+  const scenario = scenarioById(scenarioId);
+  if (!scenario) {
+    return { ok: false, code: "input", error: e.invalidInput };
+  }
+
+  try {
+    const result = await completeLiveSession(user, { scenario, locale, dialog, durationSec });
+    return { ok: true, ...result };
+  } catch (error) {
+    // The dialog stays client-side for one retry; see live-client.tsx.
+    console.error("Live debrief failed:", error);
+    return { ok: false, code: "analysis", error: e.liveScoreFailed };
   }
 }
 
