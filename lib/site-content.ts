@@ -7,7 +7,7 @@
 import type { Locale } from "./i18n/config";
 
 // TODO: switch to the real support address once the production domain lands
-// (docs/ROADMAP.md item 5).
+// (docs/BACKLOG.md, "Domain + production launch").
 export const SUPPORT_EMAIL = "support@social-xp.app";
 
 export const LEGAL_UPDATED: Record<Locale, string> = {

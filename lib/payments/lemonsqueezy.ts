@@ -1,4 +1,4 @@
-// Lemon Squeezy adapter (merchant of record - docs/ROADMAP.md item 6).
+// Lemon Squeezy adapter (merchant of record - docs/BACKLOG.md, "Payments go-live").
 // API: JSON:API over https://api.lemonsqueezy.com/v1 with Bearer auth.
 // Webhooks: X-Signature header = HMAC-SHA256 hex digest of the raw body.
 

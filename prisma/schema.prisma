@@ -68,7 +68,7 @@ model Subscription {
 }
 
 // Every signature-verified webhook payload, verbatim - audit trail plus the
-// raw material for the revenue dashboards (docs/ROADMAP.md item 8).
+// raw material for the revenue dashboards (docs/exec-plans/admin-analytics.md).
 model PaymentEvent {
   id        String   @id @default(cuid())
   provider  String

@@ -6,7 +6,7 @@ Built with **Next.js (App Router)**. The API lives in Next.js route handlers (`a
 
 **Production: https://social-xp.vercel.app** (Vercel project `social-xp`, deploy with `npx vercel deploy --prod`).
 
-The original design handover (all 16 annotated screens) is in [`design/HANDOVER.md`](design/HANDOVER.md).
+The original design handover (all 16 annotated screens) is in [`design/Social XP - All Screens v2.dc.html`](design/Social%20XP%20-%20All%20Screens%20v2.dc.html).
 
 ## Getting started
 
@@ -40,13 +40,12 @@ pooled connection (runtime); `DATABASE_URL_UNPOOLED` is the direct one Prisma us
 
 ## Known MVP simplifications
 
-- Auth: optional email+password accounts (next-auth JWT). Everyone starts anonymous; registering upgrades the same user row so progress is kept. No email verification / password reset yet.
-- Paywall "Start free trial" just flags `isPremium` — wire StoreKit/Stripe later.
-- Daily reset uses server-local midnight, not the user's timezone.
+- Auth: optional email+password accounts (next-auth JWT). Everyone starts anonymous; registering upgrades the same user row so progress is kept. Email verification, password reset, and login rate-limiting are in.
+- Payments: Lemon Squeezy (merchant of record) behind a provider-agnostic adapter (`lib/payments`); checkout/webhooks are code-complete but not live yet (see the backlog).
 - Streak share sends text (no generated image yet); "Save" on a quote shares/copies it.
 - No daily lesson cap (product decision) — chapters still unlock sequentially; Premium unlocks all chapters, coach, and streak repair.
 - Two courses ship in MVP: **Social Skills** (A1–B1, 6 units incl. backchanneling) and **Courage to Be Disliked** (A1, 2 units, Adlerian psychology). Course switcher lives on the Chapters screen.
 - The full 37-unit curriculum roadmap (A1–C2, with can-do statements and shipped/planned status) lives in [`docs/CURRICULUM.md`](docs/CURRICULUM.md).
-- Prioritized next steps live in [`docs/ROADMAP.md`](docs/ROADMAP.md).
+- Product plan, core-loop mechanics, architecture map, and the prioritized backlog live in [`docs/`](docs/README.md) — the system of record for how this repo is run.
 - `/method` explains the evidence base (BST, CBT homework research, graded exposure, spaced retrieval). The expert-board line there is forward-looking copy — update it once professional review actually happens.
 - Quote attributions must be editorially verified before launch (see handover).
