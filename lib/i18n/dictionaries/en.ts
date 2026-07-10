@@ -338,7 +338,6 @@ const en = {
     // live roleplay (v4: a date, not a dashboard)
     liveCta: (name: string) => `Talk it out with ${name}`,
     liveCtaSub: "A real conversation. They talk back.",
-    liveSoloRep: "Quick solo rep instead",
     changeScene: "Change scene",
     pickScene: "Pick your scene",
     packBadge: "your pack",

@@ -52,6 +52,8 @@ export function buildCharacterPrompt(
 
 WHO YOU ARE: ${character.persona}
 
+HOW YOU SOUND: ${scenario.voiceStyle} Keep this delivery in every reply.
+
 THE SCENE: ${text.setup}
 
 YOUR GOAL IN THE SCENE: ${character.objective}

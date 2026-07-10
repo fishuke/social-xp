@@ -3,10 +3,16 @@
 // AI coach flow: record (dark screen) → processing → feedback.
 // Audio is captured with MediaRecorder, re-encoded to 16kHz mono WAV in the
 // browser (Gemini-safe format, ~1.9MB/min), and sent to submitCoachSession.
+// The live roleplay (v4) mounts on top as its own mode: primary CTA on the
+// ready screen, scene picker sheet, then LiveCoachClient takes the screen.
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import { submitCoachSession, type CoachSubmitResult } from "@/lib/actions";
 import type { CoachPrompt } from "@/lib/coach";
+import type { SceneOption } from "./live-client";
 import { ConfettiBurst } from "@/components/confetti";
 import { CountUp } from "@/components/count-up";
 import { LocaleLink } from "@/components/locale-link";
@@ -23,14 +29,21 @@ import {
 import { ProgressBar } from "@/components/ui";
 import { shareText } from "@/lib/share";
 
+// Loads only when a user actually opens a live scene (pulls the Gemini SDK).
+const LiveCoach = dynamic(() => import("./live-client").then((m) => m.LiveCoachClient), {
+  ssr: false,
+});
+
 export type CoachHistoryItem = {
   id: string;
   promptText: string;
   overall: number;
   when: string;
+  live?: boolean;
   summary?: string;
   strengths?: string[];
   oneThing?: string;
+  growthAreas?: string[];
   scores?: { confidence: number; clarity: number; energy: number; pace: number };
 };
 
@@ -40,6 +53,9 @@ type Props = {
   locked: boolean;
   isPremium: boolean;
   history: CoachHistoryItem[];
+  // null hides the live CTA entirely (feature not configured).
+  live: { scenes: SceneOption[]; defaultId: string } | null;
+  dread: string | null;
 };
 
 type Phase = "ready" | "recording" | "processing" | "done";
@@ -52,15 +68,35 @@ const BAR_COLORS = ["#FF914D", "#FFC24A", "#FF5A2C"];
 // Idle waveform silhouette (design: heights 22–90px, here as 0..1 of 90px).
 const IDLE_BARS = Array.from({ length: BAR_COUNT }, (_, i) => 0.24 + 0.5 * Math.abs(Math.sin(i * 0.9)));
 
-export function CoachClient({ name, prompt, locked, isPremium, history }: Props) {
+export function CoachClient({ name, prompt, locked, isPremium, history, live, dread }: Props) {
   const t = useT();
   const locale = useLocale();
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("ready");
   const [seconds, setSeconds] = useState(0);
   const [bars, setBars] = useState<number[]>(IDLE_BARS);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CoachSuccess | null>(null);
   const [lockedNow, setLockedNow] = useState(locked);
+  const [mode, setMode] = useState<"home" | "live">("home");
+  const [sceneId, setSceneId] = useState(live?.defaultId ?? null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const selectedScene = live?.scenes.find((s) => s.id === sceneId) ?? live?.scenes[0] ?? null;
+  // The user's dread pack leads the row; everything else follows in pack order.
+  const dreadOrder =
+    dread && DREAD_ORDER.includes(dread)
+      ? [dread, ...DREAD_ORDER.filter((d) => d !== dread)]
+      : DREAD_ORDER;
+  const orderedScenes = live
+    ? dreadOrder.flatMap((d) => live.scenes.filter((s) => s.dread === d))
+    : [];
+
+  const sceneRowRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    sceneRowRef.current
+      ?.querySelector('[aria-selected="true"]')
+      ?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [sceneId]);
 
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -193,6 +229,20 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
     setPhase("ready");
   }
 
+  if (mode === "live" && selectedScene) {
+    return (
+      <LiveCoach
+        scene={selectedScene}
+        name={name}
+        history={history}
+        onExit={() => {
+          setMode("home");
+          router.refresh(); // fresh history + quest state after a scene
+        }}
+      />
+    );
+  }
+
   if (phase === "done" && result) {
     return (
       <FeedbackScreen
@@ -206,8 +256,114 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
     );
   }
 
-  if (lockedNow && phase !== "processing") {
+  // Live scenes stay unlimited during alpha, so the hard gate only owns the
+  // screen when there is no live mode to offer.
+  if (lockedNow && phase !== "processing" && !live) {
     return <GatedScreen history={history} t={t} />;
+  }
+
+  // Live home: conversation-first. The solo rep stays implemented below but
+  // only renders when the live feature is not configured (user call).
+  if (live && selectedScene) {
+    return (
+      <div
+        className="page-enter flex flex-1 flex-col items-center px-6 pb-8 pt-[58px] text-center"
+        style={{ background: "linear-gradient(180deg, #241A12, #3A2416)" }}
+      >
+        <p className="font-display text-[13px] font-semibold uppercase tracking-[2px] text-amber">
+          {t.coach.kicker}
+        </p>
+
+        <div
+          ref={sceneRowRef}
+          className="-mx-6 mt-7 w-[calc(100%+48px)] overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="listbox"
+          aria-label={t.coach.pickScene}
+        >
+          <div className="flex gap-2 pb-1">
+            {orderedScenes.map((scene) => {
+              const selected = scene.id === selectedScene.id;
+              return (
+                <button
+                  key={scene.id}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => setSceneId(scene.id)}
+                  className={`flex w-[104px] shrink-0 flex-col items-center gap-1 rounded-[16px] px-2 py-3 ${
+                    selected ? "bg-white/15 ring-2 ring-coral" : "bg-white/[0.07]"
+                  }`}
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEDE4] text-[20px]">
+                    {scene.avatar}
+                  </span>
+                  <span className="w-full truncate font-display text-[13px] font-semibold text-white">
+                    {scene.personaName}
+                  </span>
+                  <span className="w-full truncate font-body text-[10px] font-extrabold text-ondark/60">
+                    {scene.isDaily ? t.coach.todayBadge : scene.scene}
+                  </span>
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              className="flex w-[104px] shrink-0 flex-col items-center justify-center gap-1 rounded-[16px] bg-white/[0.07] px-2 py-3"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-[18px]">
+                ✨
+              </span>
+              <span className="w-full truncate font-display text-[13px] font-semibold text-amber">
+                {t.coach.changeScene}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <h1 className="mt-6 max-w-[340px] font-display text-[24px] font-semibold leading-[1.2] text-white">
+          {selectedScene.title}
+        </h1>
+        <p className="mt-2 max-w-[320px] font-body text-[14px] font-bold leading-[1.5] text-ondark/70">
+          {selectedScene.setup}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => setMode("live")}
+          className="mt-6 flex w-full max-w-[360px] items-center gap-3 rounded-[20px] bg-coral p-4 text-left shadow-[0_5px_0_#D8431B] transition-transform active:scale-[0.99]"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#FFEDE4] text-[24px]">
+            {selectedScene.avatar}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-[17px] font-semibold text-white">
+              {t.coach.liveCta(selectedScene.personaName)}
+            </span>
+            <span className="block truncate font-body text-[12px] font-extrabold text-white/75">
+              {t.coach.liveCtaSub} · {selectedScene.scene}
+            </span>
+          </span>
+          <ChevronRightIcon size={18} color="#fff" className="shrink-0" />
+        </button>
+
+        <HistoryList items={history} className="mt-8 w-full max-w-[360px] text-left" dark t={t} />
+
+        {pickerOpen && (
+          <ScenePicker
+            scenes={live.scenes}
+            dread={dread}
+            selectedId={selectedScene.id}
+            onSelect={(id) => {
+              setSceneId(id);
+              setPickerOpen(false);
+            }}
+            onClose={() => setPickerOpen(false)}
+            t={t}
+          />
+        )}
+      </div>
+    );
   }
 
   const recording = phase === "recording";
@@ -300,6 +456,109 @@ export function CoachClient({ name, prompt, locked, isPremium, history }: Props)
         <HistoryList items={history} className="mt-8 w-full max-w-[360px] text-left" dark t={t} />
       )}
     </div>
+  );
+}
+
+/* ---------- scene picker (live roleplay) ---------- */
+
+const DREAD_ORDER = ["interviews", "dating", "speaking-up", "boundaries", "small-talk"];
+
+// Bottom sheet listing all live scenes, the user's dread pack first, the
+// daily scene badged. Portals to body so it covers the tab chrome.
+function ScenePicker({
+  scenes,
+  dread,
+  selectedId,
+  onSelect,
+  onClose,
+  t,
+}: {
+  scenes: SceneOption[];
+  dread: string | null;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  onClose: () => void;
+  t: Dictionary;
+}) {
+  const order = dread
+    ? [dread, ...DREAD_ORDER.filter((d) => d !== dread)]
+    : DREAD_ORDER;
+  const goalLabel = (id: string) =>
+    t.onboarding.goals.find((g) => g.id === id)?.label ?? id;
+
+  return createPortal(
+    <div className="fixed inset-0 z-50" role="dialog" aria-label={t.coach.pickScene}>
+      <button
+        type="button"
+        aria-label={t.common.close}
+        onClick={onClose}
+        className="absolute inset-0 bg-black/50"
+      />
+      <div className="absolute inset-x-0 bottom-0 mx-auto max-h-[80vh] w-full max-w-[402px] overflow-y-auto rounded-t-[24px] bg-[#FFF6EE] p-5 pb-9">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="font-display text-[20px] font-semibold text-cocoa">{t.coach.pickScene}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.common.close}
+            className="rounded-full bg-black/5 px-3 py-1.5 font-body text-[13px] font-extrabold text-sec2"
+          >
+            ✕
+          </button>
+        </div>
+        {order.map((groupDread) => {
+          const group = scenes.filter((s) => s.dread === groupDread);
+          if (group.length === 0) return null;
+          return (
+            <section key={groupDread} className="mb-4">
+              <p className="mb-2 flex items-center gap-2 font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-sec2">
+                {goalLabel(groupDread)}
+                {groupDread === dread && (
+                  <span className="rounded-full bg-amber px-2 py-0.5 text-[10px] normal-case tracking-normal text-cocoa">
+                    {t.coach.packBadge}
+                  </span>
+                )}
+              </p>
+              <div className="flex flex-col gap-2">
+                {group.map((scene) => (
+                  <button
+                    key={scene.id}
+                    type="button"
+                    onClick={() => onSelect(scene.id)}
+                    className={`flex w-full items-center gap-3 rounded-[16px] bg-white p-3 text-left shadow-[0_2px_0_rgba(0,0,0,0.04)] ${
+                      scene.id === selectedId ? "ring-2 ring-coral" : ""
+                    }`}
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFEDE4] text-[22px]">
+                      {scene.avatar}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center gap-2">
+                        <span className="truncate font-body text-[14px] font-bold text-ink">
+                          {scene.title}
+                        </span>
+                        {scene.isDaily && (
+                          <span className="shrink-0 rounded-full bg-coral px-2 py-0.5 font-body text-[10px] font-extrabold text-white">
+                            {t.coach.todayBadge}
+                          </span>
+                        )}
+                      </span>
+                      <span className="block truncate font-body text-[12px] font-bold text-sec2">
+                        {scene.scene}
+                      </span>
+                    </span>
+                    <span className="shrink-0 font-body text-[12px] font-bold text-faint">
+                      {scene.personaName}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -453,7 +712,7 @@ function FeedbackScreen({
   );
 }
 
-function MetricBar({
+export function MetricBar({
   label,
   value,
   fill,
@@ -510,7 +769,7 @@ function GatedScreen({ history, t }: { history: CoachHistoryItem[]; t: Dictionar
 
 /* ---------- shared bits ---------- */
 
-function HistoryList({
+export function HistoryList({
   items,
   className,
   dark,
@@ -551,8 +810,9 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
       ]
     : [];
   const strengths = item.strengths ?? [];
+  const growthAreas = item.growthAreas ?? [];
   const hasDetail = Boolean(
-    item.summary || item.oneThing || scoreRows.length > 0 || strengths.length > 0,
+    item.summary || item.oneThing || scoreRows.length > 0 || strengths.length > 0 || growthAreas.length > 0,
   );
   const scoreBg = item.overall >= 75 ? "#58C08A" : item.overall >= 50 ? "#FFB020" : "#FF914D";
   const shell = dark
@@ -572,6 +832,11 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
       >
         {item.promptText}
       </span>
+      {item.live && (
+        <span className="shrink-0 rounded-full bg-coral px-2 py-0.5 font-body text-[10px] font-extrabold uppercase text-white">
+          {t.coach.liveChip}
+        </span>
+      )}
       <span className={`shrink-0 font-body text-[12px] font-bold ${dark ? "text-ondark/60" : "text-faint"}`}>
         {item.when}
       </span>
@@ -663,13 +928,34 @@ function HistoryRow({ item, dark, t }: { item: CoachHistoryItem; dark?: boolean;
               </p>
             </>
           )}
+          {growthAreas.length > 0 && (
+            <>
+              <p
+                className={`mt-3 font-body text-[11px] font-extrabold uppercase tracking-[1.5px] ${dark ? "text-amber" : "text-[#C9554A]"}`}
+              >
+                {t.coach.growthTitle}
+              </p>
+              <ul className="mt-1.5 flex flex-col gap-1.5">
+                {growthAreas.map((g, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-[13px]">⚡</span>
+                    <span
+                      className={`font-body text-[13px] font-bold leading-[1.5] ${dark ? "text-white" : "text-ink"}`}
+                    >
+                      {g}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-function formatTime(totalSec: number): string {
+export function formatTime(totalSec: number): string {
   const m = Math.floor(totalSec / 60);
   const s = totalSec % 60;
   return `${m}:${String(s).padStart(2, "0")}`;

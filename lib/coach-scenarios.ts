@@ -32,7 +32,8 @@ export type CoachScenario = {
   id: string;
   dread: Dread;
   avatar: string; // character emoji for the live scene header
-  voice: string; // Gemini prebuilt voice for the live scene
+  voice: string; // Gemini prebuilt voice, distinct per character
+  voiceStyle: string; // spoken delivery direction (tone, pace, laugh, quirks)
   text: Record<Locale, ScenarioText>;
 };
 
@@ -43,6 +44,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "interviews",
     avatar: "👨🏻‍💼",
     voice: "Charon",
+    voiceStyle:
+      "Measured and low, a hint of end-of-day tiredness. Speeds up slightly when genuinely interested. Dry chuckle, never a big laugh.",
     text: {
       en: {
         title: "The opener",
@@ -81,6 +84,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "interviews",
     avatar: "👩🏾‍💼",
     voice: "Kore",
+    voiceStyle:
+      "Precise and kind, unhurried. A knowing smile you can hear when she catches a canned answer. Soft short laugh.",
     text: {
       en: {
         title: "The weakness question",
@@ -119,6 +124,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "interviews",
     avatar: "🧔🏻",
     voice: "Orus",
+    voiceStyle:
+      "Fast, clipped, decisive. Drops to a slower, warmer register when impressed. Impatient little mm sounds while listening.",
     text: {
       en: {
         title: "The closer",
@@ -159,6 +166,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "dating",
     avatar: "👩🏽",
     voice: "Leda",
+    voiceStyle:
+      "Playful and quick, wine-bar volume, a teasing lilt. Laughs easily and openly when something lands. Goes flat and politely bored when the other side monologues.",
     text: {
       en: {
         title: "The first minute",
@@ -197,6 +206,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "dating",
     avatar: "👨🏻",
     voice: "Puck",
+    voiceStyle:
+      "Animated and curious, leans into words when delighted. Big genuine laugh. Mock-gasps at good weird details.",
     text: {
       en: {
         title: "Off script",
@@ -234,7 +245,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "date-your-turn",
     dread: "dating",
     avatar: "👩🏻",
-    voice: "Aoede",
+    voice: "Laomedeia",
+    voiceStyle:
+      "Storyteller energy: expressive highs and lows, theatrical sighs, giggles mid-sentence when something is fun.",
     text: {
       en: {
         title: "Your turn",
@@ -274,7 +287,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "meeting-doubt",
     dread: "speaking-up",
     avatar: "👨🏼‍💼",
-    voice: "Fenrir",
+    voice: "Alnilam",
+    voiceStyle:
+      "Composed meeting voice, slightly brisk. Tightens when defensive, opens up and slows down when a named risk actually lands.",
     text: {
       en: {
         title: "The hole in the plan",
@@ -313,6 +328,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "speaking-up",
     avatar: "👩🏻‍💼",
     voice: "Zephyr",
+    voiceStyle:
+      "Warm and bright, welcoming, a little melodic. Encouraging mm-hms while listening. Laughs warmly at human details.",
     text: {
       en: {
         title: "The new one",
@@ -350,7 +367,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "meeting-your-idea",
     dread: "speaking-up",
     avatar: "👨🏽‍💼",
-    voice: "Charon",
+    voice: "Iapetus",
+    voiceStyle:
+      "Calm, focused, deliberate pauses. Thinks out loud in a lower register. A rare but real huh-nice when the structure is clean.",
     text: {
       en: {
         title: "Floor is yours",
@@ -390,7 +409,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "no-car",
     dread: "boundaries",
     avatar: "🧑🏽",
-    voice: "Puck",
+    voice: "Zubenelgenubi",
+    voiceStyle:
+      "Charming and energetic, a wheedling tone when pushing, exaggerated wounded sighs when refused, quick to laugh it off.",
     text: {
       en: {
         title: "The favor",
@@ -429,6 +450,8 @@ export const SCENARIOS: CoachScenario[] = [
     dread: "boundaries",
     avatar: "👩🏼",
     voice: "Aoede",
+    voiceStyle:
+      "Giddy night-out energy, rapid and loud-ish. A teasing whine when guilt-tripping. Cackles at good comebacks.",
     text: {
       en: {
         title: "The push",
@@ -466,7 +489,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "roommate-dishes",
     dread: "boundaries",
     avatar: "🧑🏻",
-    voice: "Fenrir",
+    voice: "Umbriel",
+    voiceStyle:
+      "Flat, unbothered slacker drawl. Gets a defensive edge when pushed hard, ends in a reluctant grumble when agreeing.",
     text: {
       en: {
         title: "Holding the line",
@@ -506,7 +531,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "elevator-neighbor",
     dread: "small-talk",
     avatar: "👩🏻‍🦰",
-    voice: "Kore",
+    voice: "Sulafat",
+    voiceStyle:
+      "Gentle, unhurried, neighborly warmth. Small pleasant laughs. Comfortable with tiny silences.",
     text: {
       en: {
         title: "The elevator",
@@ -544,7 +571,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "party-host",
     dread: "small-talk",
     avatar: "🧑🏾",
-    voice: "Puck",
+    voice: "Sadachbia",
+    voiceStyle:
+      "Lively and conspiratorial, like sharing a joke by the snack table. Infectious laugh, playful stage whispers.",
     text: {
       en: {
         title: "The party",
@@ -582,7 +611,9 @@ export const SCENARIOS: CoachScenario[] = [
     id: "coffee-line",
     dread: "small-talk",
     avatar: "👩🏻",
-    voice: "Leda",
+    voice: "Autonoe",
+    voiceStyle:
+      "Quick, sunny counter-service rhythm. Bright laugh, keeps things moving, warm sign-off.",
     text: {
       en: {
         title: "The regular",
@@ -698,11 +729,27 @@ export const RUBRICS: Record<Dread, RubricDimension[]> = {
   ],
 };
 
-/** Same date, same scenario, everywhere in the world (Wordle-style). */
-export function dailyScenario(localDate: string): CoachScenario {
+function dateSeed(localDate: string): number {
   let seed = 0;
   for (const c of localDate) seed = (seed * 31 + c.charCodeAt(0)) % 997;
-  return SCENARIOS[seed % SCENARIOS.length];
+  return seed;
+}
+
+/** Same date, same scenario, everywhere in the world (Wordle-style). */
+export function dailyScenario(localDate: string): CoachScenario {
+  return SCENARIOS[dateSeed(localDate) % SCENARIOS.length];
+}
+
+/**
+ * The live scene the user actually signed up for: today's pick from their
+ * dread pack, rotating daily. The global daily scenario stays the solo
+ * prompt and keeps its badge in the picker; it should never be the reason a
+ * dating-dread user opens on a barista.
+ */
+export function dailyPackScenario(dread: string, localDate: string): CoachScenario | undefined {
+  const pack = SCENARIOS.filter((s) => s.dread === dread);
+  if (pack.length === 0) return undefined; // pre-2026-07 goal values
+  return pack[dateSeed(localDate) % pack.length];
 }
 
 export function scenarioById(id: string): CoachScenario | undefined {

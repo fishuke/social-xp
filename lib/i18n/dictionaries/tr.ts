@@ -339,7 +339,6 @@ const tr: Dictionary = {
     // canlı rol yapma (v4: rapor değil, buluşma)
     liveCta: (name: string) => `${name} ile konuş`,
     liveCtaSub: "Gerçek bir sohbet. Karşılık veriyorlar.",
-    liveSoloRep: "Onun yerine hızlı solo tekrar",
     changeScene: "Sahneyi değiştir",
     pickScene: "Sahneni seç",
     packBadge: "senin paketin",
