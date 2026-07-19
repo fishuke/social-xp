@@ -356,7 +356,7 @@ export async function startCheckout(input: { plan: "monthly" | "yearly" }): Prom
     return { ok: true, url: null };
   }
 
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://social-xp.vercel.app";
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://convozy.app";
   try {
     const { url } = await provider.createCheckout({
       userId: user.id,

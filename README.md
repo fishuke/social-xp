@@ -1,4 +1,4 @@
-# Social XP
+# Convozy
 
 Duolingo-style app for training social skills — 3-minute lessons, one real-world rep a day, collectible quotes, XP, streaks and daily quests.
 

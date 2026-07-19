@@ -1,4 +1,4 @@
-# Social XP: Product Plan
+# Convozy: Product Plan
 
 One line: **Duolingo for social skills.** Three-minute lessons, one real-world
 rep a day, XP, streaks, quests, chests, collectible quotes, and an AI speaking

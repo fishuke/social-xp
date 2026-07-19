@@ -26,7 +26,7 @@ export default async function AdminLayout({
       <header className="border-b border-[#E5E0D8] bg-white">
         <div className="mx-auto flex max-w-5xl items-center gap-6 px-6 py-3">
           <Link href={withLocale(locale, "/admin")} className="font-display text-[17px] font-semibold text-cocoa">
-            Social XP <span className="text-coral">Admin</span>
+            Convozy <span className="text-coral">Admin</span>
           </Link>
           <nav className="flex gap-4">
             {NAV.map((item) => (

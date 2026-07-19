@@ -17,9 +17,9 @@ const nunito = Nunito({
 });
 
 const META: Record<Locale, { title: string; description: string }> = {
-  en: { title: "Social XP", description: "Social skills are just reps. 3 minutes a day." },
+  en: { title: "Convozy", description: "Social skills are just reps. 3 minutes a day." },
   tr: {
-    title: "Social XP",
+    title: "Convozy",
     description: "Sosyal beceriler sadece tekrardan ibaret. Günde 3 dakika.",
   },
 };
@@ -38,8 +38,8 @@ export async function generateMetadata({
   return {
     title: meta.title,
     description: meta.description,
-    applicationName: "Social XP",
-    appleWebApp: { capable: true, title: "Social XP", statusBarStyle: "default" },
+    applicationName: "Convozy",
+    appleWebApp: { capable: true, title: "Convozy", statusBarStyle: "default" },
   };
 }
 
