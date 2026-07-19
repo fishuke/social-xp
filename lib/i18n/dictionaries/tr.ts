@@ -31,7 +31,7 @@ const tr: Dictionary = {
   },
 
   onboarding: {
-    brand: "Social XP",
+    brand: "Convozy",
     heroTitleLine1: "Sosyal beceriler",
     heroTitleLine2: "sadece tekrardan ibaret.",
     heroBody:
@@ -108,7 +108,7 @@ const tr: Dictionary = {
   },
 
   landing: {
-    metaTitle: "Social XP · Günde 3 dakikada sosyal özgüven",
+    metaTitle: "Convozy · Günde 3 dakikada sosyal özgüven",
     metaDescription:
       "Kısacık dersler, gerçek dünya görevleri ve bir yapay zeka konuşma koçu. Duolingo Fransızca öğretir gibi, insanlarla konuşmayı çalıştır.",
     heroChip: "Günde 3 dakika",
@@ -192,7 +192,7 @@ const tr: Dictionary = {
         "✓ Günde 1 yapay zeka koç tekrarı",
       ],
       plusBadge: "7 GÜN ÜCRETSİZ DENEME",
-      plusName: "Social XP+",
+      plusName: "Convozy+",
       plusPriceMonthly: "$6.99",
       plusPriceUnit: "/ay",
       plusPriceYearly: "veya $39.99/yıl (%52 tasarruf)",
@@ -208,7 +208,7 @@ const tr: Dictionary = {
     faq: [
       {
         q: "Bu terapi mi?",
-        a: "Hayır. Social XP bir beceri eğitimidir, sohbetler için bir spor salonu gibi. Klinisyenlerin doğruladığı yöntemleri (BDT, maruz bırakma) ödünç alır, ama terapi, teşhis ya da tedavi değildir ve profesyonel bakımın yerini tutmaz.",
+        a: "Hayır. Convozy bir beceri eğitimidir, sohbetler için bir spor salonu gibi. Klinisyenlerin doğruladığı yöntemleri (BDT, maruz bırakma) ödünç alır, ama terapi, teşhis ya da tedavi değildir ve profesyonel bakımın yerini tutmaz.",
       },
       {
         q: "Ne kadar zaman alıyor?",
@@ -219,7 +219,7 @@ const tr: Dictionary = {
         a: "Hayır. Hemen antrenmana başlayabilirsin; ilerleme cihazına kaydedilir. Serini tüm cihazlarında güvende tutmak için sonradan ücretsiz bir hesap oluşturabilirsin.",
       },
       {
-        q: "Social XP+ ne ekliyor?",
+        q: "Convozy+ ne ekliyor?",
         a: "İlk günden tüm bölümler açık, sınırsız yapay zeka koç seansı ve seri onarımı. Planlar 7 günlük ücretsiz denemeyle başlar: aylık $6.99 veya yıllık $39.99.",
       },
       {
@@ -231,32 +231,32 @@ const tr: Dictionary = {
     finalCtaBody: "Kayıt yok, kredi kartı yok. Sadece kapı tutma senaryosu ve biraz XP.",
     finalCta: "Ücretsiz antrenmana başla",
     footerDisclaimer:
-      "Social XP, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir ve profesyonel bakımın yerini tutmaz.",
-    footerCopyright: (year: number) => `© ${year} Social XP`,
+      "Convozy, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir ve profesyonel bakımın yerini tutmaz.",
+    footerCopyright: (year: number) => `© ${year} Convozy`,
   },
 
   method: {
-    metaTitle: "Yöntem · Social XP",
+    metaTitle: "Yöntem · Convozy",
     metaDescription:
-      "Social XP neden işe yarıyor: Davranışsal Beceri Eğitimi, BDT düşünce çalışması, kademeli maruz bırakma ve aralıklı hatırlama.",
+      "Convozy neden işe yarıyor: Davranışsal Beceri Eğitimi, BDT düşünce çalışması, kademeli maruz bırakma ve aralıklı hatırlama.",
     kicker: "Yöntem",
     title: "Rastgele dersler değil.",
     intro:
-      "Social XP'deki her ders, insanların sosyal becerileri gerçekte nasıl öğrendiğine dair hakemli araştırmalarda doğrulanmış yöntemler üzerine kuruludur.",
+      "Convozy'deki her ders, insanların sosyal becerileri gerçekte nasıl öğrendiğine dair hakemli araştırmalarda doğrulanmış yöntemler üzerine kuruludur.",
     tryFirstLesson: "İlk dersi dene",
     disclaimer:
-      "Social XP, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir.",
+      "Convozy, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir.",
   },
 
   legal: {
-    privacyMetaTitle: "Gizlilik Politikası · Social XP",
-    privacyMetaDescription: "Social XP'nin neyi, neden topladığı ve sahip olduğun seçenekler.",
+    privacyMetaTitle: "Gizlilik Politikası · Convozy",
+    privacyMetaDescription: "Convozy'nin neyi, neden topladığı ve sahip olduğun seçenekler.",
     privacyKicker: "Gizlilik politikası",
     privacyTitle: "Tekrarların sana ait kalır.",
     privacyIntro: (updated: string) =>
-      `Social XP, antrenmanını yürütmek için gereken en az veriyi toplar. İşte tüm resim, sade bir dille. Son güncelleme ${updated}.`,
-    termsMetaTitle: "Kullanım Koşulları · Social XP",
-    termsMetaDescription: "Seninle Social XP arasındaki anlaşma.",
+      `Convozy, antrenmanını yürütmek için gereken en az veriyi toplar. İşte tüm resim, sade bir dille. Son güncelleme ${updated}.`,
+    termsMetaTitle: "Kullanım Koşulları · Convozy",
+    termsMetaDescription: "Seninle Convozy arasındaki anlaşma.",
     termsKicker: "Kullanım koşulları",
     termsTitle: "Anlaşma, açık sözlerle.",
     termsIntro: (updated: string) =>
@@ -298,7 +298,7 @@ const tr: Dictionary = {
     isNew: "YENİ",
     lesson: (index: number) => `Ders ${index}`,
     ofSix: (n: number) => `6 sözden ${n} tanesi`,
-    shareMessage: (text: string, author: string) => `“${text}” · ${author} · Social XP'de toplandı`,
+    shareMessage: (text: string, author: string) => `“${text}” · ${author} · Convozy'de toplandı`,
     dialogLabel: "Söz ayrıntısı",
   },
 
@@ -323,7 +323,7 @@ const tr: Dictionary = {
     whatWorked: "İşe yarayanlar",
     oneThingTitle: "Deneyeceğin tek şey",
     transcript: "Metin dökümü",
-    goUnlimited: "Social XP+ ile sınırsıza geç",
+    goUnlimited: "Convozy+ ile sınırsıza geç",
     freeRepUsed: "Bugünün ücretsiz tekrarı buydu. Yeni konu yarın.",
     tryAgainXp: "Tekrar dene · +15 XP",
     recentReps: "Son tekrarlar",
@@ -331,10 +331,10 @@ const tr: Dictionary = {
     gatedTitle: "Bugünün ücretsiz tekrarı tamamlandı. 💪",
     gatedBody:
       "Ortaya çıktığın için helal olsun. Yarın yeni bir konu geliyor, ya da sınırsıza geçip istediğin kadar tekrar yap.",
-    getPlus: "Social XP+ edin",
+    getPlus: "Convozy+ edin",
     shareResult: "Tekrarımı paylaş",
     shareMessage: (grade: string, score: number) =>
-      `🎤 ${grade} konuşma tekrarı, Social XP'de ${score}/100 puan. Sosyal beceriler sadece tekrardan ibaret.`,
+      `🎤 ${grade} konuşma tekrarı, Convozy'de ${score}/100 puan. Sosyal beceriler sadece tekrardan ibaret.`,
 
     // canlı rol yapma (v4: rapor değil, buluşma)
     liveCta: (name: string) => `${name} ile konuş`,
@@ -412,7 +412,7 @@ const tr: Dictionary = {
     keepItGoing: "Devam ettir",
     shareMyStreak: "Serimi paylaş",
     shareMessage: (n: number) =>
-      `🔥 Social XP'de ${n} günlük seri. Sosyal beceriler sadece tekrardan ibaret.`,
+      `🔥 Convozy'de ${n} günlük seri. Sosyal beceriler sadece tekrardan ibaret.`,
   },
 
   you: {
@@ -441,9 +441,9 @@ const tr: Dictionary = {
     emailVerifiedBanner: "E-posta doğrulandı. Hazırsın ✅",
     createAccountTitle: "Hesap oluştur",
     createAccountSub: "Serini ve XP'ni tüm cihazlarında güvende tut",
-    upgradeTitle: "Social XP+ kilidini aç",
+    upgradeTitle: "Convozy+ kilidini aç",
     upgradeSub: "Tüm bölümler, sınırsız koç tekrarı, seri onarımı",
-    plusName: "Social XP+",
+    plusName: "Convozy+",
     subTrial: (date?: string) => `Ücretsiz deneme${date ? ` · ilk ödeme ${date}` : ""}`,
     subActive: (plan: "monthly" | "yearly", date?: string) =>
       `${plan === "yearly" ? "Yıllık" : "Aylık"} plan${date ? ` · yenilenme ${date}` : ""}`,
@@ -456,7 +456,7 @@ const tr: Dictionary = {
     settingsCardSub: "Hesap, hatırlatıcılar, dil",
     shareProgress: "İlerlememi paylaş",
     shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
-      `🏆 Seviye ${level} · ⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Social XP'de. Sosyal beceriler sadece tekrar meselesi.`,
+      `🏆 Seviye ${level} · ⚡ ${xp} XP · 🔥 ${streak} günlük seri · ${quotes} söz, Convozy'de. Sosyal beceriler sadece tekrar meselesi.`,
     thisWeek: "Bu hafta",
     weekdayLetters: ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"],
     weekActivitySummary: (n: number) =>
@@ -487,7 +487,7 @@ const tr: Dictionary = {
   },
 
   paywall: {
-    brandBadge: "SOCIAL XP+",
+    brandBadge: "CONVOZY+",
     title: "İstediğin kadar antrenman yap.",
     perks: [
       "İlk günden tüm bölümler açık",
@@ -506,11 +506,11 @@ const tr: Dictionary = {
     thenPrice: (plan: "monthly" | "yearly") =>
       `Sonra ${plan === "yearly" ? "$39.99/yıl" : "$6.99/ay"} · istediğin an iptal et`,
     disclaimer:
-      "Social XP, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir.",
+      "Convozy, pratik yoluyla özgüven inşa eder. Terapi ya da ruh sağlığı tedavisi değildir.",
     manageSubscription: "Aboneliği yönet",
     opening: "Açılıyor…",
     manageFailed: "Açılamadı - tekrar dene",
-    successTitlePremium: "Social XP+'a hoş geldin",
+    successTitlePremium: "Convozy+'a hoş geldin",
     successTitlePending: "Ödeme alındı",
     successBodyPremium: "Her bölüm açık. İstediğin sırada, istediğin kadar antrenman yap.",
     successBodyPending: "Yükseltmene saniyeler kaldı - ödeme onaylanır onaylanmaz açılıyor.",

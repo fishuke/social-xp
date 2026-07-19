@@ -9,7 +9,7 @@ type Mail = { to: string; subject: string; text: string };
 
 async function sendMail(mail: Mail): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.MAIL_FROM || "Social XP <onboarding@resend.dev>";
+  const from = process.env.MAIL_FROM || "Convozy <onboarding@resend.dev>";
 
   if (!apiKey) {
     console.log(`[mail:dev] to=${mail.to} subject="${mail.subject}"\n${mail.text}`);
@@ -36,66 +36,66 @@ function appUrl(): string {
 
 const resetMail: Record<Locale, (link: string) => { subject: string; text: string }> = {
   en: (link) => ({
-    subject: "Reset your Social XP password",
+    subject: "Reset your Convozy password",
     text: [
       "Hi,",
       "",
-      "Someone (hopefully you) asked to reset the password for this Social XP account.",
+      "Someone (hopefully you) asked to reset the password for this Convozy account.",
       "The link below works once and expires in 1 hour:",
       "",
       link,
       "",
       "Didn't ask for this? You can safely ignore this email. Your password stays as it is.",
       "",
-      "Social XP",
+      "Convozy",
     ].join("\n"),
   }),
   tr: (link) => ({
-    subject: "Social XP şifreni sıfırla",
+    subject: "Convozy şifreni sıfırla",
     text: [
       "Merhaba,",
       "",
-      "Birisi (umarız sensindir) bu Social XP hesabının şifresini sıfırlamak istedi.",
+      "Birisi (umarız sensindir) bu Convozy hesabının şifresini sıfırlamak istedi.",
       "Aşağıdaki bağlantı bir kez çalışır ve 1 saat içinde geçerliliğini yitirir:",
       "",
       link,
       "",
       "Bunu sen istemediysen bu e-postayı yok sayabilirsin. Şifren olduğu gibi kalır.",
       "",
-      "Social XP",
+      "Convozy",
     ].join("\n"),
   }),
 };
 
 const verifyMail: Record<Locale, (link: string) => { subject: string; text: string }> = {
   en: (link) => ({
-    subject: "Verify your Social XP email",
+    subject: "Verify your Convozy email",
     text: [
       "Hi,",
       "",
-      "Confirm this email address for your Social XP account by opening the link below.",
+      "Confirm this email address for your Convozy account by opening the link below.",
       "It expires in 24 hours:",
       "",
       link,
       "",
       "Didn't create an account? You can safely ignore this email.",
       "",
-      "Social XP",
+      "Convozy",
     ].join("\n"),
   }),
   tr: (link) => ({
-    subject: "Social XP e-postanı doğrula",
+    subject: "Convozy e-postanı doğrula",
     text: [
       "Merhaba,",
       "",
-      "Aşağıdaki bağlantıyı açarak bu e-posta adresini Social XP hesabın için doğrula.",
+      "Aşağıdaki bağlantıyı açarak bu e-posta adresini Convozy hesabın için doğrula.",
       "Bağlantı 24 saat içinde geçerliliğini yitirir:",
       "",
       link,
       "",
       "Bir hesap oluşturmadıysan bu e-postayı yok sayabilirsin.",
       "",
-      "Social XP",
+      "Convozy",
     ].join("\n"),
   }),
 };

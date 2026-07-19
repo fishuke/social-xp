@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Social XP: agent map
+# Convozy: agent map
 
 Duolingo-style app for training social skills: 3-minute lessons, one
 real-world rep a day, XP, streaks, quests, chests, collectible quotes, an AI

@@ -30,7 +30,7 @@ export default async function SiteLayout({
           <BackButton />
           <span className="flex items-center gap-2">
             <Logo size={24} />
-            <span className="font-display text-[16px] font-semibold text-cocoa">Social XP</span>
+            <span className="font-display text-[16px] font-semibold text-cocoa">Convozy</span>
           </span>
         </div>
         <main className="flex-1">{children}</main>
@@ -44,7 +44,7 @@ export default async function SiteLayout({
         <div className="mx-auto flex w-full max-w-[1020px] items-center justify-between px-6 py-4">
           <Link href={withLocale(locale, "/")} className="flex items-center gap-2.5">
             <Logo size={32} />
-            <span className="font-display text-[19px] font-semibold text-cocoa">Social XP</span>
+            <span className="font-display text-[19px] font-semibold text-cocoa">Convozy</span>
           </Link>
           <nav className="flex items-center gap-5">
             <Link
@@ -78,7 +78,7 @@ export default async function SiteLayout({
         <div className="mx-auto flex w-full max-w-[1020px] flex-col items-center gap-5 px-6 text-center">
           <span className="flex items-center gap-2">
             <Logo size={26} />
-            <span className="font-display text-[16px] font-semibold text-cocoa">Social XP</span>
+            <span className="font-display text-[16px] font-semibold text-cocoa">Convozy</span>
           </span>
           <p className="max-w-[440px] font-body text-[12px] font-bold leading-[1.5] text-faint2">
             {t.landing.footerDisclaimer}

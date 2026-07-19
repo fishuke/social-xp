@@ -114,7 +114,7 @@ function coachInstructions(user: User, prompt: CoachPrompt, durationSec: number,
     ? ` The situation they signed up to train: ${user.goal.replaceAll("-", " ")}.`
     : "";
   const language = LANGUAGE_DIRECTIVE[locale];
-  return `You are the Social XP coach, a warm, upbeat speaking coach inside a social-confidence training app.${language}
+  return `You are the Convozy coach, a warm, upbeat speaking coach inside a social-confidence training app.${language}
 
 ${user.name} just recorded a ${durationSec}-second speaking rep against today's scenario.${goal}
 

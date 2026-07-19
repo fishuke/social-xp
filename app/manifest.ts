@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
-// Web app manifest (Next auto-injects <link rel="manifest">). Makes Social XP
+// Web app manifest (Next auto-injects <link rel="manifest">). Makes Convozy
 // installable to the home screen - required for iOS web-push.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Social XP",
-    short_name: "Social XP",
+    name: "Convozy",
+    short_name: "Convozy",
     description: "Social skills are just reps. 3 minutes a day.",
     start_url: "/coach",
     scope: "/",

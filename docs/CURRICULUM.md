@@ -1,4 +1,4 @@
-# Social XP — Curriculum Map (source of truth)
+# Convozy: Curriculum Map (source of truth)
 
 CEFR-style progression for the **Social Skills** course. Every lesson gets a **can-do statement**
 ("Can decline a favor and survive the silence") — completing it is the level-up condition.

@@ -17,7 +17,7 @@ function ensureVapid(): void {
   if (!publicKey || !privateKey) {
     throw new Error("VAPID keys are not configured (NEXT_PUBLIC_VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY)");
   }
-  webpush.setVapidDetails(process.env.VAPID_SUBJECT || "mailto:hello@social-xp.app", publicKey, privateKey);
+  webpush.setVapidDetails(process.env.VAPID_SUBJECT || "mailto:hello@convozy.app", publicKey, privateKey);
   configured = true;
 }
 

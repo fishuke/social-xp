@@ -30,7 +30,7 @@ const en = {
   },
 
   onboarding: {
-    brand: "Social XP",
+    brand: "Convozy",
     heroTitleLine1: "Social skills are",
     heroTitleLine2: "just reps.",
     heroBody:
@@ -107,7 +107,7 @@ const en = {
   },
 
   landing: {
-    metaTitle: "Social XP · Social confidence in 3 minutes a day",
+    metaTitle: "Convozy · Social confidence in 3 minutes a day",
     metaDescription:
       "Bite-size lessons, real-world challenges, and an AI speaking coach. Train talking to people the way Duolingo trains French.",
     heroChip: "3 minutes a day",
@@ -191,7 +191,7 @@ const en = {
         "✓ 1 AI coach rep per day",
       ],
       plusBadge: "7-DAY FREE TRIAL",
-      plusName: "Social XP+",
+      plusName: "Convozy+",
       plusPriceMonthly: "$6.99",
       plusPriceUnit: "/mo",
       plusPriceYearly: "or $39.99/yr (save 52%)",
@@ -207,7 +207,7 @@ const en = {
     faq: [
       {
         q: "Is this therapy?",
-        a: "No. Social XP is skills training, like a gym for conversations. It borrows methods that clinicians validated (CBT, exposure), but it isn't therapy, diagnosis, or treatment, and it doesn't replace professional care.",
+        a: "No. Convozy is skills training, like a gym for conversations. It borrows methods that clinicians validated (CBT, exposure), but it isn't therapy, diagnosis, or treatment, and it doesn't replace professional care.",
       },
       {
         q: "How much time does it take?",
@@ -218,7 +218,7 @@ const en = {
         a: "No. You can start training immediately; progress saves on your device. Create a free account later to keep your streak safe across devices.",
       },
       {
-        q: "What does Social XP+ add?",
+        q: "What does Convozy+ add?",
         a: "Every chapter unlocked from day one, unlimited AI coach sessions, and streak repair. Plans start with a 7-day free trial: $6.99/month or $39.99/year.",
       },
       {
@@ -230,32 +230,32 @@ const en = {
     finalCtaBody: "No signup, no credit card. Just the door-hold scenario and a little XP.",
     finalCta: "Start training free",
     footerDisclaimer:
-      "Social XP builds confidence through practice. It's not therapy or mental-health treatment, and it doesn't replace professional care.",
-    footerCopyright: (year: number) => `© ${year} Social XP`,
+      "Convozy builds confidence through practice. It's not therapy or mental-health treatment, and it doesn't replace professional care.",
+    footerCopyright: (year: number) => `© ${year} Convozy`,
   },
 
   method: {
-    metaTitle: "The Method · Social XP",
+    metaTitle: "The Method · Convozy",
     metaDescription:
-      "Why Social XP works: Behavioral Skills Training, CBT thought work, graded exposure, and spaced retrieval.",
+      "Why Convozy works: Behavioral Skills Training, CBT thought work, graded exposure, and spaced retrieval.",
     kicker: "The method",
     title: "Not random lessons.",
     intro:
-      "Every lesson in Social XP is built on methods validated in peer-reviewed research on how people actually learn social skills.",
+      "Every lesson in Convozy is built on methods validated in peer-reviewed research on how people actually learn social skills.",
     tryFirstLesson: "Try the first lesson",
     disclaimer:
-      "Social XP builds confidence through practice. It's not therapy or mental-health treatment.",
+      "Convozy builds confidence through practice. It's not therapy or mental-health treatment.",
   },
 
   legal: {
-    privacyMetaTitle: "Privacy Policy · Social XP",
-    privacyMetaDescription: "What Social XP collects, why, and the choices you have.",
+    privacyMetaTitle: "Privacy Policy · Convozy",
+    privacyMetaDescription: "What Convozy collects, why, and the choices you have.",
     privacyKicker: "Privacy policy",
     privacyTitle: "Your reps stay yours.",
     privacyIntro: (updated: string) =>
-      `Social XP collects the minimum needed to run your training. Here's the whole picture, in plain language. Last updated ${updated}.`,
-    termsMetaTitle: "Terms of Service · Social XP",
-    termsMetaDescription: "The agreement between you and Social XP.",
+      `Convozy collects the minimum needed to run your training. Here's the whole picture, in plain language. Last updated ${updated}.`,
+    termsMetaTitle: "Terms of Service · Convozy",
+    termsMetaDescription: "The agreement between you and Convozy.",
     termsKicker: "Terms of service",
     termsTitle: "The deal, in plain words.",
     termsIntro: (updated: string) =>
@@ -297,7 +297,7 @@ const en = {
     isNew: "NEW",
     lesson: (index: number) => `Lesson ${index}`,
     ofSix: (n: number) => `${n} of 6`,
-    shareMessage: (text: string, author: string) => `“${text}” · ${author} · collected on Social XP`,
+    shareMessage: (text: string, author: string) => `“${text}” · ${author} · collected on Convozy`,
     dialogLabel: "Quote detail",
   },
 
@@ -322,7 +322,7 @@ const en = {
     whatWorked: "What worked",
     oneThingTitle: "One thing to try",
     transcript: "Transcript",
-    goUnlimited: "Go unlimited with Social XP+",
+    goUnlimited: "Go unlimited with Convozy+",
     freeRepUsed: "That's today's free rep. New prompt tomorrow.",
     tryAgainXp: "Try again · +15 XP",
     recentReps: "Recent reps",
@@ -330,10 +330,10 @@ const en = {
     gatedTitle: "Today's free rep, done. 💪",
     gatedBody:
       "Nice work showing up. A fresh prompt lands tomorrow, or go unlimited and rep as much as you want.",
-    getPlus: "Get Social XP+",
+    getPlus: "Get Convozy+",
     shareResult: "Share my rep",
     shareMessage: (grade: string, score: number) =>
-      `🎤 ${grade} speaking rep, scored ${score}/100 on Social XP. Social skills are just reps.`,
+      `🎤 ${grade} speaking rep, scored ${score}/100 on Convozy. Social skills are just reps.`,
 
     // live roleplay (v4: a date, not a dashboard)
     liveCta: (name: string) => `Talk it out with ${name}`,
@@ -411,7 +411,7 @@ const en = {
     turnOnReminders: "Turn on reminders",
     keepItGoing: "Keep it going",
     shareMyStreak: "Share my streak",
-    shareMessage: (n: number) => `🔥 ${n}-day streak on Social XP. Social skills are just reps.`,
+    shareMessage: (n: number) => `🔥 ${n}-day streak on Convozy. Social skills are just reps.`,
   },
 
   you: {
@@ -440,9 +440,9 @@ const en = {
     emailVerifiedBanner: "Email verified. You're all set ✅",
     createAccountTitle: "Create an account",
     createAccountSub: "Keep your streak & XP safe across devices",
-    upgradeTitle: "Unlock Social XP+",
+    upgradeTitle: "Unlock Convozy+",
     upgradeSub: "All chapters, unlimited coach reps, streak repair",
-    plusName: "Social XP+",
+    plusName: "Convozy+",
     subTrial: (date?: string) => `Free trial${date ? ` · first charge ${date}` : ""}`,
     subActive: (plan: "monthly" | "yearly", date?: string) =>
       `${plan === "yearly" ? "Yearly" : "Monthly"} plan${date ? ` · renews ${date}` : ""}`,
@@ -455,7 +455,7 @@ const en = {
     settingsCardSub: "Account, reminders, language",
     shareProgress: "Share progress",
     shareMessage: (level: number, xp: string, streak: number, quotes: number) =>
-      `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quote${quotes === 1 ? "" : "s"} on Social XP. Social skills are just reps.`,
+      `🏆 Level ${level} · ⚡ ${xp} XP · 🔥 ${streak}-day streak · ${quotes} quote${quotes === 1 ? "" : "s"} on Convozy. Social skills are just reps.`,
     thisWeek: "This week",
     weekdayLetters: ["M", "T", "W", "T", "F", "S", "S"],
     weekActivitySummary: (n: number) =>
@@ -486,7 +486,7 @@ const en = {
   },
 
   paywall: {
-    brandBadge: "SOCIAL XP+",
+    brandBadge: "CONVOZY+",
     title: "Train as much as you want.",
     perks: [
       "All chapters unlocked from day one",
@@ -504,11 +504,11 @@ const en = {
     startTrial: "Start 7-day free trial",
     thenPrice: (plan: "monthly" | "yearly") =>
       `Then ${plan === "yearly" ? "$39.99/yr" : "$6.99/mo"} · cancel anytime`,
-    disclaimer: "Social XP builds confidence through practice. It's not therapy or mental-health treatment.",
+    disclaimer: "Convozy builds confidence through practice. It's not therapy or mental-health treatment.",
     manageSubscription: "Manage subscription",
     opening: "Opening…",
     manageFailed: "Couldn't open - try again",
-    successTitlePremium: "Welcome to Social XP+",
+    successTitlePremium: "Welcome to Convozy+",
     successTitlePending: "Payment received",
     successBodyPremium: "Every chapter is unlocked. Train in any order, as much as you want.",
     successBodyPending: "Your upgrade is seconds away - it unlocks as soon as the payment confirms.",

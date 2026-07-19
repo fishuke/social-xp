@@ -8,7 +8,7 @@ import type { Locale } from "./i18n/config";
 
 // TODO: switch to the real support address once the production domain lands
 // (docs/BACKLOG.md, "Domain + production launch").
-export const SUPPORT_EMAIL = "support@social-xp.app";
+export const SUPPORT_EMAIL = "support@convozy.app";
 
 export const LEGAL_UPDATED: Record<Locale, string> = {
   en: "July 7, 2026",
@@ -112,7 +112,7 @@ export const PRIVACY_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "Your choices",
-      body: `You can use Social XP without an account, opt out of reminders, and cancel your subscription any time. To access or delete your data, email ${SUPPORT_EMAIL} and we'll handle it within 30 days.`,
+      body: `You can use Convozy without an account, opt out of reminders, and cancel your subscription any time. To access or delete your data, email ${SUPPORT_EMAIL} and we'll handle it within 30 days.`,
     },
   ],
   tr: [
@@ -142,7 +142,7 @@ export const PRIVACY_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "Senin seçeneklerin",
-      body: `Social XP'yi hesapsız kullanabilir, hatırlatıcıları kapatabilir ve aboneliğini istediğin zaman iptal edebilirsin. Verilerine erişmek veya onları silmek için ${SUPPORT_EMAIL} adresine yaz, 30 gün içinde hallederiz.`,
+      body: `Convozy'yi hesapsız kullanabilir, hatırlatıcıları kapatabilir ve aboneliğini istediğin zaman iptal edebilirsin. Verilerine erişmek veya onları silmek için ${SUPPORT_EMAIL} adresine yaz, 30 gün içinde hallederiz.`,
     },
   ],
 };
@@ -151,11 +151,11 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
   en: [
     {
       title: "The service",
-      body: "Social XP is a training app for social confidence: short lessons, quizzes, real-world challenges, and an AI speaking coach. You need to be at least 13 to use it (or the minimum age in your country), and under 18 you'll need a parent or guardian's OK.",
+      body: "Convozy is a training app for social confidence: short lessons, quizzes, real-world challenges, and an AI speaking coach. You need to be at least 13 to use it (or the minimum age in your country), and under 18 you'll need a parent or guardian's OK.",
     },
     {
       title: "Not therapy",
-      body: "Social XP builds confidence through practice. It is not therapy, medical care, or mental-health treatment, and it doesn't replace them. If you're struggling, please reach out to a qualified professional.",
+      body: "Convozy builds confidence through practice. It is not therapy, medical care, or mental-health treatment, and it doesn't replace them. If you're struggling, please reach out to a qualified professional.",
     },
     {
       title: "Your account",
@@ -163,7 +163,7 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "Subscriptions & billing",
-      body: `Social XP+ is sold through Lemon Squeezy, our merchant of record and the legal seller. Plans start with a 7-day free trial, then renew automatically (monthly or yearly) until you cancel. Cancel any time from Manage subscription on the You page; you keep access until the end of the period you paid for. Refund requests go through Lemon Squeezy or ${SUPPORT_EMAIL}.`,
+      body: `Convozy+ is sold through Lemon Squeezy, our merchant of record and the legal seller. Plans start with a 7-day free trial, then renew automatically (monthly or yearly) until you cancel. Cancel any time from Manage subscription on the You page; you keep access until the end of the period you paid for. Refund requests go through Lemon Squeezy or ${SUPPORT_EMAIL}.`,
     },
     {
       title: "Fair use",
@@ -171,11 +171,11 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "Our content",
-      body: "Lessons, quotes curation, and app design belong to Social XP. They're licensed to you for personal use, not for republishing or building competing courses.",
+      body: "Lessons, quotes curation, and app design belong to Convozy. They're licensed to you for personal use, not for republishing or building competing courses.",
     },
     {
       title: "No guarantees",
-      body: "We work hard to keep Social XP up and improving, but it's provided as is, without warranties. To the extent the law allows, our liability is limited to what you paid us in the last 12 months.",
+      body: "We work hard to keep Convozy up and improving, but it's provided as is, without warranties. To the extent the law allows, our liability is limited to what you paid us in the last 12 months.",
     },
     {
       title: "Changes",
@@ -185,11 +185,11 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
   tr: [
     {
       title: "Hizmet",
-      body: "Social XP sosyal özgüven için bir antrenman uygulamasıdır: kısa dersler, sorular, gerçek hayat görevleri ve bir yapay zeka konuşma koçu. Kullanmak için en az 13 yaşında olman gerekir (ya da ülkendeki asgari yaş) ve 18 yaşından küçüksen bir ebeveyn ya da vasinin onayı gerekir.",
+      body: "Convozy sosyal özgüven için bir antrenman uygulamasıdır: kısa dersler, sorular, gerçek hayat görevleri ve bir yapay zeka konuşma koçu. Kullanmak için en az 13 yaşında olman gerekir (ya da ülkendeki asgari yaş) ve 18 yaşından küçüksen bir ebeveyn ya da vasinin onayı gerekir.",
     },
     {
       title: "Terapi değildir",
-      body: "Social XP özgüveni pratikle inşa eder. Terapi, tıbbi bakım ya da ruh sağlığı tedavisi değildir ve bunların yerini tutmaz. Zorlanıyorsan lütfen nitelikli bir uzmana başvur.",
+      body: "Convozy özgüveni pratikle inşa eder. Terapi, tıbbi bakım ya da ruh sağlığı tedavisi değildir ve bunların yerini tutmaz. Zorlanıyorsan lütfen nitelikli bir uzmana başvur.",
     },
     {
       title: "Hesabın",
@@ -197,7 +197,7 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "Abonelikler ve faturalandırma",
-      body: `Social XP+, kayıtlı satıcımız ve yasal satıcı olan Lemon Squeezy üzerinden satılır. Planlar 7 günlük ücretsiz denemeyle başlar, sonra sen iptal edene kadar otomatik yenilenir (aylık veya yıllık). Sen sayfasındaki Aboneliği yönet üzerinden istediğin zaman iptal et; ödediğin dönemin sonuna kadar erişimin sürer. İade talepleri Lemon Squeezy ya da ${SUPPORT_EMAIL} üzerinden yürür.`,
+      body: `Convozy+, kayıtlı satıcımız ve yasal satıcı olan Lemon Squeezy üzerinden satılır. Planlar 7 günlük ücretsiz denemeyle başlar, sonra sen iptal edene kadar otomatik yenilenir (aylık veya yıllık). Sen sayfasındaki Aboneliği yönet üzerinden istediğin zaman iptal et; ödediğin dönemin sonuna kadar erişimin sürer. İade talepleri Lemon Squeezy ya da ${SUPPORT_EMAIL} üzerinden yürür.`,
     },
     {
       title: "Adil kullanım",
@@ -205,11 +205,11 @@ export const TERMS_SECTIONS: Record<Locale, ContentSection[]> = {
     },
     {
       title: "İçeriğimiz",
-      body: "Dersler, söz derlemesi ve uygulama tasarımı Social XP'ye aittir. Bunlar sana kişisel kullanım için lisanslanır; yeniden yayımlamak ya da rakip kurslar oluşturmak için değil.",
+      body: "Dersler, söz derlemesi ve uygulama tasarımı Convozy'ye aittir. Bunlar sana kişisel kullanım için lisanslanır; yeniden yayımlamak ya da rakip kurslar oluşturmak için değil.",
     },
     {
       title: "Garanti yok",
-      body: "Social XP'yi ayakta ve gelişiyor tutmak için çok çalışıyoruz, ama hizmet olduğu gibi, garantisiz sunulur. Yasanın izin verdiği ölçüde sorumluluğumuz, son 12 ayda bize ödediğin tutarla sınırlıdır.",
+      body: "Convozy'yi ayakta ve gelişiyor tutmak için çok çalışıyoruz, ama hizmet olduğu gibi, garantisiz sunulur. Yasanın izin verdiği ölçüde sorumluluğumuz, son 12 ayda bize ödediğin tutarla sınırlıdır.",
     },
     {
       title: "Değişiklikler",

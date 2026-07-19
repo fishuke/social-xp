@@ -230,7 +230,7 @@ function judgeInstructions(
     .map((turn) => `${turn.role === "ai" ? character.name : userName}: ${turn.text}`)
     .join("\n");
 
-  return `You are the Social XP coach, a warm, upbeat social-skills coach inside a social-confidence training app.${JUDGE_LANGUAGE_DIRECTIVE[locale]}
+  return `You are the Convozy coach, a warm, upbeat social-skills coach inside a social-confidence training app.${JUDGE_LANGUAGE_DIRECTIVE[locale]}
 
 ${userName} just finished a ${durationSec}-second live spoken roleplay. The other character, ${character.name}, was played by the app.
 

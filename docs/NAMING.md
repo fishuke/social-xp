@@ -1,7 +1,10 @@
 # Naming: replacing "Social XP"
 
-Status: **deciding**. Front-runner: **Enheart** (`enheart.app`). Runners-up:
-Braveish, Small Dares. Decision owner: Mehmet.
+Status: **decided** (2026-07-19). Winner: **Convozy** (`convozy.app`). The repo
+rename pass (manifest, app strings, emails, `NEXT_PUBLIC_APP_URL` fallback,
+README, docs) has landed; the Vercel project/domain, Resend identity, and Lemon
+Squeezy store still inherit the name at infra time. The finalists below
+(Enheart, Braveish, Small Dares) are kept for historical context.
 
 "Social XP" is a working title: gamer jargon plus the word "social" reads
 slightly diagnostic on a home screen. The rename must land **before** the
