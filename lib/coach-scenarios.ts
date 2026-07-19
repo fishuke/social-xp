@@ -293,7 +293,7 @@ export const SCENARIOS: CoachScenario[] = [
     text: {
       en: {
         title: "The hole in the plan",
-        setup: "Team meeting. Everyone likes a plan you think has a hole in it. The lead turns to you.",
+        setup: "Team meeting. Everyone is ready to lock next week's launch date, but you think it will slip. The lead turns to you.",
         line: "Any thoughts before we lock this in?",
         sub: "Name the risk clearly without torching the plan or the room.",
         character: {
@@ -308,7 +308,7 @@ export const SCENARIOS: CoachScenario[] = [
       },
       tr: {
         title: "Plandaki açık",
-        setup: "Ekip toplantısı. Sence açığı olan bir planı herkes beğenmiş. Lider sana dönüyor.",
+        setup: "Ekip toplantısı. Herkes gelecek haftaki lansman tarihini kesinleştirmeye hazır ama sence bu tarih kayacak. Lider sana dönüyor.",
         line: "Kilitlemeden önce eklemek istediğin bir şey var mı?",
         sub: "Planı da ortamı da yakmadan riski net söyle.",
         character: {
@@ -373,7 +373,7 @@ export const SCENARIOS: CoachScenario[] = [
     text: {
       en: {
         title: "Floor is yours",
-        setup: "You mentioned an idea in the chat. The manager stops the meeting.",
+        setup: "Team meeting. You dropped one line in the chat, a way to cut the weekly reports in half, and the manager stops everything to hear it.",
         line: "That's interesting. Walk us through it.",
         sub: "Structure it: the problem, your idea, why it works. 30 seconds.",
         character: {
@@ -388,7 +388,7 @@ export const SCENARIOS: CoachScenario[] = [
       },
       tr: {
         title: "Söz sende",
-        setup: "Yazışmada bir fikirden bahsetmiştin. Yönetici toplantıyı durduruyor.",
+        setup: "Ekip toplantısı. Sohbete tek satır düşürdün, haftalık raporları yarıya indirmenin bir yolu, ve yönetici her şeyi durdurup seni dinlemek istiyor.",
         line: "İlginç. Bize baştan anlatır mısın?",
         sub: "Sırayla: sorun, fikrin, neden işe yarar. 30 saniye.",
         character: {
