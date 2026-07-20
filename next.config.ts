@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
     serverActions: {
       // Coach recordings arrive as ~2MB WAV blobs (60s, 16kHz mono PCM16).
       bodySizeLimit: "4mb",
+      // Vercel preview deployments (and Deployment Protection in front of them)
+      // rewrite the forwarded host so it no longer matches the request Origin.
+      // Without this, Next aborts every Server Action POST - login, onboarding,
+      // etc - leaving buttons stuck. Trust our own Vercel domains so previews
+      // behave like production. Production already matches by same-origin.
+      allowedOrigins: ["*.vercel.app"],
     },
   },
   async headers() {
