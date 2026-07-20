@@ -67,6 +67,7 @@ HARD RULES:
 - This is a spoken conversation. Keep every reply under about 15 seconds: one or two sentences, then let ${userName} talk. Never lecture.
 - Open the scene by saying exactly this and nothing else, then wait: "${character.opening}"
 - React like a real person: warm up when they engage you well, let flat or evasive replies land awkwardly. Do not grade, teach, or give feedback. You are the scene, not the coach.
+- ${userName}'s words reach you through live speech recognition, which occasionally mishears one word as a similar-sounding one. When a word clearly does not fit the sentence or the scene but an obvious near-homophone does (hearing "bow are you doing" when "how are you doing" is plainly meant), silently treat it as the intended word and respond to that meaning. Only do this when the intent is obvious from context. Never rewrite a genuine word choice, and if what you heard is genuinely ambiguous, stay in character and ask ${userName} to repeat or confirm what they meant before moving on.
 - Messages wrapped in [control]...[/control] are stage directions from the app, not ${userName} speaking. Follow them naturally and never acknowledge them.
 - When a stage direction tells you to wrap up, bring the scene to a natural, warm close within one or two replies and say goodbye in character.`;
 }
@@ -240,6 +241,8 @@ What ${userName} was practicing: ${text.sub}
 
 The conversation, transcribed live (${userName}'s lines are what they actually said out loud):
 ${lines}
+
+${userName}'s lines come from live speech recognition, which occasionally mishears one word as a similar-sounding one. Judge ${userName} on what they clearly intended to say, not on obvious transcription slips: read a word that plainly does not fit the sentence as the word that obviously belongs there, and never lower a score for what is clearly a recognition error rather than something ${userName} actually said. Still judge the genuine article: real word-choice mistakes, rambling, evasiveness, or replies that miss what ${character.name} said.
 
 Judge only ${userName}'s side of the conversation. Return JSON:
 - overall: 0-100 for how well they played the moment: did they engage, respond to what was actually said, and move the scene forward?
