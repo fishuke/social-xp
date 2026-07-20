@@ -603,6 +603,7 @@ const tr: Dictionary = {
   },
 
   errors: {
+    somethingWrong: "Bir şeyler ters gitti. Lütfen tekrar dene.",
     passwordsDontMatch: "O şifreler eşleşmiyor.",
     invalidInput: "Geçersiz giriş",
     emailTaken: "O e-postaya bağlı bir hesap zaten var. Onun yerine giriş yap.",

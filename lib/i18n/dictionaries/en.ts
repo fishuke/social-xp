@@ -601,6 +601,7 @@ const en = {
   },
 
   errors: {
+    somethingWrong: "Something went wrong. Please try again.",
     passwordsDontMatch: "Those passwords don't match.",
     invalidInput: "Invalid input",
     emailTaken: "That email already has an account. Log in instead.",

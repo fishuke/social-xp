@@ -26,14 +26,21 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     if (busy) return;
     setBusy(true);
     setError(null);
-    const result: AuthResult = isLogin
-      ? await loginAccount({ email, password })
-      : await registerAccount({ email, password });
-    if (result.ok) {
-      router.replace(withLocale(locale, "/coach"));
-      router.refresh();
-    } else {
-      setError(result.error);
+    try {
+      const result: AuthResult = isLogin
+        ? await loginAccount({ email, password })
+        : await registerAccount({ email, password });
+      if (result.ok) {
+        router.replace(withLocale(locale, "/coach"));
+        router.refresh();
+      } else {
+        setError(result.error);
+        setBusy(false);
+      }
+    } catch {
+      // A rejected server action (e.g. a blocked request on a preview
+      // deployment) must never leave the button stuck spinning.
+      setError(t.errors.somethingWrong);
       setBusy(false);
     }
   }
@@ -101,12 +108,18 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
             disabled={busy}
             onClick={async () => {
               setBusy(true);
-              const result = await loginAccount({ email: "demo@social.xp", password: "password123" });
-              if (result.ok) {
-                router.replace(withLocale(locale, "/coach"));
-                router.refresh();
-              } else {
-                setError(result.error);
+              setError(null);
+              try {
+                const result = await loginAccount({ email: "demo@social.xp", password: "password123" });
+                if (result.ok) {
+                  router.replace(withLocale(locale, "/coach"));
+                  router.refresh();
+                } else {
+                  setError(result.error);
+                  setBusy(false);
+                }
+              } catch {
+                setError(t.errors.somethingWrong);
                 setBusy(false);
               }
             }}
