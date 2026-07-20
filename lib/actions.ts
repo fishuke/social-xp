@@ -386,6 +386,21 @@ export async function getManageSubscriptionUrl(): Promise<string | null> {
 
 export type AuthResult = { ok: true } | { ok: false; error: string };
 
+// An auth action must never throw back to the client: an unhandled rejection
+// leaves the form's submit button stuck spinning forever with no explanation.
+// The usual culprit is an environment that can't reach the database or is
+// missing AUTH_SECRET - e.g. a Vercel preview whose env vars were only set for
+// production. Log the real cause, and surface it on screen outside production
+// so preview testers can report exactly what failed.
+function authFailure(fallback: string, error: unknown): AuthResult {
+  console.error("auth action failed:", error);
+  const detail = error instanceof Error ? error.message : String(error);
+  // Hide internals on the real production site; show them everywhere else
+  // (previews, local dev) so the failing piece is obvious to a tester.
+  const hideDetail = process.env.VERCEL_ENV === "production";
+  return { ok: false, error: hideDetail ? fallback : `${fallback} (${detail})` };
+}
+
 export async function registerAccount(input: { email: string; password: string }): Promise<AuthResult> {
   const e = await errs();
   const parsed = credentialsSchema.safeParse(input);
@@ -394,26 +409,30 @@ export async function registerAccount(input: { email: string; password: string }
   }
   const { email, password } = parsed.data;
 
-  const taken = await prisma.user.findUnique({ where: { email } });
-  if (taken) return { ok: false, error: e.emailTaken };
-
-  const current = await getSessionUser();
-  const passwordHash = await hash(password, 10);
-  const user =
-    current && !current.email
-      ? // upgrade the anonymous user - progress, XP, and streak are kept
-        await prisma.user.update({ where: { id: current.id }, data: { email, passwordHash } })
-      : await prisma.user.create({ data: { email, passwordHash } });
-
-  // Best effort: a broken mail provider must never block registration.
   try {
-    await sendVerificationMail(email, await createAuthToken(user.id, "verify"), user.locale);
-  } catch (error) {
-    console.error("verification mail failed:", error);
-  }
+    const taken = await prisma.user.findUnique({ where: { email } });
+    if (taken) return { ok: false, error: e.emailTaken };
 
-  await signIn("credentials", { email, password, redirect: false });
-  return { ok: true };
+    const current = await getSessionUser();
+    const passwordHash = await hash(password, 10);
+    const user =
+      current && !current.email
+        ? // upgrade the anonymous user - progress, XP, and streak are kept
+          await prisma.user.update({ where: { id: current.id }, data: { email, passwordHash } })
+        : await prisma.user.create({ data: { email, passwordHash } });
+
+    // Best effort: a broken mail provider must never block registration.
+    try {
+      await sendVerificationMail(email, await createAuthToken(user.id, "verify"), user.locale);
+    } catch (error) {
+      console.error("verification mail failed:", error);
+    }
+
+    await signIn("credentials", { email, password, redirect: false });
+    return { ok: true };
+  } catch (error) {
+    return authFailure(e.somethingWrong, error);
+  }
 }
 
 const LOGIN_FAILS = 5;
@@ -426,10 +445,10 @@ export async function loginAccount(input: { email: string; password: string }): 
     return { ok: false, error: parsed.error.issues[0]?.message ?? e.invalidInput };
   }
   const throttleKey = `login:${parsed.data.email}`;
-  if (await isRateLimited(throttleKey, LOGIN_FAILS)) {
-    return { ok: false, error: e.tooManyLoginAttempts };
-  }
   try {
+    if (await isRateLimited(throttleKey, LOGIN_FAILS)) {
+      return { ok: false, error: e.tooManyLoginAttempts };
+    }
     await signIn("credentials", { ...parsed.data, redirect: false });
     await clearRateLimit(throttleKey);
     return { ok: true };
@@ -438,7 +457,9 @@ export async function loginAccount(input: { email: string; password: string }): 
       await rateLimit(throttleKey, LOGIN_FAILS, LOGIN_WINDOW_SEC); // count the failure
       return { ok: false, error: e.wrongCredentials };
     }
-    throw error;
+    // Infra failure (DB unreachable, missing AUTH_SECRET, etc): report it
+    // instead of throwing and freezing the button.
+    return authFailure(e.somethingWrong, error);
   }
 }
 
