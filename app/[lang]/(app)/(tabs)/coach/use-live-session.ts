@@ -29,6 +29,13 @@ const SPEAKING_THRESHOLD = 0.025;
 const SPEAKING_HOLD_MS = 350;
 const WRAPUP_CONTROL =
   "Time is almost up. Bring the scene to a natural, warm close in your next reply and say goodbye in character.";
+// Gemini Live is turn-based and stays silent until it receives input, so the
+// character never speaks first on its own. This stage direction fires once the
+// socket is open to hand the character the first turn: the persona prompt
+// already holds the exact opening line, this just triggers it so the user is
+// never forced to open the scene (and judged on how they start it).
+const KICKOFF_CONTROL =
+  "The scene starts now. Deliver your opening line to begin, then wait for a reply.";
 
 export type LiveSessionState = {
   phase: LivePhase;
@@ -326,6 +333,12 @@ export function useLiveSession({
           },
         }
       );
+      // Connect resolved, so the socket is open and the transport is assigned:
+      // nudge the character to take the first turn (its opening line). Isolated
+      // so a send hiccup never triggers the fallback-reconnect path below.
+      try {
+        if (!stale()) transportRef.current?.sendControl(KICKOFF_CONTROL);
+      } catch {}
     } catch {
       if (stale()) return;
       if (choice === "primary") {
