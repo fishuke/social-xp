@@ -8,7 +8,7 @@
 // full-duplex engine (NVIDIA PersonaPlex, EN only) is the planned second
 // transport; see docs/BACKLOG.md.
 
-import { GoogleGenAI, Modality, Type } from "@google/genai";
+import { EndSensitivity, GoogleGenAI, Modality, StartSensitivity, Type } from "@google/genai";
 import { z } from "zod";
 import type { User } from "@prisma/client";
 import { awardCoachSessionXp, countSessionsToday, XP_SESSIONS_PER_DAY } from "./coach";
@@ -121,6 +121,21 @@ export async function mintLiveToken(
           },
           inputAudioTranscription: {},
           outputAudioTranscription: {},
+          // Gemini Live defaults to trigger-happy VAD (high start sensitivity,
+          // short silence window), so ambient noise and natural pauses cut the
+          // character off or split a turn, leaving the scene stalled until the
+          // user speaks again. Damp it: require a little sustained speech to
+          // start a turn and a longer silence to end one. Pairs with the
+          // client muting the mic while the character speaks (see
+          // use-live-session.ts) to keep the conversation flowing steadily.
+          realtimeInputConfig: {
+            automaticActivityDetection: {
+              startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_LOW,
+              endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_LOW,
+              prefixPaddingMs: 300,
+              silenceDurationMs: 800,
+            },
+          },
         },
       },
     },

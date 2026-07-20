@@ -27,6 +27,13 @@ const FINAL_TURN_GRACE_MS = 10_000;
 const INSTANT_CLOSE_MS = 2_000;
 const SPEAKING_THRESHOLD = 0.025;
 const SPEAKING_HOLD_MS = 350;
+// While the character is speaking we stop streaming the mic. Browser echo
+// cancellation does not reliably cancel Web Audio output, so the speaker leaks
+// the character's own voice back into the mic; forwarded to Gemini it reads as
+// the user barging in and cuts the reply off mid-sentence. The tail keeps the
+// mic closed a beat past the last scheduled sample so trailing echo also lands
+// after the gate, not before it.
+const MIC_GATE_TAIL_SEC = 0.2;
 const WRAPUP_CONTROL =
   "Time is almost up. Bring the scene to a natural, warm close in your next reply and say goodbye in character.";
 
@@ -179,6 +186,14 @@ export function useLiveSession({
       if (scheduledRef.current.size === 0) setAiSpeaking(false);
     };
     setAiSpeaking(true);
+  }
+
+  // True while character audio is still scheduled ahead of the play cursor (or
+  // within the echo tail): the window in which the mic must stay closed.
+  function aiAudioPlaying(): boolean {
+    const ctx = ctxRef.current;
+    if (!ctx) return false;
+    return ctx.currentTime < playCursorRef.current + MIC_GATE_TAIL_SEC;
   }
 
   function flushPlayback() {
@@ -370,8 +385,9 @@ export function useLiveSession({
 
     setPhase("connecting");
 
-    // Mic first, inside the tap gesture. Echo cancellation is mandatory: the
-    // speaker plays the character while the mic keeps streaming.
+    // Mic first, inside the tap gesture. Echo cancellation still matters for
+    // the brief reopen window after the coach stops (see MIC_GATE_TAIL_SEC),
+    // even though the mic is gated off for the bulk of the character's turn.
     let stream: MediaStream;
     try {
       stream = await navigator.mediaDevices.getUserMedia({
@@ -402,6 +418,9 @@ export function useLiveSession({
       workletRef.current = worklet;
       worklet.port.onmessage = (event: MessageEvent<ArrayBuffer>) => {
         if (mutedRef.current || stopSendingRef.current || endedRef.current) return;
+        // Half-duplex while the coach speaks: drop mic chunks so speaker echo
+        // never reaches Gemini's VAD and triggers a false interruption.
+        if (aiAudioPlaying()) return;
         try {
           transportRef.current?.sendAudioChunk(pcm16ToBase64(new Int16Array(event.data)));
         } catch {}
