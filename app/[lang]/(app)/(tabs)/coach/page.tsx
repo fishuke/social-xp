@@ -3,12 +3,12 @@ import { getSessionUser } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { coachLocked, countSessionsToday, getDailyPrompt } from "@/lib/coach";
 import { getLiveDefaults } from "@/lib/coach-live";
-import { dailyPackScenario, SCENARIOS, scenarioById } from "@/lib/coach-scenarios";
+import { dailyPackScenario, MENTORS, SCENARIOS, scenarioById } from "@/lib/coach-scenarios";
 import { dayString } from "@/lib/game";
 import { coerceLocale, formatDate } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/routing";
 import { CoachClient, type CoachHistoryItem } from "./coach-client";
-import type { SceneOption } from "./live-client";
+import type { MentorOption, SceneOption } from "./live-client";
 
 export const dynamic = "force-dynamic";
 
@@ -82,12 +82,17 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       dread: s.dread,
       title: text.title,
       setup: text.setup,
-      scene: text.character.scene,
-      personaName: text.character.name,
-      avatar: s.avatar,
+      sceneChip: text.sceneChip,
+      defaultMentorId: s.defaultMentorId,
       isDaily: s.id === prompt.id,
     };
   });
+  const mentors: MentorOption[] = MENTORS.map((m) => ({
+    id: m.id,
+    name: m.name[locale],
+    avatar: m.avatar,
+    tagline: m.tagline[locale],
+  }));
 
   return (
     <CoachClient
@@ -96,7 +101,11 @@ export default async function CoachPage({ params }: { params: Promise<{ lang: st
       locked={coachLocked(user, sessionsToday)}
       isPremium={user.isPremium}
       history={history}
-      live={defaults ? { scenes, defaultId: defaults.scenarioId } : null}
+      live={
+        defaults
+          ? { scenes, mentors, defaultScenarioId: defaults.scenarioId, defaultMentorId: defaults.mentorId }
+          : null
+      }
       dread={user.goal}
     />
   );

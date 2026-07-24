@@ -40,7 +40,7 @@ import {
   mintLiveToken,
   type LiveSessionResult,
 } from "./coach-live";
-import { scenarioById } from "./coach-scenarios";
+import { resolveMentor, scenarioById } from "./coach-scenarios";
 
 async function requireUser(): Promise<User> {
   const user = await getSessionUser();
@@ -216,6 +216,8 @@ const LIVE_MINTS_PER_HOUR = 20;
 
 const startLiveSchema = z.object({
   scenarioId: z.string().min(1).max(64),
+  // Premium picks any mentor; the server pins non-premium to the scene default.
+  mentorId: z.string().min(1).max(64).optional(),
   locale: z.enum(LOCALES),
   // The model id is locked inside the token, so a fallback retry needs a
   // fresh mint against the second model.
@@ -230,7 +232,7 @@ export type StartLiveResult =
 
 export async function startLiveSession(input: StartLiveInput): Promise<StartLiveResult> {
   const user = await requireUser();
-  const { scenarioId, locale, model } = startLiveSchema.parse(input);
+  const { scenarioId, mentorId, locale, model } = startLiveSchema.parse(input);
   const e = getDictionary(locale).errors;
 
   if (!process.env.GEMINI_API_KEY) {
@@ -240,12 +242,15 @@ export async function startLiveSession(input: StartLiveInput): Promise<StartLive
   if (!scenario) {
     return { ok: false, code: "scenario", error: e.invalidInput };
   }
+  // Gate lives server-side: a non-premium user always gets the scene default,
+  // whatever mentorId the client sends.
+  const mentor = resolveMentor(scenario, mentorId, user.isPremium);
   if (!(await rateLimit(`live:${user.id}`, LIVE_MINTS_PER_HOUR, 3600))) {
     return { ok: false, code: "rate", error: e.liveRateLimited };
   }
 
   try {
-    const grant = await mintLiveToken(user, scenario, locale, model);
+    const grant = await mintLiveToken(user, scenario, mentor, locale, model);
     return { ok: true, ...grant };
   } catch (error) {
     console.error("Live token mint failed:", error);
@@ -260,6 +265,7 @@ const liveTurnSchema = z.object({
 
 const submitLiveSchema = z.object({
   scenarioId: z.string().min(1).max(64),
+  mentorId: z.string().min(1).max(64).optional(),
   locale: z.enum(LOCALES),
   durationSec: z.number().int().min(10).max(270),
   dialog: z.array(liveTurnSchema).min(2).max(80),
@@ -282,7 +288,7 @@ export async function submitLiveSession(input: SubmitLiveInput): Promise<SubmitL
   if (!parsed.success) {
     return { ok: false, code: "input", error: e.invalidInput };
   }
-  const { scenarioId, locale, durationSec, dialog } = parsed.data;
+  const { scenarioId, mentorId, locale, durationSec, dialog } = parsed.data;
 
   const userTurns = dialog.filter((turn) => turn.role === "you").length;
   if (userTurns < LIVE_MIN_USER_TURNS) {
@@ -295,9 +301,12 @@ export async function submitLiveSession(input: SubmitLiveInput): Promise<SubmitL
   if (!scenario) {
     return { ok: false, code: "input", error: e.invalidInput };
   }
+  // Same server-side gate as the mint: the debrief judges the mentor the user
+  // was actually allowed to talk to, not whatever the client claims.
+  const mentor = resolveMentor(scenario, mentorId, user.isPremium);
 
   try {
-    const result = await completeLiveSession(user, { scenario, locale, dialog, durationSec });
+    const result = await completeLiveSession(user, { scenario, mentor, locale, dialog, durationSec });
     return { ok: true, ...result };
   } catch (error) {
     // The dialog stays client-side for one retry; see live-client.tsx.

@@ -339,6 +339,8 @@ const en = {
     liveCta: (name: string) => `Talk it out with ${name}`,
     liveCtaSub: "A real conversation. They talk back.",
     changeScene: "Change scene",
+    pickMentor: "Your mentor",
+    mentorLockedHint: "Pair any mentor with any scene with Convozy+",
     pickScene: "Pick your scene",
     packBadge: "your pack",
     todayBadge: "today's scene",

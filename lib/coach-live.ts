@@ -12,7 +12,13 @@ import { GoogleGenAI, Modality, Type } from "@google/genai";
 import { z } from "zod";
 import type { User } from "@prisma/client";
 import { awardCoachSessionXp, countSessionsToday, XP_SESSIONS_PER_DAY } from "./coach";
-import { RUBRICS, type CoachScenario, type RubricDimension } from "./coach-scenarios";
+import {
+  defaultMentorFor,
+  RUBRICS,
+  type CoachScenario,
+  type Mentor,
+  type RubricDimension,
+} from "./coach-scenarios";
 import { XP } from "./content";
 import { prisma } from "./db";
 import { dayString, type QuestState } from "./game";
@@ -34,38 +40,43 @@ const LANGUAGE_NAME: Record<Locale, string> = { en: "English", tr: "Turkish" };
 /* ---------- character prompt ---------- */
 
 /**
- * System instruction for the live model: play the scenario character, open
- * with the authored line, push back per persona, and treat [control] lines
- * as stage directions. The rubric hints steer the character toward moments
- * the debrief judge can actually score.
+ * System instruction for the live model: the chosen mentor plays the role the
+ * scenario calls for, keeping their own personality and voice while the scene
+ * context and objective come from the scenario. Opens with the scenario's
+ * line, pushes back per the scenario objective, and treats [control] lines as
+ * stage directions. The rubric hints steer toward moments the debrief judge
+ * can actually score.
  */
 export function buildCharacterPrompt(
+  mentor: Mentor,
   scenario: CoachScenario,
   locale: Locale,
   userName: string
 ): string {
   const text = scenario.text[locale];
-  const character = text.character;
+  const name = mentor.name[locale];
   const rubricHints = RUBRICS[scenario.dread].map((r) => `- ${r.judge}`).join("\n");
 
-  return `You are ${character.name}, a character in a live spoken roleplay inside a social-confidence training app. ${userName} is practicing this scene with you.
+  return `You are ${name}, a character in a live spoken roleplay inside a social-confidence training app. ${userName} is practicing this scene with you.
 
-WHO YOU ARE: ${character.persona}
+WHO YOU ARE: ${mentor.persona[locale]}
 
-HOW YOU SOUND: ${scenario.voiceStyle} Keep this delivery in every reply.
+HOW YOU SOUND: ${mentor.voiceStyle} Keep this delivery in every reply.
 
 THE SCENE: ${text.setup}
 
-YOUR GOAL IN THE SCENE: ${character.objective}
+IN THIS SCENE YOU ARE: ${text.role}. Play this role fully, but stay yourself: keep the personality and delivery above no matter the scene.
+
+YOUR GOAL IN THE SCENE: ${text.objective}
 
 ${userName} is practicing these skills. Give natural openings for each, without ever naming them:
 ${rubricHints}
 
 HARD RULES:
-- Stay in character as ${character.name} the entire time. Never mention being an AI, a model, an assistant, or a coach. Never break the scene.
+- Stay in character as ${name} the entire time. Never mention being an AI, a model, an assistant, or a coach. Never break the scene.
 - Speak only ${LANGUAGE_NAME[locale]}, no matter what language you hear.
 - This is a spoken conversation. Keep every reply under about 15 seconds: one or two sentences, then let ${userName} talk. Never lecture.
-- Open the scene by saying exactly this and nothing else, then wait: "${character.opening}"
+- Open the scene by saying exactly this and nothing else, then wait: "${text.opening}"
 - React like a real person: warm up when they engage you well, let flat or evasive replies land awkwardly. Do not grade, teach, or give feedback. You are the scene, not the coach.
 - Messages wrapped in [control]...[/control] are stage directions from the app, not ${userName} speaking. Follow them naturally and never acknowledge them.
 - When a stage direction tells you to wrap up, bring the scene to a natural, warm close within one or two replies and say goodbye in character.`;
@@ -93,6 +104,7 @@ export type LiveTokenGrant = {
 export async function mintLiveToken(
   user: Pick<User, "name">,
   scenario: CoachScenario,
+  mentor: Mentor,
   locale: Locale,
   choice: "primary" | "fallback"
 ): Promise<LiveTokenGrant> {
@@ -113,10 +125,10 @@ export async function mintLiveToken(
       liveConnectConstraints: {
         model,
         config: {
-          systemInstruction: buildCharacterPrompt(scenario, locale, user.name),
+          systemInstruction: buildCharacterPrompt(mentor, scenario, locale, user.name),
           responseModalities: [Modality.AUDIO],
           speechConfig: {
-            voiceConfig: { prebuiltVoiceConfig: { voiceName: scenario.voice } },
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: mentor.voice } },
             languageCode: LANGUAGE_CODE[locale],
           },
           inputAudioTranscription: {},
@@ -217,25 +229,26 @@ LANGUAGE: Write every text field you return (sceneHeadline, sceneNote, headline,
 
 function judgeInstructions(
   userName: string,
+  mentor: Mentor,
   scenario: CoachScenario,
   locale: Locale,
   dialog: LiveDialogTurn[],
   durationSec: number
 ): string {
   const text = scenario.text[locale];
-  const character = text.character;
+  const name = mentor.name[locale];
   const rubric = RUBRICS[scenario.dread];
   const rubricLines = rubric.map((r) => `- ${r.key}: ${r.judge}`).join("\n");
   const lines = dialog
-    .map((turn) => `${turn.role === "ai" ? character.name : userName}: ${turn.text}`)
+    .map((turn) => `${turn.role === "ai" ? name : userName}: ${turn.text}`)
     .join("\n");
 
   return `You are the Convozy coach, a warm, upbeat social-skills coach inside a social-confidence training app.${JUDGE_LANGUAGE_DIRECTIVE[locale]}
 
-${userName} just finished a ${durationSec}-second live spoken roleplay. The other character, ${character.name}, was played by the app.
+${userName} just finished a ${durationSec}-second live spoken roleplay. The other character, ${name}, was played by the app.
 
 The scene: ${text.setup}
-${character.name}'s role: ${character.persona}
+${name}'s role in the scene: ${text.role}
 What ${userName} was practicing: ${text.sub}
 
 The conversation, transcribed live (${userName}'s lines are what they actually said out loud):
@@ -264,7 +277,13 @@ Rules: encouraging first, actionable always, never a stinging grade. Talk to ${u
  */
 export async function judgeLiveDialog(
   user: User,
-  input: { scenario: CoachScenario; locale: Locale; dialog: LiveDialogTurn[]; durationSec: number }
+  input: {
+    scenario: CoachScenario;
+    mentor: Mentor;
+    locale: Locale;
+    dialog: LiveDialogTurn[];
+    durationSec: number;
+  }
 ): Promise<LiveDebrief> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
@@ -276,7 +295,16 @@ export async function judgeLiveDialog(
       {
         role: "user",
         parts: [
-          { text: judgeInstructions(user.name, input.scenario, input.locale, input.dialog, input.durationSec) },
+          {
+            text: judgeInstructions(
+              user.name,
+              input.mentor,
+              input.scenario,
+              input.locale,
+              input.dialog,
+              input.durationSec
+            ),
+          },
         ],
       },
     ],
@@ -344,16 +372,23 @@ function resolveRubric(dims: RubricDimension[], debrief: LiveDebrief, locale: Lo
  */
 export async function completeLiveSession(
   user: User,
-  input: { scenario: CoachScenario; locale: Locale; dialog: LiveDialogTurn[]; durationSec: number }
+  input: {
+    scenario: CoachScenario;
+    mentor: Mentor;
+    locale: Locale;
+    dialog: LiveDialogTurn[];
+    durationSec: number;
+  }
 ): Promise<LiveSessionResult> {
   const date = dayString(new Date(), user.timezone);
   const sessionsBefore = await countSessionsToday(user);
   const debrief = await judgeLiveDialog(user, input);
 
   const text = input.scenario.text[input.locale];
+  const personaName = input.mentor.name[input.locale];
   const youLabel = getDictionary(input.locale).coach.youLabel;
   const transcript = input.dialog
-    .map((turn) => `${turn.role === "ai" ? text.character.name : youLabel}: ${turn.text}`)
+    .map((turn) => `${turn.role === "ai" ? personaName : youLabel}: ${turn.text}`)
     .join("\n");
 
   const userWords = input.dialog
@@ -388,7 +423,8 @@ export async function completeLiveSession(
       feedback: {
         mode: "live",
         scenarioId: input.scenario.id,
-        personaName: text.character.name,
+        mentorId: input.mentor.id,
+        personaName,
         dialog: input.dialog,
         rubric: debrief.rubric,
         sceneHeadline: debrief.sceneHeadline,
@@ -408,7 +444,7 @@ export async function completeLiveSession(
   return {
     debrief,
     rubric: resolveRubric(RUBRICS[input.scenario.dread], debrief, input.locale),
-    personaName: text.character.name,
+    personaName,
     durationSec: input.durationSec,
     xpAwarded,
     totalXP: award.totalXP,
@@ -422,6 +458,7 @@ export async function completeLiveSession(
 
 export type LiveDefaults = {
   scenarioId: string;
+  mentorId: string;
   personaName: string;
   avatar: string;
   scene: string;
@@ -431,16 +468,19 @@ export type LiveDefaults = {
 
 /**
  * What the coach tab needs to offer today's live scene, or null when the
- * feature is not configured (hides the live CTA entirely).
+ * feature is not configured (hides the live CTA entirely). The mentor here is
+ * the scene's default pairing (free tier); premium may swap it in the UI.
  */
 export function getLiveDefaults(scenario: CoachScenario, locale: Locale): LiveDefaults | null {
   if (!process.env.GEMINI_API_KEY) return null;
   const text = scenario.text[locale];
+  const mentor = defaultMentorFor(scenario);
   return {
     scenarioId: scenario.id,
-    personaName: text.character.name,
-    avatar: scenario.avatar,
-    scene: text.character.scene,
+    mentorId: mentor.id,
+    personaName: mentor.name[locale],
+    avatar: mentor.avatar,
+    scene: text.sceneChip,
     title: text.title,
     setup: text.setup,
   };

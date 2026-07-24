@@ -110,3 +110,4 @@ GPT-Live gets a real API with competitive pricing.
 
 2026-07-10 | plan | plan written after model research + codebase mapping | -
 2026-07-10 | 1-3 | coach home tab + redirects, dread onboarding, scenario engine (15 scenarios en+tr, daily pick, fit-aware scoring); verified via full browser flow both locales | -
+2026-07-24 | 7+ | mentors decoupled from scenarios (CON-15): the 15 scene characters are now standalone mentors (personality/voice) that compose with any scenario (context + rubric) at prompt/judge time. Live home leads with a mentor picker; premium pairs any mentor with any scene, free rides the scene default (gate enforced server-side in resolveMentor). | -
