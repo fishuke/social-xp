@@ -12,7 +12,8 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { submitCoachSession, type CoachSubmitResult } from "@/lib/actions";
 import type { CoachPrompt } from "@/lib/coach";
-import type { SceneOption } from "./live-client";
+import { withLocale } from "@/lib/i18n/routing";
+import type { MentorOption, SceneOption } from "./live-client";
 import { ConfettiBurst } from "@/components/confetti";
 import { CountUp } from "@/components/count-up";
 import { LocaleLink } from "@/components/locale-link";
@@ -54,7 +55,12 @@ type Props = {
   isPremium: boolean;
   history: CoachHistoryItem[];
   // null hides the live CTA entirely (feature not configured).
-  live: { scenes: SceneOption[]; defaultId: string } | null;
+  live: {
+    scenes: SceneOption[];
+    mentors: MentorOption[];
+    defaultScenarioId: string;
+    defaultMentorId: string;
+  } | null;
   dread: string | null;
 };
 
@@ -79,24 +85,22 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
   const [result, setResult] = useState<CoachSuccess | null>(null);
   const [lockedNow, setLockedNow] = useState(locked);
   const [mode, setMode] = useState<"home" | "live">("home");
-  const [sceneId, setSceneId] = useState(live?.defaultId ?? null);
+  const [sceneId, setSceneId] = useState(live?.defaultScenarioId ?? null);
+  // Premium keeps its own mentor pick across scene changes; free users always
+  // ride the selected scene's default mentor (see selectedMentor below).
+  const [premiumMentorId, setPremiumMentorId] = useState(live?.defaultMentorId ?? null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const selectedScene = live?.scenes.find((s) => s.id === sceneId) ?? live?.scenes[0] ?? null;
-  // The user's dread pack leads the row; everything else follows in pack order.
-  const dreadOrder =
-    dread && DREAD_ORDER.includes(dread)
-      ? [dread, ...DREAD_ORDER.filter((d) => d !== dread)]
-      : DREAD_ORDER;
-  const orderedScenes = live
-    ? dreadOrder.flatMap((d) => live.scenes.filter((s) => s.dread === d))
-    : [];
+  const selectedMentorId = isPremium ? premiumMentorId : (selectedScene?.defaultMentorId ?? null);
+  const selectedMentor =
+    live?.mentors.find((m) => m.id === selectedMentorId) ?? live?.mentors[0] ?? null;
 
-  const sceneRowRef = useRef<HTMLDivElement | null>(null);
+  const mentorRowRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    sceneRowRef.current
+    mentorRowRef.current
       ?.querySelector('[aria-selected="true"]')
       ?.scrollIntoView({ inline: "center", block: "nearest" });
-  }, [sceneId]);
+  }, [selectedMentorId]);
 
   const streamRef = useRef<MediaStream | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -229,10 +233,11 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
     setPhase("ready");
   }
 
-  if (mode === "live" && selectedScene) {
+  if (mode === "live" && selectedScene && selectedMentor) {
     return (
       <LiveCoach
         scene={selectedScene}
+        mentor={selectedMentor}
         name={name}
         history={history}
         onExit={() => {
@@ -262,9 +267,11 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
     return <GatedScreen history={history} t={t} />;
   }
 
-  // Live home: conversation-first. The solo rep stays implemented below but
-  // only renders when the live feature is not configured (user call).
-  if (live && selectedScene) {
+  // Live home: conversation-first. Pick a mentor (premium can pair any mentor
+  // with any scene; free rides the scene's default), then the scene, then go.
+  // The solo rep stays implemented below but only renders when the live
+  // feature is not configured (user call).
+  if (live && selectedScene && selectedMentor) {
     return (
       <div
         className="page-enter flex flex-1 flex-col items-center px-6 pb-8 pt-[58px] text-center"
@@ -274,52 +281,68 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
           {t.coach.kicker}
         </p>
 
+        <p className="mt-6 self-start font-body text-[12px] font-extrabold uppercase tracking-[1.5px] text-ondark/60">
+          {t.coach.pickMentor}
+        </p>
         <div
-          ref={sceneRowRef}
-          className="-mx-6 mt-7 w-[calc(100%+48px)] overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          ref={mentorRowRef}
+          className="-mx-6 mt-2 w-[calc(100%+48px)] overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           role="listbox"
-          aria-label={t.coach.pickScene}
+          aria-label={t.coach.pickMentor}
         >
           <div className="flex gap-2 pb-1">
-            {orderedScenes.map((scene) => {
-              const selected = scene.id === selectedScene.id;
+            {live.mentors.map((m) => {
+              const selected = m.id === selectedMentor.id;
+              const unlocked = isPremium || m.id === selectedScene.defaultMentorId;
               return (
                 <button
-                  key={scene.id}
+                  key={m.id}
                   type="button"
                   role="option"
                   aria-selected={selected}
-                  onClick={() => setSceneId(scene.id)}
+                  onClick={() => {
+                    if (!unlocked) {
+                      router.push(withLocale(locale, "/paywall"));
+                      return;
+                    }
+                    if (isPremium) setPremiumMentorId(m.id);
+                  }}
                   className={`flex w-[104px] shrink-0 flex-col items-center gap-1 rounded-[16px] px-2 py-3 ${
                     selected ? "bg-white/15 ring-2 ring-coral" : "bg-white/[0.07]"
                   }`}
                 >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEDE4] text-[20px]">
-                    {scene.avatar}
+                  <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEDE4] text-[20px]">
+                    {m.avatar}
+                    {!unlocked && (
+                      <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber shadow-[0_1px_0_#D89E2E]">
+                        <LockIcon size={10} color="#2E2018" />
+                      </span>
+                    )}
                   </span>
-                  <span className="w-full truncate font-display text-[13px] font-semibold text-white">
-                    {scene.personaName}
+                  <span
+                    className={`w-full truncate font-display text-[13px] font-semibold ${
+                      unlocked ? "text-white" : "text-ondark/50"
+                    }`}
+                  >
+                    {m.name}
                   </span>
                   <span className="w-full truncate font-body text-[10px] font-extrabold text-ondark/60">
-                    {scene.isDaily ? t.coach.todayBadge : scene.scene}
+                    {m.tagline}
                   </span>
                 </button>
               );
             })}
-            <button
-              type="button"
-              onClick={() => setPickerOpen(true)}
-              className="flex w-[104px] shrink-0 flex-col items-center justify-center gap-1 rounded-[16px] bg-white/[0.07] px-2 py-3"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-[18px]">
-                ✨
-              </span>
-              <span className="w-full truncate font-display text-[13px] font-semibold text-amber">
-                {t.coach.changeScene}
-              </span>
-            </button>
           </div>
         </div>
+        {!isPremium && (
+          <button
+            type="button"
+            onClick={() => router.push(withLocale(locale, "/paywall"))}
+            className="mt-2 self-start font-body text-[12px] font-extrabold text-amber"
+          >
+            {t.coach.mentorLockedHint}
+          </button>
+        )}
 
         <h1 className="mt-6 max-w-[340px] font-display text-[24px] font-semibold leading-[1.2] text-white">
           {selectedScene.title}
@@ -327,6 +350,13 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
         <p className="mt-2 max-w-[320px] font-body text-[14px] font-bold leading-[1.5] text-ondark/70">
           {selectedScene.setup}
         </p>
+        <button
+          type="button"
+          onClick={() => setPickerOpen(true)}
+          className="mt-3 rounded-full bg-white/10 px-4 py-2 font-display text-[13px] font-semibold text-amber"
+        >
+          {t.coach.changeScene}
+        </button>
 
         <button
           type="button"
@@ -334,14 +364,14 @@ export function CoachClient({ name, prompt, locked, isPremium, history, live, dr
           className="mt-6 flex w-full max-w-[360px] items-center gap-3 rounded-[20px] bg-coral p-4 text-left shadow-[0_5px_0_#D8431B] transition-transform active:scale-[0.99]"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#FFEDE4] text-[24px]">
-            {selectedScene.avatar}
+            {selectedMentor.avatar}
           </span>
           <span className="min-w-0 flex-1">
             <span className="block font-display text-[17px] font-semibold text-white">
-              {t.coach.liveCta(selectedScene.personaName)}
+              {t.coach.liveCta(selectedMentor.name)}
             </span>
             <span className="block truncate font-body text-[12px] font-extrabold text-white/75">
-              {t.coach.liveCtaSub} · {selectedScene.scene}
+              {t.coach.liveCtaSub} · {selectedScene.sceneChip}
             </span>
           </span>
           <ChevronRightIcon size={18} color="#fff" className="shrink-0" />
@@ -529,9 +559,6 @@ function ScenePicker({
                       scene.id === selectedId ? "ring-2 ring-coral" : ""
                     }`}
                   >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFEDE4] text-[22px]">
-                      {scene.avatar}
-                    </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
                         <span className="truncate font-body text-[14px] font-bold text-ink">
@@ -544,12 +571,10 @@ function ScenePicker({
                         )}
                       </span>
                       <span className="block truncate font-body text-[12px] font-bold text-sec2">
-                        {scene.scene}
+                        {scene.sceneChip}
                       </span>
                     </span>
-                    <span className="shrink-0 font-body text-[12px] font-bold text-faint">
-                      {scene.personaName}
-                    </span>
+                    <ChevronRightIcon size={16} color="#B8A99C" className="shrink-0" />
                   </button>
                 ))}
               </div>

@@ -48,9 +48,11 @@ export type LiveSessionState = {
 
 export function useLiveSession({
   scenarioId,
+  mentorId,
   onFinished,
 }: {
   scenarioId: string;
+  mentorId: string;
   onFinished: (dialog: LiveDialogTurn[], durationSec: number, salvage: boolean) => void;
 }): LiveSessionState {
   const locale = useLocale();
@@ -266,7 +268,7 @@ export function useLiveSession({
 
     let res;
     try {
-      res = await startLiveSession({ scenarioId, locale, model: choice });
+      res = await startLiveSession({ scenarioId, mentorId, locale, model: choice });
     } catch {
       if (!stale()) fail("connect");
       return;

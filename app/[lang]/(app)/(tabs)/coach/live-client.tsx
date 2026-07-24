@@ -33,10 +33,16 @@ export type SceneOption = {
   dread: string;
   title: string;
   setup: string;
-  scene: string;
-  personaName: string;
-  avatar: string;
+  sceneChip: string;
+  defaultMentorId: string;
   isDaily: boolean;
+};
+
+export type MentorOption = {
+  id: string;
+  name: string;
+  avatar: string;
+  tagline: string;
 };
 
 type View = "intro" | "live" | "sceneEnd" | "debrief";
@@ -76,11 +82,13 @@ function countWords(text: string): number {
 
 export function LiveCoachClient({
   scene,
+  mentor,
   name,
   history,
   onExit,
 }: {
   scene: SceneOption;
+  mentor: MentorOption;
   name: string;
   history: CoachHistoryItem[];
   onExit: () => void;
@@ -99,6 +107,7 @@ export function LiveCoachClient({
 
   const session = useLiveSession({
     scenarioId: scene.id,
+    mentorId: mentor.id,
     onFinished: (dialog, durationSec, salvage) => {
       setFinished({ dialog, durationSec, salvage });
       setView("sceneEnd");
@@ -109,7 +118,13 @@ export function LiveCoachClient({
   async function score(dialog: LiveDialogTurn[], durationSec: number) {
     setScoring("pending");
     try {
-      const res = await submitLiveSession({ scenarioId: scene.id, locale, durationSec, dialog });
+      const res = await submitLiveSession({
+        scenarioId: scene.id,
+        mentorId: mentor.id,
+        locale,
+        durationSec,
+        dialog,
+      });
       if (res.ok) {
         setResult(res);
         setScoring("done");
@@ -134,7 +149,7 @@ export function LiveCoachClient({
         result={result}
         durationSec={finished.durationSec}
         dialog={finished.dialog}
-        personaName={scene.personaName}
+        personaName={mentor.name}
         name={name}
         history={history}
         onRunBack={reset}
@@ -148,6 +163,7 @@ export function LiveCoachClient({
     return (
       <SceneEndScreen
         scene={scene}
+        mentor={mentor}
         finished={finished}
         scoring={scoring}
         result={result}
@@ -160,21 +176,23 @@ export function LiveCoachClient({
   }
 
   if (session.phase === "live" || session.phase === "wrapup") {
-    return <LiveScreen scene={scene} session={session} t={t} />;
+    return <LiveScreen scene={scene} mentor={mentor} session={session} t={t} />;
   }
 
-  return <IntroScreen scene={scene} session={session} onBack={onExit} t={t} />;
+  return <IntroScreen scene={scene} mentor={mentor} session={session} onBack={onExit} t={t} />;
 }
 
 /* ---------- intro (persona + how it works + the start gesture) ---------- */
 
 function IntroScreen({
   scene,
+  mentor,
   session,
   onBack,
   t,
 }: {
   scene: SceneOption;
+  mentor: MentorOption;
   session: LiveSessionState;
   onBack: () => void;
   t: Dictionary;
@@ -204,13 +222,13 @@ function IntroScreen({
           className="flex h-[110px] w-[110px] items-center justify-center rounded-full text-[54px]"
           style={{ background: "#FFEDE4", boxShadow: "0 0 0 3px #FFC24A, 0 0 60px rgba(255,194,74,0.25)" }}
         >
-          {scene.avatar}
+          {mentor.avatar}
         </div>
         <div>
           <h1 className="font-display text-[28px] font-semibold leading-[1.15] text-white">
-            {scene.personaName}
+            {mentor.name}
           </h1>
-          <p className="mt-1 font-body text-[13px] font-extrabold text-[#FF914D]">{scene.scene}</p>
+          <p className="mt-1 font-body text-[13px] font-extrabold text-[#FF914D]">{scene.sceneChip}</p>
         </div>
         <p className="max-w-[300px] font-body text-[15px] font-bold leading-[1.5] text-ondark/75">
           {scene.setup}
@@ -249,14 +267,16 @@ function IntroScreen({
 
 function LiveScreen({
   scene,
+  mentor,
   session,
   t,
 }: {
   scene: SceneOption;
+  mentor: MentorOption;
   session: LiveSessionState;
   t: Dictionary;
 }) {
-  const name = scene.personaName;
+  const name = mentor.name;
   const pendingYouWords = countWords(session.pendingYou);
   const score = vibeScore(session.dialog, pendingYouWords);
   const bucket = vibeBucket(score);
@@ -279,7 +299,7 @@ function LiveScreen({
     bucket === "dipping" ? t.coach.vibeDipping : bucket === "warming" ? t.coach.vibeWarming : t.coach.vibeWorking;
 
   const status = session.aiSpeaking
-    ? `${t.coach.liveTalking(name)} ${scene.scene}`
+    ? `${t.coach.liveTalking(name)} ${scene.sceneChip}`
     : reaction === "laughed" || bucket === "working"
       ? t.coach.statusLeaning(name)
       : bucket === "dipping"
@@ -317,7 +337,7 @@ function LiveScreen({
               boxShadow: session.aiSpeaking ? "0 0 0 2px #FF914D" : "none",
             }}
           >
-            {scene.avatar}
+            {mentor.avatar}
           </div>
           {floatEmoji ? (
             <span
@@ -593,6 +613,7 @@ function BackButton({ onClick, label }: { onClick: () => void; label: string }) 
 
 function SceneEndScreen({
   scene,
+  mentor,
   finished,
   scoring,
   result,
@@ -602,6 +623,7 @@ function SceneEndScreen({
   t,
 }: {
   scene: SceneOption;
+  mentor: MentorOption;
   finished: { dialog: LiveDialogTurn[]; durationSec: number; salvage: boolean };
   scoring: Scoring;
   result: LiveSessionResult | null;
@@ -640,7 +662,7 @@ function SceneEndScreen({
             className="flex h-[130px] w-[130px] items-center justify-center rounded-full text-[64px]"
             style={{ background: "#FFEDE4", boxShadow: "0 0 0 3px #FFC24A, 0 0 60px rgba(255,194,74,0.25)" }}
           >
-            {scene.avatar}
+            {mentor.avatar}
           </div>
           <span
             className="absolute -right-2 -top-1 text-[34px]"

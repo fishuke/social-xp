@@ -340,6 +340,8 @@ const tr: Dictionary = {
     liveCta: (name: string) => `${name} ile konuş`,
     liveCtaSub: "Gerçek bir sohbet. Karşılık veriyorlar.",
     changeScene: "Sahneyi değiştir",
+    pickMentor: "Koçun",
+    mentorLockedHint: "Convozy+ ile her koçu her sahneyle eşleştir",
     pickScene: "Sahneni seç",
     packBadge: "senin paketin",
     todayBadge: "günün sahnesi",
